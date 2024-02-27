@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Bookit!</title>
+        <style>
+            input[type="text"] {
+                width: 25%;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <h2>Add new bookmark!</h2>
+
+        <form action="./bookit.php" method="POST">
+            <label for="url">URL:</label>
+            <input type="text" name="url" id="url" placeholder="URL to bookmark" required> <br><br>
+            
+            <label for="tags">Tags(list):</label>
+            <input type="text" name="tags" id="tags" placeholder="Space-separated tags in lowercase" required> <br><br>      
+            
+            <input type="submit" value="Add (or update) bookmarks!">
+        </form>
+
+    </body>
+</html>
