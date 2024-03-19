@@ -24,7 +24,9 @@
 </head>
 
 <body>
-    <h1>Bookit!</h1>
+    <?php 
+        include __DIR__ . 'header.php';
+    ?>
     <h2>Add new bookmark:</h2>
     <form action="./bookit.php" method="post" style="display: flex; flex-direction: column;">
         <label>
@@ -39,14 +41,10 @@
 
         <input type="submit" value="Add (or update) bookmark">
     </form>
-    <footer>
-        <nav>
-            <ul class="footer-links">
-                <li><a href=".">Home</a></li>
-                <li><a href="./add.html">Add another bookmark!</a></li>
-            </ul>
-        </nav>
-    </footer>
+
+    <?php
+        include __DIR__. '/footer.php';
+    ?>
 </body>
 
 </html>

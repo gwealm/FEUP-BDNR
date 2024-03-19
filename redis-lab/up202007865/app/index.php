@@ -50,11 +50,18 @@
         .footer-links > li:first-child::before  {
             content: '';
         }
+
+        .auth {
+            display: flex;
+            gap: 10px;
+        }
+
     </style>
 </head>
 <body>
-    <h1>Bookit!</h1>
-    <?php 
+    <?php
+        include __DIR__ . '/header.php';
+
         require __DIR__ . '/db.php';
 
         $db = new DB();
@@ -97,14 +104,8 @@
             </ul>
             <?php
         }
+    
+        include __DIR__. '/footer.php';
     ?>
-    <footer>
-        <nav>
-            <ul class="footer-links">
-                <li><a href=".">Home</a></li>
-                <li><a href="./add.html">Add another bookmark!</a></li>
-            </ul>
-        </nav>
-    </footer>
 </body>
 </html>

@@ -7,10 +7,17 @@ use Ramsey\Uuid\UuidInterface;
 
 Predis\Autoloader::register();
 
-class Bookmark {
+interface DBObject {
+    static function key(string $id): string;
+
+    public function _save(Predis\Client $client);
+
+    public function render();
+}
+
+class Bookmark implements DBObject {
     private UuidInterface $id;
     private string $url;
-
     /**
      * @var string[]
      */
@@ -88,6 +95,38 @@ class Bookmark {
     }
 }
 
+class User implements DBObject {
+    private string $username;
+
+    /**
+     * 
+     */
+    public function __construct(string $username) {
+        $this->username = $username;
+    }
+
+    static function key(string $id): string {
+        return "user:$id";
+    }
+
+    function _save(Predis\ClientInterface $db) {
+
+    }
+
+    static function getFromDB(Predis\ClientInterface $db, string $id): User {
+        $userKey = User::key($id);
+
+        $username = $db->hget($userKey, 'username');
+
+        return new User($username);
+    }
+    public function render() {
+        ?>
+        <?php
+    }
+
+}
+
 class DB {
     private Predis\Client $client;
 
@@ -99,6 +138,49 @@ class DB {
         $bookmark->_save($this->client);
     }
 
+    public function userExists(string $username): bool {        
+        $userKey = User::key($username);
+
+        return $this->client->exists($userKey) > 0;
+    }
+
+    public function login(string $username, string $password): ?User {        
+        $userKey = User::key($username);
+
+        function comparePassword(string $passwordCandidate, string $hashedPassword): bool {
+            return password_verify($passwordCandidate, $hashedPassword);
+        }
+
+        $storedPassword = $this->client->hget($userKey, 'password');
+
+        if (comparePassword($password, $storedPassword)) {
+            return User::getFromDB($this->client, $username);
+        }
+    
+        return null;
+    }
+
+    public function register(string $username, string $password): User {
+        function hashPassword(string $password): string {
+            return password_hash($password, PASSWORD_DEFAULT);
+        }
+
+        $userKey = User::key($username);
+
+        $this->client->hset($userKey, 'online', true);
+        $this->client->hset($userKey, 'username', $username);
+        $this->client->hset($userKey, 'password', hashPassword($password));
+
+        return new User($username);
+    }
+
+    public function setUserOnline(string $username) {
+        $userKey = User::key($username);
+
+        $this->client->hset($userKey, 'online', true);
+    }
+
+
     /**
      * @return Bookmark[]
      */
@@ -108,7 +190,7 @@ class DB {
         $bookmarkIds = $this->client->zrevrange( // see zrevrangebyscore
             'bookmarks', 
             0, 
-            -1, // with -1 the results get sorted in reverse
+            -1, // with -1 we get all the results
             [
                 'WITHSCORES' => false,
                 'LIMIT' => [
