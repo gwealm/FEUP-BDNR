@@ -1,15 +1,28 @@
 <?php
 
-require __DIR__ . '/db.php';
+require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/session.php';
 
-$url = $_POST['url'];
-$tags = explode(' ', $_POST['tags']);
+$session = new Session();
 
-$db = new DB();
+if ($session->isAuthenticated()) {
 
-$bookmark = new Bookmark($url, $tags);
+    $username = $session->get('user');
 
-$db->saveBookmark($bookmark);
+    $db = new DB();
+
+    $user = $db->getUser($username);
+
+    $url = $_POST['url'];
+    $tags = explode(' ', $_POST['tags']);
+    
+    $bookmark = new Bookmark($url, $tags);
+
+    $user->bookmarks[] = $bookmark->id->toString();
+    
+    $db->saveBookmark($bookmark);
+    $db->saveUser($user);
+}
 
 header("Location: /");
 die;

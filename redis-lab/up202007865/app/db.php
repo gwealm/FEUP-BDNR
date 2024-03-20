@@ -16,7 +16,7 @@ interface DBObject {
 }
 
 class Bookmark implements DBObject {
-    private UuidInterface $id;
+    public UuidInterface $id;
     private string $url;
     /**
      * @var string[]
@@ -99,10 +99,16 @@ class User implements DBObject {
     private string $username;
 
     /**
+     * @var string[]
+     */
+    public array $bookmarks;
+
+    /**
      * 
      */
     public function __construct(string $username) {
         $this->username = $username;
+        $this->bookmarks = [];
     }
 
     static function key(string $id): string {
@@ -110,7 +116,11 @@ class User implements DBObject {
     }
 
     function _save(Predis\ClientInterface $db) {
+        $userKey = User::key($this->username);
 
+        $bookmarkKey = "$userKey:bookmarks";
+
+        $db->sadd($bookmarkKey, $this->bookmarks);
     }
 
     static function getFromDB(Predis\ClientInterface $db, string $id): User {
@@ -118,7 +128,10 @@ class User implements DBObject {
 
         $username = $db->hget($userKey, 'username');
 
-        return new User($username);
+        $user = new User($username);
+        $user->bookmarks = $db->smembers("$userKey:bookmarks");
+
+        return $user;
     }
     public function render() {
         ?>
@@ -138,10 +151,23 @@ class DB {
         $bookmark->_save($this->client);
     }
 
+    public function saveUser(User $user) {
+        $user->_save($this->client);
+    }
+
     public function userExists(string $username): bool {        
         $userKey = User::key($username);
 
         return $this->client->exists($userKey) > 0;
+    }
+
+    public function getUser(string $username): User {
+        $userKey = User::key($username);
+
+        if (!$this->client->exists($userKey))
+            throw new Exception("User not found");
+
+        return User::getFromDB($this->client, $username);
     }
 
     public function login(string $username, string $password): ?User {        
@@ -180,11 +206,10 @@ class DB {
         $this->client->hset($userKey, 'online', true);
     }
 
-
     /**
      * @return Bookmark[]
      */
-    public function getLatestBookmarks(): array {
+    public function getLatestBookmarks(User $user): array {
 
         // Get 15 latest bookmarks
         $bookmarkIds = $this->client->zrevrange( // see zrevrangebyscore
@@ -200,16 +225,17 @@ class DB {
             ]
         );
 
-        return array_map(fn ($bookmarkId) => Bookmark::getFromDB($this->client, $bookmarkId), $bookmarkIds);
+        return array_map(fn ($bookmarkId) => Bookmark::getFromDB($this->client, $bookmarkId), array_filter($bookmarkIds, fn ($bookmarkId) => in_array($bookmarkId, $user->bookmarks)));
     }
 
     /**
      * @return Bookmark[]
      */
-    public function getForTags(array $tags): array {
+    public function getForTags(User $user, array $tags): array {
         $bookmarkIds = $this->client->sinter($tags);
 
-        return array_map(fn ($bookmarkId) => Bookmark::getFromDB($this->client, $bookmarkId), $bookmarkIds);
+        // FIXME: in here we could add the keys to the 'sinter' call, but ctrl+c/ctrl+v galore
+        return array_map(fn ($bookmarkId) => Bookmark::getFromDB($this->client, $bookmarkId), array_filter($bookmarkIds, fn ($bookmarkId) => in_array($bookmarkId, $user->bookmarks)));
     }
 }
 

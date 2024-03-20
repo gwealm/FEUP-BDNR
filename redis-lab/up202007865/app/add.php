@@ -25,7 +25,7 @@
 
 <body>
     <?php 
-        include __DIR__ . 'header.php';
+        include __DIR__ . '/header.php';
     ?>
     <h2>Add new bookmark:</h2>
     <form action="./bookit.php" method="post" style="display: flex; flex-direction: column;">

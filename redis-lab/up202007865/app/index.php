@@ -61,48 +61,62 @@
 <body>
     <?php
         include __DIR__ . '/header.php';
+        require_once __DIR__ . '/db.php';
+        require_once __DIR__ . '/session.php';
 
-        require __DIR__ . '/db.php';
+        $session = new Session();
+        
+        if (!$session->isAuthenticated()) {
+            ?>
+            <h2>You are not logged in.</h2>
 
-        $db = new DB();
-
-        /**
-         * @var Bookmark[]
-         */
-        $bookmarks = [];
-
-        if (count($_GET) !== 0 && isset($_GET['tags'])) {
-            $tags = $_GET['tags']
-
-            ?> 
-            <h2>Bookmarks for '<?= $tags ?>':</h2>
+            <a href="./login.php">Sign in</a> or <a href="./register.php">create an account</a> to create and see your bookmarks.
             <?php
-
-            $tags = explode(',', $tags);
-            $tags = array_map(fn($tag) => "tag:$tag", $tags);
-
-            $bookmarks = $db->getForTags($tags);
         } else {
-            ?> 
-            <h2>Latest bookmarks:</h2>
-            <?php
-            $bookmarks = $db->getLatestBookmarks();
-        }
+            $db = new DB();
     
-        if (count($bookmarks) === 0) {
-            ?>
-            <h3>Sorry, you don't have any bookmarks yet!</h3>
-            <?php
-        } else {
-            ?>
-            <ul class="bookmark-list">
-            <?php
-                foreach ($bookmarks as $bookmark) {
-                    $bookmark->render();
-                }
-            ?>
-            </ul>
-            <?php
+            $username = $session->get('user');
+
+            $user = $db->getUser($username);
+
+            /**
+             * @var Bookmark[]
+             */
+            $bookmarks = [];
+    
+            if (count($_GET) !== 0 && isset($_GET['tags'])) {
+                $tags = $_GET['tags']
+    
+                ?> 
+                <h2>Bookmarks for '<?= $tags ?>':</h2>
+                <?php
+    
+                $tags = explode(',', $tags);
+                $tags = array_map(fn($tag) => "tag:$tag", $tags);
+    
+                $bookmarks = $db->getForTags($user, $tags);
+            } else {
+                ?> 
+                <h2>Latest bookmarks:</h2>
+                <?php
+                $bookmarks = $db->getLatestBookmarks($user);
+            }
+        
+            if (count($bookmarks) === 0) {
+                ?>
+                <h3>Sorry, you don't have any bookmarks yet!</h3>
+                <?php
+            } else {
+                ?>
+                <ul class="bookmark-list">
+                <?php
+                    foreach ($bookmarks as $bookmark) {
+                        $bookmark->render();
+                    }
+                ?>
+                </ul>
+                <?php
+            }
         }
     
         include __DIR__. '/footer.php';
