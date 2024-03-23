@@ -2,6 +2,8 @@
 
 namespace DB\Models;
 
+use Predis\ClientInterface;
+
 class User extends DBModel implements Renderable{
 
     /**
@@ -22,6 +24,28 @@ class User extends DBModel implements Renderable{
         $this->bookmarks = [];
         $this->followedUsers = [];
     }
+
+    public static function getFromDB(ClientInterface $client, string $id): static {
+
+        $userKey = static::key($id);
+
+        $username = $client->hget($userKey, 'username');
+
+        $user = new User($username, $id);
+
+        $bookmarkIds = $client->smembers($userKey->add("bookmarks"));
+
+        foreach ($bookmarkIds as $bookmarkId) {
+            $bookmark = Bookmark::getFromDB($client, $bookmarkId);
+        
+            $bookmark->author = $user;
+
+            $user->bookmarks[] = $bookmark;
+        }
+
+        return $user;
+    }
+
 
     protected function _save(\Predis\ClientInterface $client) {
         $userKey = static::key($this->getId());

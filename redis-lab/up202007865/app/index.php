@@ -65,9 +65,10 @@ require __DIR__ . '/autoload.php'
 <body>
     <?php
         include __DIR__ . '/partials/header.php';
-        require_once __DIR__ . '/db.php';
 
         use \Lib\Session;
+        use DB\DB;
+        use DB\Models\User;
 
         $session = new Session();
         
@@ -77,12 +78,10 @@ require __DIR__ . '/autoload.php'
 
             <a href="./login.php">Sign in</a> or <a href="./register.php">create an account</a> to create and see your bookmarks.
             <?php
-        } else {
-            $db = new DB();
-    
-            $username = $session->get('user');
+        } else {    
+            $userId = $session->get('user');
 
-            $user = $db->getUser($username);
+            $user = DB::get(User::class, $userId);
 
             /**
              * @var Bookmark[]
@@ -99,12 +98,12 @@ require __DIR__ . '/autoload.php'
                 $tags = explode(',', $tags);
                 $tags = array_map(fn($tag) => "tag:$tag", $tags);
     
-                $bookmarks = $db->getForTags($tags);
+                // $bookmarks = $db->getForTags($tags);
             } else {
                 ?> 
                 <h2>Latest bookmarks:</h2>
                 <?php
-                $bookmarks = $db->getLatestBookmarks($user);
+                // $bookmarks = $db->getLatestBookmarks($user);
             }
         
             if (count($bookmarks) === 0) {

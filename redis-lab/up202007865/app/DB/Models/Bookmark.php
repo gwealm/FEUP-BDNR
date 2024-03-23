@@ -3,10 +3,11 @@
 namespace DB\Models;
 
 use DB\Models\Renderable;
+use Predis\ClientInterface;
 
 class Bookmark extends DBModel implements Renderable {
 
-    private User $author;
+    public User $author;
     private string $url;
 
     /**
@@ -21,6 +22,26 @@ class Bookmark extends DBModel implements Renderable {
         $this->tags = [];
     }
 
+    public static function getFromDB(ClientInterface $client, string $id): static {
+    
+        $bookmarkKey = static::key($id);
+
+        $url = $client->hget($bookmarkKey, 'url');
+
+        // we are loaded from a User so we do not need to set the author here
+        $bookmark = new Bookmark($url, $id);
+
+        $tags = $client->smembers($bookmarkKey->add("tags"));
+
+        foreach ($tags as $tagId) {
+            $tag = Tag::getFromDB($client, $tagId);
+        
+            $bookmark->tags[] = $tag;
+        }
+
+        return $bookmark;
+    }
+    
     protected function _save(\Predis\ClientInterface $client) {
         $bookmarkKey = static::key($this->getId());
 

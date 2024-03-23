@@ -24,15 +24,14 @@ class Auth {
     }
 
     public static function register(string $username, string $password): ?User {
-        $db = DB::instance();
-        $dbClient = $db->raw();
+        $dbClient = DB::raw();
 
         $userExists = static::usernameExists($dbClient, $username);
 
         if ($userExists) return null;
 
         $user = new User($username);
-        $db->save($user);
+        DB::save($user);
 
         // FIXME: we should not need direct access to the DB client.
         $dbClient->hset(User::key($user->getId()), 'password', Password::hash($password));
@@ -41,8 +40,7 @@ class Auth {
     }
 
     public static function login(string $username, string $password): ?User {
-        $db = DB::instance();
-        $dbClient = $db->raw();
+        $dbClient = DB::raw();
 
         $userExists = static::usernameExists($dbClient, $username);
 
@@ -56,18 +54,17 @@ class Auth {
 
             if ($candidateUsername !== $username) continue;
 
+            $id = explode(Key::SEPARATOR, $userId)[1];
+
             $storedPassword = $dbClient->hget($userId, 'password');
 
             if (Password::verify($password, $storedPassword)) {
-                $user = $db->get($userId);
+                $user = DB::get(User::class, $id);
 
                 if ($user === null) {
-
-                    $id = explode(Key::SEPARATOR, $userId)[1];
-
-                    $user = new User($username, $id);
+                    $user = new User($username);
             
-                    $db->save($user);
+                    DB::save($user);
                 } 
                 
                 return $user;
@@ -84,13 +81,11 @@ class Auth {
     }
 
     public static function getUser(): ?User {
-        $db = DB::instance();
-
         $session = new Session();
 
         $userKey = User::key($session->get('user'));
 
-        return $db->get($userKey);
+        return DB::get($userKey);
     }
 
     public static function isAuthenticated(): bool {

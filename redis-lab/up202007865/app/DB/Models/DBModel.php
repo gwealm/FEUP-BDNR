@@ -50,6 +50,8 @@ abstract class DBModel {
         return new Key(strtolower(end(explode("\\", get_called_class()))));
     }
 
+    public static abstract function getFromDB(ClientInterface $client, string $id): static;
+
     protected abstract function _save(ClientInterface $client);
     public function save(ClientInterface $client) {
         # TODO: verify caller context

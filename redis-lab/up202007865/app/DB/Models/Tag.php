@@ -3,13 +3,14 @@
 namespace DB\Models;
 
 use DB\Models\Renderable;
+use Predis\ClientInterface;
 
 class Tag extends DBModel implements Renderable {
 
     /**
      * The bookmarks tagged with this tag.
      * 
-     * @var Bookmark[]
+     * @var string[]
      */
     private array $bookmarks;
 
@@ -28,6 +29,20 @@ class Tag extends DBModel implements Renderable {
         <?php
     }
 
+    public static function getFromDB(ClientInterface $client, string $id): static {
+        $tagKey = static::key($id);
+
+        $name = $client->hget($tagKey, 'name');
+
+        $tag = new Tag($name, $id);
+
+        $bookmarks = $client->smembers($tagKey->add("bookmarks"));
+
+        $tag->bookmarks = $bookmarks;
+
+        return $tag;
+    }
+
     protected function _save(\Predis\ClientInterface $client) {
         $tagKey = static::key($this->getId());
         
@@ -36,9 +51,8 @@ class Tag extends DBModel implements Renderable {
 
         if (count($this->bookmarks) > 0) {
             $tagBookmarkKey = $tagKey->add('bookmarks');
-            $tagBookmarkIDs = array_map(fn (Bookmark $bookmark) => $bookmark->getId(), $this->bookmarks);
 
-            $client->sadd($tagBookmarkKey, $tagBookmarkIDs);
+            $client->sadd($tagBookmarkKey, $this->bookmarks);
         }
     }
 }
