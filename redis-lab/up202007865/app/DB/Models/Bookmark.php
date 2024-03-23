@@ -13,7 +13,7 @@ class Bookmark extends DBModel implements Renderable {
     /**
      * @var Tag[]
      */
-    private array $tags;
+    public array $tags;
 
     public function __construct(string $url, string $id = null) {
         parent::__construct($id);
@@ -28,7 +28,7 @@ class Bookmark extends DBModel implements Renderable {
 
         $url = $client->hget($bookmarkKey, 'url');
 
-        // we are loaded from a User so we do not need to set the author here
+        // we are basically loaded from a User so we do not need to set the author here
         $bookmark = new Bookmark($url, $id);
 
         $tags = $client->smembers($bookmarkKey->add("tags"));
@@ -50,10 +50,16 @@ class Bookmark extends DBModel implements Renderable {
 
         $bookmarkAuthor = $bookmarkKey->add('author');
         $client->set($bookmarkAuthor, $this->author->getId());
+        $authorBookmarksKey = User::key($this->author->getId())->add('bookmarks');
+        $client->sadd($authorBookmarksKey, $this->getId());
 
         if (count($this->tags) > 0) {
             $bookmarkTagKey = $bookmarkKey->add('tags');
-            $bookmarkTagIDs = array_map(fn (Tag $tag) => $tag->getId(), $this->tags);
+            $bookmarkTagIDs = array_map(function (Tag $tag) use ($client) {
+                $tag->save($client);
+                
+                return $tag->getId();
+            } , $this->tags);
 
             $client->sadd($bookmarkTagKey, $bookmarkTagIDs);
         }

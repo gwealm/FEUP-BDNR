@@ -66,22 +66,18 @@ require __DIR__ . '/autoload.php'
     <?php
         include __DIR__ . '/partials/header.php';
 
-        use \Lib\Session;
-        use DB\DB;
-        use DB\Models\User;
-
-        $session = new Session();
+        use \Lib\Auth;
+        use DB\Models\Bookmark;
+    
         
-        if (!$session->isAuthenticated()) {
+        if (!Auth::isAuthenticated()) {
             ?>
             <h2>You are not logged in.</h2>
 
             <a href="./login.php">Sign in</a> or <a href="./register.php">create an account</a> to create and see your bookmarks.
             <?php
         } else {    
-            $userId = $session->get('user');
-
-            $user = DB::get(User::class, $userId);
+            $user = Auth::getUser();
 
             /**
              * @var Bookmark[]
@@ -103,7 +99,7 @@ require __DIR__ . '/autoload.php'
                 ?> 
                 <h2>Latest bookmarks:</h2>
                 <?php
-                // $bookmarks = $db->getLatestBookmarks($user);
+                $bookmarks = $user->bookmarks;
             }
         
             if (count($bookmarks) === 0) {

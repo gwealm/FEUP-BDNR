@@ -9,7 +9,7 @@ class User extends DBModel implements Renderable{
     /**
      * @var Bookmark[]
      */
-    private array $bookmarks;
+    public array $bookmarks;
     public string $username;
 
     /**
@@ -55,7 +55,11 @@ class User extends DBModel implements Renderable{
 
         if (count($this->bookmarks) > 0) {
             $userBookmarkKey = $userKey->add('bookmarks');
-            $userBookmarkIDs = array_map(fn (Bookmark $bookmark) => $bookmark->getId(), $this->bookmarks);
+            $userBookmarkIDs = array_map(function (Bookmark $bookmark) use ($client) {
+                // $bookmark->save($client);
+                
+                return $bookmark->getId();
+            } , $this->bookmarks);
     
             $client->sadd($userBookmarkKey, $userBookmarkIDs);
         }

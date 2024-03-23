@@ -1,3 +1,7 @@
+<?php
+require __DIR__ . '/autoload.php'
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,7 +32,7 @@
         include __DIR__ . '/partials/header.php';
     ?>
     <h2>Add new bookmark:</h2>
-    <form action="./bookit.php" method="post" style="display: flex; flex-direction: column;">
+    <form action="./api/bookit.php" method="post" style="display: flex; flex-direction: column;">
         <label>
             URL:
             <input type="url" name="url" id="url" placeholder="URL to bookmark">

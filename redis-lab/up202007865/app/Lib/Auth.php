@@ -7,14 +7,17 @@ require_once dirname(__DIR__) . '/autoload.php';
 use DB\DB;
 use DB\Models\Key;
 use DB\Models\User;
-use Error;
 use Lib\Password;
-use TypeError;
 
 class Auth {
 
     private static function usernameExists(\Predis\ClientInterface $client, string $username): bool {
         $userIds = $client->keys(User::keyPrefix()->add('*'));
+
+        // HACK: this is so hacky but whatever
+        $userIds = array_filter($userIds, function ($candidateUserId) {
+            return substr_count($candidateUserId, ':') === 1;
+        });
 
         $usernames = array_map(function ($id) use ($client) {
             return $client->hget($id, 'username');
@@ -83,9 +86,9 @@ class Auth {
     public static function getUser(): ?User {
         $session = new Session();
 
-        $userKey = User::key($session->get('user'));
+        $userId = $session->get('user');
 
-        return DB::get($userKey);
+        return DB::get(User::class, $userId);
     }
 
     public static function isAuthenticated(): bool {
