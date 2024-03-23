@@ -25,7 +25,7 @@
 
 <body>
     <?php 
-        include __DIR__ . '/header.php';
+        include __DIR__ . '/partials/header.php';
     ?>
     <h2>Add new bookmark:</h2>
     <form action="./bookit.php" method="post" style="display: flex; flex-direction: column;">
@@ -43,7 +43,7 @@
     </form>
 
     <?php
-        include __DIR__. '/footer.php';
+        include __DIR__. '/partials/footer.php';
     ?>
 </body>
 

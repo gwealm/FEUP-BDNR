@@ -1,3 +1,7 @@
+<?php
+require __DIR__ . '/autoload.php'
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,9 +64,10 @@
 </head>
 <body>
     <?php
-        include __DIR__ . '/header.php';
+        include __DIR__ . '/partials/header.php';
         require_once __DIR__ . '/db.php';
-        require_once __DIR__ . '/session.php';
+
+        use \Lib\Session;
 
         $session = new Session();
         
@@ -94,7 +99,7 @@
                 $tags = explode(',', $tags);
                 $tags = array_map(fn($tag) => "tag:$tag", $tags);
     
-                $bookmarks = $db->getForTags($user, $tags);
+                $bookmarks = $db->getForTags($tags);
             } else {
                 ?> 
                 <h2>Latest bookmarks:</h2>
@@ -119,7 +124,7 @@
             }
         }
     
-        include __DIR__. '/footer.php';
+        include __DIR__. '/partials/footer.php';
     ?>
 </body>
 </html>

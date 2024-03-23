@@ -1,7 +1,5 @@
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
-
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
@@ -231,11 +229,10 @@ class DB {
     /**
      * @return Bookmark[]
      */
-    public function getForTags(User $user, array $tags): array {
+    public function getForTags(array $tags): array {
         $bookmarkIds = $this->client->sinter($tags);
 
-        // FIXME: in here we could add the keys to the 'sinter' call, but ctrl+c/ctrl+v galore
-        return array_map(fn ($bookmarkId) => Bookmark::getFromDB($this->client, $bookmarkId), array_filter($bookmarkIds, fn ($bookmarkId) => in_array($bookmarkId, $user->bookmarks)));
+        return array_map(fn ($bookmarkId) => Bookmark::getFromDB($this->client, $bookmarkId), $bookmarkIds);
     }
 }
 

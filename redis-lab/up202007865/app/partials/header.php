@@ -1,7 +1,5 @@
-
-<?php 
-
-    include_once __DIR__ . '/session.php';
+<?php
+    use \Lib\Session;
 
     $session = new Session();
 ?>
@@ -19,6 +17,6 @@
 ?>
 <div>
     <span><?= $username ?></span>
-    <span><a href="./logout.php">Logout</a></span>
+    <span><a href="./api/logout.php">Logout</a></span>
 </div>
 <?php } ?>

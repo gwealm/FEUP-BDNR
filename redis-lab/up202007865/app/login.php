@@ -1,31 +1,7 @@
-<?php 
-    if (strcmp($_SERVER['REQUEST_METHOD'], "POST") === 0) {
+<?php
+require __DIR__ . '/autoload.php'
+?>
 
-        include_once __DIR__. '/session.php';
-        include_once __DIR__. '/db.php';
-
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        
-        $db = new DB();
-        $session = new Session();
-
-        if (!$db->userExists($username)) {
-            header("Location: /");
-            die;
-        }
-
-        $user = $db->login($username, $password);
-
-        if ($user !== null) {
-            $session->set('user', $username);
-        } 
-
-        header("Location: /");
-        die;
-
-    } else if (strcmp($_SERVER['REQUEST_METHOD'], "GET") === 0) {
-    ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,10 +29,10 @@
 
 <body>
     <?php 
-        include __DIR__ . '/header.php';
+        include __DIR__ . '/partials/header.php';
     ?>
     <h2>Login:</h2>
-    <form action="./login.php" method="POST" style="display: flex; flex-direction: column;">
+    <form action="./api/login.php" method="POST" style="display: flex; flex-direction: column;">
         <label>
             Username:
             <input type="text" name="username" id="username" placeholder="Type your username...">
@@ -71,14 +47,8 @@
     </form>
 
     <?php
-        include __DIR__. '/footer.php';
+        include __DIR__. '/partials/footer.php';
     ?>
 </body>
 
 </html>
-    <?php
-    } else {
-        header("Location: /");
-        die;
-    }
-?>

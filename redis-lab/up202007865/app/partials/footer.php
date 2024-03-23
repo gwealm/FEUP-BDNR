@@ -2,9 +2,8 @@
     <nav>
         <ul class="footer-links">
             <li><a href=".">Home</a></li>
-            <?php 
-            
-                include_once __DIR__ . '/session.php';
+            <?php
+                use \Lib\Session;
 
                 $session = new Session();
 
