@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+    aerospikedb:
+        image: aerospike/aerospike-server:latest
+        networks:
+        - aerospikenetwork
+        volumes:
+        - ./data:/opt/aerospike/data/
+    
+    meshworker:
+        image: aerospike/aerospike-tools:3.15.0.3
+        networks:
+        - aerospikenetwork
+        depends_on:
+        - aerospikedb
+        entrypoint:
+        - /run/secrets/discovery
+        - "--servicename"
+        - aerospikedb
+        - "-i"
+        - "5"
+        - "-v"
+        secrets:
+        - source: discoveryfile
+          target: discovery
+#          mode: 0750
+
+networks:
+  aerospikenetwork:
+    driver: bridge
+
+secrets:
+    discoveryfile:
+        file: ./discovery.py
