@@ -3,9 +3,19 @@ export interface Server {
     id: string;
     name: string;
 
-    image: string;
+    image?: string;
 
     channels: Channel[];
+}
+
+type UserServerList = {
+    [id: Server['id']]: Channel['id'];
+}
+export interface User {
+    id: string;
+    name: string;
+    servers: UserServerList;
+    lastServer: keyof User['servers'];
 }
 
 export interface Channel {
