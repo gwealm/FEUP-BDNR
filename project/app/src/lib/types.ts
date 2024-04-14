@@ -1,21 +1,21 @@
-interface Server {
-    
+export interface Server {
+
     id: string;
     name: string;
 
     image: string;
-    
+
     channels: Channel[];
 }
 
-interface Channel {
+export interface Channel {
     id: string;
     name: string;
 
     messages: Message[];
 }
 
-interface Message {
+export interface Message {
 
     id: string;
 
