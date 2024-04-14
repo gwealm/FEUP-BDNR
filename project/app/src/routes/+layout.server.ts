@@ -21,11 +21,6 @@ export const load: LayoutServerLoad = async () => {
             name: "Test Server 1",
             image: "https://picsum.photos/300/300",
             channels: [
-                {
-                    id: "1",
-                    name: "Test Channel 1",
-                    messages: []
-                }
             ],
         },
         {

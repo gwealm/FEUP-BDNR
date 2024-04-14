@@ -4,7 +4,7 @@
 
     export let data: LayoutData;
 
-    const { channels } = data;
+    $: channels = data.channels;
 </script>
 
 <div class="h-full flex">

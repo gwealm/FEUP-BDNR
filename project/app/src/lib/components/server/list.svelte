@@ -7,7 +7,7 @@
 
 <!-- TODO: add generic scrollable list component -->
 <ul class="flex flex-col gap-2 items-center">
-    {#each servers as server}
+    {#each servers as server (`server-${server.id}`)}
         <li class="">
             <ServerPreview {server} />
         </li>

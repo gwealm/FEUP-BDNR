@@ -6,7 +6,7 @@
 </script>
 
 <ul class="flex flex-col gap-2 items-center">
-    {#each channels as channel}
+    {#each channels as channel (`channel-${channel.id}`)}
         <li class="w-full">
             <ChannelPreview {channel} />
         </li>
