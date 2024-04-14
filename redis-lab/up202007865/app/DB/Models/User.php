@@ -61,7 +61,7 @@ class User extends DBModel implements Renderable{
                 return $bookmark->getId();
             } , $this->bookmarks);
     
-            $client->sadd($userBookmarkKey, $userBookmarkIDs);
+            $client->zadd($userBookmarkKey, $userBookmarkIDs);
         }
 
         if (count($this->followedUsers) > 0) {

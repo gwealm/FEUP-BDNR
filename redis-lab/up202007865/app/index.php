@@ -97,7 +97,7 @@ require __DIR__ . '/autoload.php'
                 // $bookmarks = $db->getForTags($tags);
             } else {
                 ?> 
-                <h2>Latest bookmarks:</h2>
+                <h2>Your latest bookmarks:</h2>
                 <?php
                 $bookmarks = $user->bookmarks;
             }

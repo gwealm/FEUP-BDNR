@@ -2,6 +2,7 @@
 
 namespace DB\Models;
 
+use DB\DB;
 use DB\Models\Renderable;
 use Predis\ClientInterface;
 
@@ -42,6 +43,14 @@ class Bookmark extends DBModel implements Renderable {
         return $bookmark;
     }
     
+    public static function forTags(array $tags) {
+        $client = DB::raw();
+
+        
+
+
+    }
+
     protected function _save(\Predis\ClientInterface $client) {
         $bookmarkKey = static::key($this->getId());
 
