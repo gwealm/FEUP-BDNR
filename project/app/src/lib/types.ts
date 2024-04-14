@@ -22,6 +22,8 @@ export interface Channel {
     id: string;
     name: string;
 
+    server: Server['id'];
+
     messages: Message[];
 }
 

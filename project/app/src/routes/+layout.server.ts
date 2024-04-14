@@ -10,7 +10,7 @@ export const load: LayoutServerLoad = async () => {
         name: "Test User",
         servers: {
             "1": "1",
-            "2": "1",
+            "2": "3",
         },
         lastServer: "1"
     };
