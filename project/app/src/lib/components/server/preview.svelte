@@ -4,7 +4,7 @@
     export let server: Server;
 </script>
 
-<div class="w-12 h-12 tooltip tooltip-right" data-tip={server.name}>
+<div class="w-12 h-12">
     <img
         src={server.image}
         alt="Image for {server.name}"

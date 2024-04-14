@@ -1,5 +1,6 @@
 import typography from "@tailwindcss/typography";
 import daisyui from "daisyui";
+import hideScrollbar from "tailwind-scrollbar-hide";
 
 /** @type {import("tailwindcss").Config & {daisyui: import("daisyui").Config}} */
 export default {
@@ -13,5 +14,5 @@ export default {
         themes: true,
     },
 
-    plugins: [typography, daisyui],
+    plugins: [typography, daisyui, hideScrollbar],
 };
