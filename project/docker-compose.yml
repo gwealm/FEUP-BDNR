@@ -22,6 +22,7 @@ services:
         depends_on:
         - aerospikedb
         entrypoint:
+        # - python --servicename aerospikedb
         - /run/secrets/discovery
         - "--servicename"
         - aerospikedb
