@@ -1,19 +1,9 @@
-
 import type { LayoutServerLoad } from "./$types";
-import type { Server, User } from "$lib/types";
+import type { Server } from "$lib/types";
 
 export const load: LayoutServerLoad = async () => {
 
     // TODO: Fetch user data from DB
-    const user: User = {
-        id: "1",
-        name: "Test User",
-        servers: {
-            "1": "1",
-            "2": "3",
-        },
-        lastServer: "1"
-    };
 
     const servers: Server[] = [
         {
@@ -32,7 +22,6 @@ export const load: LayoutServerLoad = async () => {
     ];
 
     return {
-        user,
         servers
     };
 }
