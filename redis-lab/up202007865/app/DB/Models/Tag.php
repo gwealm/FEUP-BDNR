@@ -12,29 +12,28 @@ class Tag extends DBModel implements Renderable {
      * 
      * @var string[]
      */
-    private array $bookmarks;
+    public array $bookmarks;
 
-    private string $name;
 
-    public function __construct(string $name, string $id = null) {
-        parent::__construct($id);
+    public function __construct(string $name) {
+        parent::__construct($name);
 
-        $this->name = $name;
         $this->bookmarks = [];
     }
 
     public function render() {
+
+        $tagId = $this->getId();
+
         ?>
-        <a href="./?tags=<?= $this->name ?>" data-tag-id="<?= $this->getId() ?>"><?= $this->name ?></a>
+        <a href="./?tags=<?= $tagId ?>" data-tag-id="<?= $tagId ?>"><?= $tagId ?></a>
         <?php
     }
 
-    public static function getFromDB(ClientInterface $client, string $id): static {
-        $tagKey = static::key($id);
-
-        $name = $client->hget($tagKey, 'name');
-
-        $tag = new Tag($name, $id);
+    public static function getFromDB(ClientInterface $client, string $name): static {        
+        $tag = new Tag($name);
+        
+        $tagKey = static::key($tag->getId());
 
         $bookmarks = $client->smembers($tagKey->add("bookmarks"));
 
@@ -46,13 +45,10 @@ class Tag extends DBModel implements Renderable {
     protected function _save(\Predis\ClientInterface $client) {
         $tagKey = static::key($this->getId());
         
-        $client->hset($tagKey, 'id', $this->getId());
-        $client->hset($tagKey, 'name', $this->name);
-
         if (count($this->bookmarks) > 0) {
             $tagBookmarkKey = $tagKey->add('bookmarks');
 
-            $client->sadd($tagBookmarkKey, $this->bookmarks);
+            $temp = $client->sadd($tagBookmarkKey, $this->bookmarks);
         }
     }
 }

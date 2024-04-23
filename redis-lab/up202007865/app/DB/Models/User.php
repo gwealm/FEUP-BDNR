@@ -3,6 +3,7 @@
 namespace DB\Models;
 
 use Predis\ClientInterface;
+use Ramsey\Uuid\Uuid;
 
 class User extends DBModel implements Renderable{
 
@@ -18,7 +19,7 @@ class User extends DBModel implements Renderable{
     private array $followedUsers;
 
     public function __construct(string $username, string $id = null) {
-        parent::__construct($id);
+        parent::__construct((is_null($id) ? Uuid::uuid4() : Uuid::fromString($id))->toString());
 
         $this->username = $username;
         $this->bookmarks = [];

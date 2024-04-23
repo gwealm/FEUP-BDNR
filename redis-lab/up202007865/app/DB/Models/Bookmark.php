@@ -5,11 +5,12 @@ namespace DB\Models;
 use DB\DB;
 use DB\Models\Renderable;
 use Predis\ClientInterface;
+use Ramsey\Uuid\Uuid;
 
 class Bookmark extends DBModel implements Renderable {
 
     public User $author;
-    private string $url;
+    public string $url;
 
     /**
      * @var Tag[]
@@ -17,7 +18,7 @@ class Bookmark extends DBModel implements Renderable {
     public array $tags;
 
     public function __construct(string $url, string $id = null) {
-        parent::__construct($id);
+        parent::__construct((is_null($id) ? Uuid::uuid4() : Uuid::fromString($id))->toString());
 
         $this->url = $url;
         $this->tags = [];
@@ -36,7 +37,10 @@ class Bookmark extends DBModel implements Renderable {
 
         foreach ($tags as $tagId) {
             $tag = Tag::getFromDB($client, $tagId);
-        
+
+            $tag->bookmarks ??= [];
+            $tag->bookmarks[] = $id;
+
             $bookmark->tags[] = $tag;
         }
 
@@ -46,9 +50,18 @@ class Bookmark extends DBModel implements Renderable {
     public static function forTags(array $tags) {
         $client = DB::raw();
 
+        $tagIds = array_map(fn($tagId) => (string)Tag::key($tagId)->add('bookmarks'), $tags);
         
+        $bookmarkIds = $client->sinter($tagIds);
 
+        $bookmarks = array_map(fn($bookmarkId) => Bookmark::getFromDB($client, $bookmarkId), $bookmarkIds);
 
+        foreach ($bookmarks as $bookmark) {
+            $bookmarkAuthorId = $client->get($bookmark->key($bookmark->getId())->add('author'));
+            $bookmark->author = User::getFromDB($client, $bookmarkAuthorId);
+        }
+
+        return $bookmarks;
     }
 
     protected function _save(\Predis\ClientInterface $client) {

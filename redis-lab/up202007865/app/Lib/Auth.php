@@ -53,6 +53,8 @@ class Auth {
 
         foreach ($userIds as $userId) {
 
+            if (substr_count($userId, ':') > 1) continue; // Compound key
+
             $candidateUsername = $dbClient->hget($userId, 'username');
 
             if ($candidateUsername !== $username) continue;

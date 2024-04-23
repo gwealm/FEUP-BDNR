@@ -32,14 +32,14 @@ class Key {
 
 abstract class DBModel {
 
-    private UuidInterface $id;
+    private string $id;
 
     protected function __construct(string $id = null) {
-        $this->id = is_null($id) ? Uuid::uuid4() : Uuid::fromString($id);
+        $this->id = $id;
     }
 
     public function getId(): string {
-        return $this->id->toString();
+        return $this->id;
     }
 
     public static function key(string $id): Key { 

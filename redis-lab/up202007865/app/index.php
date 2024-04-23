@@ -66,10 +66,9 @@ require __DIR__ . '/autoload.php'
     <?php
         include __DIR__ . '/partials/header.php';
 
-        use \Lib\Auth;
+        use Lib\Auth;
         use DB\Models\Bookmark;
     
-        
         if (!Auth::isAuthenticated()) {
             ?>
             <h2>You are not logged in.</h2>
@@ -92,9 +91,8 @@ require __DIR__ . '/autoload.php'
                 <?php
     
                 $tags = explode(',', $tags);
-                $tags = array_map(fn($tag) => "tag:$tag", $tags);
     
-                // $bookmarks = $db->getForTags($tags);
+                $bookmarks = Bookmark::forTags($tags);
             } else {
                 ?> 
                 <h2>Your latest bookmarks:</h2>

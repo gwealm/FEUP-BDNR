@@ -22,6 +22,7 @@ if (Auth::isAuthenticated()) {
         $tag = new Tag($tagName);
 
         $bookmark->tags[] = $tag;
+        $tag->bookmarks[] = $bookmark->getId();
     }
 
     DB::save($bookmark);
