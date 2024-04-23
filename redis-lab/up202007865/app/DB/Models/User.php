@@ -14,9 +14,9 @@ class User extends DBModel implements Renderable{
     public string $username;
 
     /**
-     * @var User[]
+     * @var string[]
      */
-    private array $followedUsers;
+    public array $followedUsers;
 
     public function __construct(string $username, string $id = null) {
         parent::__construct((is_null($id) ? Uuid::uuid4() : Uuid::fromString($id))->toString());
@@ -34,7 +34,18 @@ class User extends DBModel implements Renderable{
 
         $user = new User($username, $id);
 
-        $bookmarkIds = $client->smembers($userKey->add("bookmarks"));
+        $bookmarkIds = $client->zrevrange(
+            $userKey->add("bookmarks"),
+            0, 
+            -1, // with -1 we get all the results
+            [
+                'WITHSCORES' => false,
+                'LIMIT' => [
+                    'OFFSET' => 0,
+                    'COUNT' => 15
+                ]
+            ]
+        );
 
         foreach ($bookmarkIds as $bookmarkId) {
             $bookmark = Bookmark::getFromDB($client, $bookmarkId);
@@ -43,6 +54,10 @@ class User extends DBModel implements Renderable{
 
             $user->bookmarks[] = $bookmark;
         }
+
+        $followedKey = $userKey->add("followedUsers");
+
+        $user->followedUsers = $client->smembers($followedKey);
 
         return $user;
     }
@@ -56,26 +71,30 @@ class User extends DBModel implements Renderable{
 
         if (count($this->bookmarks) > 0) {
             $userBookmarkKey = $userKey->add('bookmarks');
-            $userBookmarkIDs = array_map(function (Bookmark $bookmark) use ($client) {
+            $userBookmarkIDs = array_map(function (Bookmark $bookmark) {
                 // $bookmark->save($client);
                 
                 return $bookmark->getId();
             } , $this->bookmarks);
-    
-            $client->zadd($userBookmarkKey, $userBookmarkIDs);
+
+            $cansado = [];
+            foreach ($userBookmarkIDs as $bookmarkId) {
+                $cansado[$bookmarkId] = time();
+            }
+
+            $client->zadd((string)$userBookmarkKey, $cansado);
         }
 
         if (count($this->followedUsers) > 0) {
             $followedUsersKey = $userKey->add('followedUsers');
-            $followedUserIDs = array_map(fn (User $user) => $user->getId(), $this->followedUsers);
 
-            $client->sadd($followedUsersKey, $followedUserIDs);
+            $client->sadd($followedUsersKey, $this->followedUsers);
         }
     }
 
     public function render() {
         ?>
-        <span data-user-id="<?= $this->getId() ?>">By: <a href="" title="Click to follow <?= $this->username ?>"><?= $this->username ?></a></span>
+        <span data-user-id="<?= $this->getId() ?>">By: <a href="/api/follow.php?user=<?= $this->getId() ?>" title="Click to follow <?= $this->username ?>"><?= $this->username ?></a></span>
         <?php
     }
 

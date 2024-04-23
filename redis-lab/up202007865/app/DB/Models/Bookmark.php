@@ -73,7 +73,7 @@ class Bookmark extends DBModel implements Renderable {
         $bookmarkAuthor = $bookmarkKey->add('author');
         $client->set($bookmarkAuthor, $this->author->getId());
         $authorBookmarksKey = User::key($this->author->getId())->add('bookmarks');
-        $client->sadd($authorBookmarksKey, $this->getId());
+        $client->zadd($authorBookmarksKey, [$this->getId() => time()]);
 
         if (count($this->tags) > 0) {
             $bookmarkTagKey = $bookmarkKey->add('tags');

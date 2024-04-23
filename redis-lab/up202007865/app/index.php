@@ -66,9 +66,11 @@ require __DIR__ . '/autoload.php'
     <?php
         include __DIR__ . '/partials/header.php';
 
+        use DB\DB;
         use Lib\Auth;
         use DB\Models\Bookmark;
-    
+use DB\Models\User;
+
         if (!Auth::isAuthenticated()) {
             ?>
             <h2>You are not logged in.</h2>
@@ -113,6 +115,25 @@ require __DIR__ . '/autoload.php'
                     }
                 ?>
                 </ul>
+                <?php
+            }
+
+            if (count($user->followedUsers) > 0) {
+                ?>
+                <section>
+                    <h2>From people you follow</h2>
+                    <ul class="bookmark-list">
+                    <?php
+                        foreach ($user->followedUsers as $userId) {
+                            $followedUser = User::getFromDB(DB::raw(), $userId);
+                            
+                            foreach ($followedUser->bookmarks as $bookmark) {
+                                $bookmark->render();
+                            }
+                        }
+                    ?>
+                    </ul>
+                </section>
                 <?php
             }
         }
