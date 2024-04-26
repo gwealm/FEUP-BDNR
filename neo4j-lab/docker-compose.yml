@@ -1,0 +1,86 @@
+services:
+  cass1:
+    image: cassandra:latest
+    container_name: cass1
+    hostname: cass1
+    healthcheck:
+        test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
+        interval: 5s
+        timeout: 5s
+        retries: 60
+    networks:
+      - cassandra
+    ports:
+      - "9042:9042" 
+    volumes:
+      - ./database/data/cass1:/var/lib/cassandra
+    environment: &environment    # Declare and save environments variables into "environment"
+        CASSANDRA_SEEDS: "cass1,cass2"    # The first two nodes will be seeds
+        CASSANDRA_CLUSTER_NAME: ClusterBDNR
+        CASSANDRA_DC: Mars
+        CASSANDRA_RACK: West
+        CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+        CASSANDRA_NUM_TOKENS: 128  
+        HEAP_NEWSIZE: 128M
+        MAX_HEAP_SIZE: 2048M
+
+  cass2:
+    image: cassandra:latest
+    container_name: cass2
+    hostname: cass2
+    healthcheck:
+        test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
+        interval: 5s
+        timeout: 5s
+        retries: 60
+    networks:
+      - cassandra
+    ports:
+      - "9043:9042"
+    volumes:
+      - ./database/data/cass2:/var/lib/cassandra 
+      - ./database/init-scripts/:/docker-entrypoint-initdb.d/
+    environment: *environment    # point to "environment" to use the same environment variables as cass1
+    depends_on:
+      cass1:    # start cass2 only after cass1 is healthy
+        condition: service_healthy  
+
+  cass3:
+    image: cassandra:latest
+    container_name: cass3
+    hostname: cass3
+    healthcheck:
+        test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
+        interval: 5s
+        timeout: 5s
+        retries: 60
+    networks:
+      - cassandra
+    ports:
+      - "9044:9042"  
+    volumes:
+      - ./database/data/cass3:/var/lib/cassandra   
+    environment: *environment    
+    depends_on:
+      cass1:    # start cass3 only after cass1 is healthy
+        condition: service_healthy 
+
+  cassandra-load-keyspace:
+    container_name: cassandra-load-keyspace
+    image: cassandra:latest
+    depends_on:
+      - cass1
+    volumes:
+      - ./database/init.cql:/init.cql
+    command: /bin/bash -c "sleep 60 && echo loading cassandra keyspace && cqlsh cass1 -f /init.cql"
+    networks:
+      - cassandra
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+networks:
+  cassandra: 

@@ -1,0 +1,56 @@
+.bookmark {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.tag-list {
+    display: inline-flex;
+    gap: 0.2em;
+    list-style-type: none;
+    padding: 0;
+}
+
+.tag-list::before {
+    content: "[";
+}
+
+
+.tag-list::after {
+    content: "]";
+}
+
+footer > ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    list-style-type: none;
+    gap: 0.2em;
+    padding: 0;
+}
+
+footer > ul > li > a::before {
+    content: "|";
+}
+
+footer > ul > li:first-child > a:before {
+    content: "";
+}
+
+        form {
+    padding: 1em 0 1em 0;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-flow: column wrap;
+    gap: 1em;
+}
+
+button {
+    box-shadow: 0 2px 5px rgba(41, 40, 40, 0.2); /* Shadow */
+    border: 0.05em solid rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
+    background-color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
