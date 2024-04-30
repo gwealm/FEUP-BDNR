@@ -1,1 +1,11 @@
-INSERT INTO test.demo (PK, foo, bar, baz) VALUES ('key1', 123, 'abc', true);
+-- Users
+INSERT INTO test.users (PK, username, email, password, servers) VALUES ('user1', "testuser", 'testuser@mail.com', "password", LIST('["server1"]'));
+
+-- Servers 
+INSERT INTO test.servers (PK, name, channels, members) VALUES ('server1', "testserver", LIST('["channel1"]'), LIST('["user1"]'));
+
+-- Channels
+INSERT INTO test.channels (PK, name, messages) VALUES ('channel1', "testchannel", LIST('["message1"]'));
+
+-- Messages
+INSERT INTO test.messages (PK, content) VALUES ('message1', "Conteúdo da mensagem");

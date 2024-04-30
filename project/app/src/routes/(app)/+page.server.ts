@@ -1,5 +1,5 @@
 import { redirect } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import type { PageServerLoad } from "../$types";
 import { get } from "svelte/store";
 import userStore from "$lib/stores/user";
 
