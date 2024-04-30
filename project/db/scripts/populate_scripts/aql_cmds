@@ -1,0 +1,1 @@
+INSERT INTO test.demo (PK, foo, bar, baz) VALUES ('key1', 123, 'abc', true);
