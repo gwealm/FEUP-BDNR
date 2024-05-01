@@ -1,6 +1,5 @@
 import * as Aerospike from "aerospike";
 
-
 const config = new Aerospike.Config({
     hosts: [
         {
@@ -12,16 +11,40 @@ const config = new Aerospike.Config({
 
 const client = await Aerospike.connect(config);
 
+const NAMESPACE = "test";
 
-let key = new Aerospike.Key('test', 'test', 'abcd')
-let bins = {
-    name: 'Norma',
-    age: 31
+const get = async (set: string, recordKey: string): Promise<object> => {
+    const key = new Aerospike.Key(NAMESPACE, set, recordKey);
+
+    const record = await client.get(key);
+
+    return record;
 }
-await client.put(key, bins)
-let record = await client.get(key)
-console.info('Record:', record)
-await client.remove(key)
-await client.close();
 
+const remove = async (set: string, recordKey: string): Promise<object> => {
+    const key = new Aerospike.Key(NAMESPACE, set, recordKey);
 
+    const record = await client.remove(key);
+
+    return record;
+}
+
+const put = async (set: string, recordKey: string, bins: object): Promise<object> => {
+    const key = new Aerospike.Key(NAMESPACE, set, recordKey);
+
+    const record = await client.put(key, bins);
+
+    return record;
+}
+
+const shutdown = async () => {
+    await client.close();
+}
+
+export {
+    client, // FIXME: THIS IS WRONG ON SO MANY LEVELS GOD HELP ME 
+    get,
+    remove,
+    put,
+    shutdown,
+}

@@ -1,4 +1,4 @@
-import type { Actions, PageServerLoad } from "./$types";
+import type { Actions } from "./$types";
 import { validateCredentials } from "$lib/service/user";
 import { fail, redirect } from "@sveltejs/kit";
 import user from "$lib/stores/user";
@@ -29,7 +29,7 @@ export const actions: Actions = {
             return fail(422, { email, reason: "Invalid type of data for email and/or password" });
         }
 
-        const _user = validateCredentials(email, password)
+        const _user = await validateCredentials(email, password)
 
         if (_user) {
 
@@ -39,7 +39,7 @@ export const actions: Actions = {
 
             console.log("Authenticated");
 
-            throw redirect(307, "/");
+            throw redirect(303, "/");
         } else {
             return fail(403, { email, invalid: true, reason: "Invalid credentials" })
         }
