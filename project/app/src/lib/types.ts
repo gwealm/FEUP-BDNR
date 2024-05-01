@@ -1,38 +1,54 @@
-export interface Server {
+import * as z from "zod";
 
-    id: string;
-    name: string;
+const MessageSchema = z.object({
+    id: z.string(),
+    content: z.string(),
+});
+type Message = z.infer<typeof MessageSchema>;
 
-    image?: string;
+const _serverId = z.string();
 
-    channels: Channel[];
-}
+const ChannelSchema = z.object({
+    id: z.string(),
+    name: z.string(),
 
-type UserServerList = {
-    [id: Server['id']]: Channel['id'];
-}
-export interface User {
-    id: string;
-    name: string;
-    servers: UserServerList;
-    lastServer: keyof User['servers'];
-}
+    server: _serverId,
 
-export interface Channel {
-    id: string;
-    name: string;
+    messages: MessageSchema.array(),
+});
+type Channel = z.infer<typeof ChannelSchema>;
 
-    server: Server['id'];
+const ServerSchema = z.object({
+    id: _serverId,
+    name: z.string(),
 
-    messages: Message[];
-}
+    image: z.string().optional(),
 
-export interface Message {
+    channels: ChannelSchema.array(),
+});
+type Server = z.infer<typeof ServerSchema>;
 
-    id: string;
+const UserServerListSchema = _serverId.array();
+type UserServerList = z.infer<typeof UserServerListSchema>
 
-    /**
-     * The text content 
-     */
-    content: string;
+const UserSchema = z.object({
+    id: z.string(),
+    email: z.string().email(),
+    username: z.string(),
+    servers: UserServerListSchema,
+    lastServer: UserServerListSchema.element,
+});
+type User = z.infer<typeof UserSchema>;
+
+export {
+    MessageSchema,
+    type Message,
+    ChannelSchema,
+    type Channel,
+    ServerSchema,
+    type Server,
+    UserServerListSchema,
+    type UserServerList,
+    UserSchema,
+    type User,
 }

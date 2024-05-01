@@ -1,25 +1,33 @@
-import type { User } from "$lib/types";
+import { UserSchema, type User } from "$lib/types";
 import { get } from "./db";
 
 const validateCredentials = async (email: string, password: string): Promise<User | null> => {
 
-    const test = await get('users', 'user1');
+    // TODO: fetch user by mail
+    const dbResult = await get('users', 'user1');
+    const data = dbResult.bins;
 
-    console.log("test", test);
+    console.log(data);
 
-    if (email === "testuser@mail.com" && password === "password") {
-        return {
-            id: "1",
-            name: "Test User",
-            servers: {
-                "1": "1",
-                "2": "3",
-            },
-            lastServer: "1"
-        };
+    const { password: dbPassword } = data;
+
+    const valid = await verifyPassword(password, dbPassword);
+
+    if (valid) {
+        const result = UserSchema.safeParse(data);
+
+        if (result.success) {
+            return result.data;
+        } else {
+            console.log(data, result.error.flatten());
+        }
     }
 
     return null;
+}
+
+const verifyPassword = async (passwordCandidate: string, realPassword: string): Promise<boolean> => {
+    return passwordCandidate === realPassword;
 }
 
 export {

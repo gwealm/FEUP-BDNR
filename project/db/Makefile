@@ -1,9 +1,8 @@
 CONTAINER_NAME := aerospike
-TOOL_CONTAINER_NAME := aql
+AQL_TOOL_CONTAINER_NAME := aql
+ASADM_TOOL_CONTAINER_NAME := asadm
 
-all: create populate inspect
-	docker wait ${TOOL_CONTAINER_NAME}
-	$(MAKE) clean
+all: create populate indices
 
 create:
 	./scripts/create.sh ${CONTAINER_NAME}
@@ -11,11 +10,12 @@ create:
 populate:
 	./scripts/populate.sh ${CONTAINER_NAME} aql_cmds
 
+indices:
+	./scripts/indices.sh ${ASADM_TOOL_CONTAINER_NAME} ${CONTAINER_NAME}
+
 inspect:
-	./scripts/inspect.sh ${TOOL_CONTAINER_NAME} ${CONTAINER_NAME}
+	./scripts/inspect.sh ${AQL_TOOL_CONTAINER_NAME} ${CONTAINER_NAME}
 
 clean:
-	docker container stop ${TOOL_CONTAINER_NAME}
-	docker container rm ${TOOL_CONTAINER_NAME}
 	docker container stop ${CONTAINER_NAME}
 	docker container rm ${CONTAINER_NAME}

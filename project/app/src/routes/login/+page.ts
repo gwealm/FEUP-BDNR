@@ -7,6 +7,6 @@ export const load: PageLoad = (event) => {
     const user = get(userStore);
 
     if (user) {
-        redirect(303, '/');
+        redirect(303, '/@me');
     }
 }

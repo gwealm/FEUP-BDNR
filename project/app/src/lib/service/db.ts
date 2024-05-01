@@ -1,4 +1,5 @@
 import * as Aerospike from "aerospike";
+import type Record from "record";
 
 const config = new Aerospike.Config({
     hosts: [
@@ -13,15 +14,18 @@ const client = await Aerospike.connect(config);
 
 const NAMESPACE = "test";
 
-const get = async (set: string, recordKey: string): Promise<object> => {
+const get = async (set: string, recordKey: string): Promise<Record> => {
     const key = new Aerospike.Key(NAMESPACE, set, recordKey);
 
     const record = await client.get(key);
 
-    return record;
+    return {
+        ...record,
+        id: key.key,
+    };
 }
 
-const remove = async (set: string, recordKey: string): Promise<object> => {
+const remove = async (set: string, recordKey: string): Promise<Record> => {
     const key = new Aerospike.Key(NAMESPACE, set, recordKey);
 
     const record = await client.remove(key);
@@ -29,7 +33,7 @@ const remove = async (set: string, recordKey: string): Promise<object> => {
     return record;
 }
 
-const put = async (set: string, recordKey: string, bins: object): Promise<object> => {
+const put = async (set: string, recordKey: string, bins: object): Promise<Record> => {
     const key = new Aerospike.Key(NAMESPACE, set, recordKey);
 
     const record = await client.put(key, bins);

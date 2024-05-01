@@ -2,6 +2,7 @@
 
 docker run \
     -it \
+    --rm \
     --name "$1" \
     aerospike/aerospike-tools:latest \
     aql \

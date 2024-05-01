@@ -1,5 +1,5 @@
 -- Users
-INSERT INTO test.users (PK, username, email, password, servers) VALUES ('user1', "testuser", 'testuser@mail.com', "password", LIST('["server1"]'));
+INSERT INTO test.users (PK, username, email, password, servers, lastServer) VALUES ('user1', "testuser", 'testuser@mail.com', "password", LIST('["server1"]'), "server1");
 
 -- Servers 
 INSERT INTO test.servers (PK, name, channels, members) VALUES ('server1', "testserver", LIST('["channel1"]'), LIST('["user1"]'));

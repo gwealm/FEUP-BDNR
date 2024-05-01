@@ -39,7 +39,7 @@ export const actions: Actions = {
 
             console.log("Authenticated");
 
-            throw redirect(303, "/");
+            throw redirect(303, "/@me");
         } else {
             return fail(403, { email, invalid: true, reason: "Invalid credentials" })
         }
