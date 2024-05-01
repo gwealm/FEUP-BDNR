@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Server } from "$lib/types";
+    import type { ServerPreview as Server } from "$lib/types";
     import ServerPreview from "./preview.svelte";
 
     export let servers: Server[];

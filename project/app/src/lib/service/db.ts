@@ -18,7 +18,7 @@ const get = async (
     set: string,
     recordKey: string,
 ): Promise<
-    Omit<Record, "bins"> & { bins: Pick<Record, "bins"> & { id: string } }
+    Record
 > => {
     const key = new Aerospike.Key(NAMESPACE, set, recordKey);
 

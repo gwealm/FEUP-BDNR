@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type { Server } from "$lib/types";
+    import type { ServerPreview } from "$lib/types";
 
-    export let server: Server;
+    export let server: ServerPreview;
 </script>
 
 <div class="h-12 w-12">

@@ -8,8 +8,8 @@ export const load: PageServerLoad = async () => {
     const user = get(userStore);
 
     if (!user) {
-        redirect(303, "/login");
+        throw redirect(303, "/login");
     } else {
-        redirect(307, `/${user.lastServer}`);
+        throw redirect(307, `/@me`);
     }
 };

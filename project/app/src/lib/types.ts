@@ -16,7 +16,12 @@ const ChannelSchema = z.object({
 
     messages: MessageSchema.array(),
 });
+const ChannelPreviewSchema = ChannelSchema.omit({ messages: true });
 type Channel = z.infer<typeof ChannelSchema>;
+type ChannelPreview = z.infer<typeof ChannelPreviewSchema>;
+
+const ServerChannelListSchema = z.record(ChannelSchema.shape.id, ChannelPreviewSchema);
+type ServerChannelList = z.infer<typeof ServerChannelListSchema>;
 
 const ServerSchema = z.object({
     id: _serverId,
@@ -24,11 +29,13 @@ const ServerSchema = z.object({
 
     image: z.string().optional(),
 
-    channels: ChannelSchema.array(),
+    channels: ServerChannelListSchema,
 });
+const ServerPreviewSchema = ServerSchema.omit({ channels: true });
 type Server = z.infer<typeof ServerSchema>;
+type ServerPreview = z.infer<typeof ServerPreviewSchema>;
 
-const UserServerListSchema = _serverId.array();
+const UserServerListSchema = z.record(_serverId, ServerPreviewSchema);
 type UserServerList = z.infer<typeof UserServerListSchema>;
 
 const UserSchema = z.object({
@@ -36,7 +43,6 @@ const UserSchema = z.object({
     email: z.string().email(),
     username: z.string(),
     servers: UserServerListSchema,
-    lastServer: UserServerListSchema.element,
 });
 type User = z.infer<typeof UserSchema>;
 
@@ -45,8 +51,14 @@ export {
     type Message,
     ChannelSchema,
     type Channel,
+    ChannelPreviewSchema,
+    type ChannelPreview,
+    ServerChannelListSchema,
+    type ServerChannelList,
     ServerSchema,
     type Server,
+    ServerPreviewSchema,
+    type ServerPreview,
     UserServerListSchema,
     type UserServerList,
     UserSchema,

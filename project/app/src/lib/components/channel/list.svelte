@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Channel } from "$lib/types";
+    import type { ChannelPreview as Channel } from "$lib/types";
     import ChannelPreview from "./preview.svelte";
 
     export let channels: Channel[];

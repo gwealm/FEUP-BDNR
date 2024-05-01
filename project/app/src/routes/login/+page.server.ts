@@ -39,8 +39,6 @@ export const actions: Actions = {
             // Also, perhaps we should put the user in the cookies. Food for thought.
             user.set(_user);
 
-            console.log("Authenticated");
-
             throw redirect(303, "/@me");
         } else {
             return fail(403, {

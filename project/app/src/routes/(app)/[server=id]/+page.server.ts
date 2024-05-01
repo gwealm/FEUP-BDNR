@@ -10,8 +10,16 @@ export const load: PageServerLoad = async ({ parent, params: { server } }) => {
     if (!user) {
         redirect(303, "/login");
     } else {
-        const lastServerChannel = user.servers[server];
 
-        redirect(307, `/${server}/${lastServerChannel}`);
+        const { channels } = await parent();
+
+        if (channels.length === 0) {
+            // TODO: better logic
+            redirect(303, "/@me");
+        }
+
+        const channelId = channels[0].id;
+
+        redirect(307, `/${server}/${channelId}`);
     }
 };

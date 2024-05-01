@@ -1,37 +1,25 @@
-import type { Channel, Server } from "$lib/types";
+import { ServerSchema, type ChannelPreview } from "$lib/types";
 import type { LayoutServerLoad } from "./$types";
+import { get } from "$lib/service/db";
+import { error } from "@sveltejs/kit";
 
-export const load: LayoutServerLoad = async ({ params: { server } }) => {
-    const serverChannels: { [server: Server["id"]]: Channel[] } = {
-        "1": [
-            {
-                id: "1",
-                name: "Test Channel 1",
-                messages: [],
-                server: "1",
-            },
-            {
-                id: "2",
-                name: "Test Channel 2",
-                messages: [],
-                server: "1",
-            },
-        ],
-        "2": [
-            {
-                id: "3",
-                name: "Test Channel 3",
-                messages: [],
-                server: "2",
-            },
-        ],
-    };
+export const load: LayoutServerLoad = async ({ params: { server: serverId } }) => {
 
-    // TODO: implement data fetching.
-    const channels: Channel[] = serverChannels[server];
+    const dbResult = await get('servers', serverId);
+    const data = dbResult.bins;
 
-    return {
-        server,
-        channels,
-    };
+    const parseResult = ServerSchema.safeParse(data);
+
+    if (parseResult.success) {
+        const server = parseResult.data;
+
+        const channels: ChannelPreview[] = Object.values(server.channels);
+
+        return {
+            channels
+        };
+    } else {
+        console.log(data, parseResult.error.flatten())
+        error(500);
+    }
 };

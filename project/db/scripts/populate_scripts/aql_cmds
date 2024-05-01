@@ -1,8 +1,8 @@
 -- Users
-INSERT INTO test.users (PK, username, email, password, servers, lastServer) VALUES ('user1', "testuser", 'testuser@mail.com', "password", LIST('["server1"]'), "server1");
+INSERT INTO test.users (PK, username, email, password, servers) VALUES ('user1', "testuser", 'testuser@mail.com', "password", JSON('{"server1": { "id": "server1", "name": "testserver", "image": "https://picsum.photos/300/300"}}'));
 
 -- Servers 
-INSERT INTO test.servers (PK, name, channels, members) VALUES ('server1', "testserver", LIST('["channel1"]'), LIST('["user1"]'));
+INSERT INTO test.servers (PK, name, channels, members) VALUES ('server1', "testserver", JSON('{"channel1": { "id": "channel1", "name": "testchannel", "server": "server1"}}'), LIST('["user1"]'));
 
 -- Channels
 INSERT INTO test.channels (PK, name, messages) VALUES ('channel1', "testchannel", LIST('["message1"]'));

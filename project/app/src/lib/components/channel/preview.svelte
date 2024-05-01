@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type { Channel, Server } from "$lib/types";
+    import type { ChannelPreview, Server } from "$lib/types";
 
-    export let channel: Channel;
+    export let channel: ChannelPreview;
     export let selected: boolean = false;
 </script>
 

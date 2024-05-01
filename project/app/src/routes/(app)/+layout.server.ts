@@ -1,23 +1,17 @@
-import type { Server } from "$lib/types";
+import type { ServerPreview } from "$lib/types";
 import type { LayoutServerLoad } from "./$types";
+import { get } from "svelte/store";
+import userStore from "$lib/stores/user";
+import { redirect } from "@sveltejs/kit";
 
 export const load: LayoutServerLoad = async () => {
-    // TODO: Fetch user data from DB
+    const user = get(userStore);
 
-    const servers: Server[] = [
-        {
-            id: "1",
-            name: "Test Server 1",
-            image: "https://picsum.photos/300/300",
-            channels: [],
-        },
-        {
-            id: "2",
-            name: "Test Server 2",
-            image: "https://picsum.photos/300/300",
-            channels: [],
-        },
-    ];
+    if (!user) {
+        throw redirect(303, "/login");
+    }
+
+    const servers: ServerPreview[] = Object.values(user.servers);
 
     return {
         servers,
