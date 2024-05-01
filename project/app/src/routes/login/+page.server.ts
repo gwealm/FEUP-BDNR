@@ -29,19 +29,13 @@ export const actions: Actions = {
             return fail(422, { email, reason: "Invalid type of data for email and/or password" });
         }
 
-        if (validateCredentials(email, password)) {
+        const _user = validateCredentials(email, password)
+
+        if (_user) {
 
             // TODO: better way of setting the user :/
             // Also, perhaps we should put the user in the cookies. Food for thought.
-            user.set({
-                id: "1",
-                name: "Test User",
-                servers: {
-                    "1": "1",
-                    "2": "3",
-                },
-                lastServer: "1"
-            });
+            user.set(_user);
 
             console.log("Authenticated");
 
