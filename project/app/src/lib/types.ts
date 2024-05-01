@@ -29,7 +29,7 @@ const ServerSchema = z.object({
 type Server = z.infer<typeof ServerSchema>;
 
 const UserServerListSchema = _serverId.array();
-type UserServerList = z.infer<typeof UserServerListSchema>
+type UserServerList = z.infer<typeof UserServerListSchema>;
 
 const UserSchema = z.object({
     id: z.string(),
@@ -51,4 +51,4 @@ export {
     type UserServerList,
     UserSchema,
     type User,
-}
+};

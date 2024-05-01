@@ -8,7 +8,7 @@
 <div class="">
     <a
         href="/{channel.server}/{channel.id}"
-        class="w-full inline-flex justify-center gap-1"
+        class="inline-flex w-full justify-center gap-1"
     >
         <span>#</span>
         <span>{channel.name}</span>

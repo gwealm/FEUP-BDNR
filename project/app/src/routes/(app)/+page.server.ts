@@ -1,7 +1,7 @@
-import { redirect } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
-import { get } from "svelte/store";
 import userStore from "$lib/stores/user";
+import type { PageServerLoad } from "./$types";
+import { redirect } from "@sveltejs/kit";
+import { get } from "svelte/store";
 
 // If we get a request for this page it means the user has navigated to '/', load the last server the user has visited and proceed.
 export const load: PageServerLoad = async () => {
@@ -10,6 +10,6 @@ export const load: PageServerLoad = async () => {
     if (!user) {
         redirect(303, "/login");
     } else {
-        redirect(307, `/${user.lastServer}`)
+        redirect(307, `/${user.lastServer}`);
     }
-}
+};

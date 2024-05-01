@@ -4,6 +4,6 @@
     import "$lib/service/db";
 </script>
 
-<main class="h-full flex">
+<main class="flex h-full">
     <slot />
 </main>

@@ -1,5 +1,5 @@
-import { writable } from "svelte/store";
 import type { User } from "$lib/types";
+import { writable } from "svelte/store";
 
 const user = writable<User | null>();
 
@@ -24,4 +24,3 @@ const changeCurrentChannel = (server: string, channel: string) => {
 
 export default user;
 export { changeCurrentServer, changeCurrentChannel };
-

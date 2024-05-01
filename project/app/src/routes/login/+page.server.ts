@@ -1,14 +1,14 @@
-import type { Actions } from "./$types";
 import { validateCredentials } from "$lib/service/user";
-import { fail, redirect } from "@sveltejs/kit";
 import user from "$lib/stores/user";
+import type { Actions } from "./$types";
+import { fail, redirect } from "@sveltejs/kit";
 
 export const actions: Actions = {
     default: async (event) => {
         const formData = await event.request.formData();
 
-        const email = formData.get('email');
-        const password = formData.get('password');
+        const email = formData.get("email");
+        const password = formData.get("password");
 
         // TODO: add better error feedback
 
@@ -22,17 +22,19 @@ export const actions: Actions = {
 
         // HACK: I love typescript
         const str = (value: unknown): value is string => {
-            return typeof value === 'string';
-        }
+            return typeof value === "string";
+        };
 
         if (!str(email) || !str(password)) {
-            return fail(422, { email, reason: "Invalid type of data for email and/or password" });
+            return fail(422, {
+                email,
+                reason: "Invalid type of data for email and/or password",
+            });
         }
 
-        const _user = await validateCredentials(email, password)
+        const _user = await validateCredentials(email, password);
 
         if (_user) {
-
             // TODO: better way of setting the user :/
             // Also, perhaps we should put the user in the cookies. Food for thought.
             user.set(_user);
@@ -41,7 +43,11 @@ export const actions: Actions = {
 
             throw redirect(303, "/@me");
         } else {
-            return fail(403, { email, invalid: true, reason: "Invalid credentials" })
+            return fail(403, {
+                email,
+                invalid: true,
+                reason: "Invalid credentials",
+            });
         }
-    }
-}
+    },
+};

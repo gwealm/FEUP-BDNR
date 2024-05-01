@@ -1,13 +1,13 @@
 import { UserSchema, type User } from "$lib/types";
 import { get } from "./db";
 
-const validateCredentials = async (email: string, password: string): Promise<User | null> => {
-
+const validateCredentials = async (
+    email: string,
+    password: string,
+): Promise<User | null> => {
     // TODO: fetch user by mail
-    const dbResult = await get('users', 'user1');
+    const dbResult = await get("users", "user1");
     const data = dbResult.bins;
-
-    console.log(data);
 
     const { password: dbPassword } = data;
 
@@ -24,12 +24,13 @@ const validateCredentials = async (email: string, password: string): Promise<Use
     }
 
     return null;
-}
+};
 
-const verifyPassword = async (passwordCandidate: string, realPassword: string): Promise<boolean> => {
+const verifyPassword = async (
+    passwordCandidate: string,
+    realPassword: string,
+): Promise<boolean> => {
     return passwordCandidate === realPassword;
-}
+};
 
-export {
-    validateCredentials,
-}
+export { validateCredentials };

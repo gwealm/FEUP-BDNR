@@ -1,8 +1,7 @@
-import type { LayoutServerLoad } from "./$types";
 import type { Server } from "$lib/types";
+import type { LayoutServerLoad } from "./$types";
 
 export const load: LayoutServerLoad = async () => {
-
     // TODO: Fetch user data from DB
 
     const servers: Server[] = [
@@ -10,8 +9,7 @@ export const load: LayoutServerLoad = async () => {
             id: "1",
             name: "Test Server 1",
             image: "https://picsum.photos/300/300",
-            channels: [
-            ],
+            channels: [],
         },
         {
             id: "2",
@@ -22,6 +20,6 @@ export const load: LayoutServerLoad = async () => {
     ];
 
     return {
-        servers
+        servers,
     };
-}
+};
