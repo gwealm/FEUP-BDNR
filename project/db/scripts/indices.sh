@@ -8,4 +8,4 @@ docker run \
     asadm \
     -h "$(docker inspect -f '{{.NetworkSettings.IPAddress }}' "$2")"
 
-printf "enable\nmanage sindex create string user-email ns test set users bin email\nexit\n" | script -q -c "docker attach $1" /dev/null
+printf "enable\nmanage sindex create string user-email ns test set users bin email\nshow sindex\nexit\n" | script -q -c "docker attach $1" /dev/null

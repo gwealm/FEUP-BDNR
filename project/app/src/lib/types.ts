@@ -14,7 +14,7 @@ const ChannelSchema = z.object({
 
     server: _serverId,
 
-    messages: MessageSchema.array(),
+    messages: MessageSchema.shape.id.array(),
 });
 const ChannelPreviewSchema = ChannelSchema.omit({ messages: true });
 type Channel = z.infer<typeof ChannelSchema>;
