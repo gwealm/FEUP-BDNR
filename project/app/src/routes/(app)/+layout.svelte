@@ -7,14 +7,12 @@
     const { servers } = data;
 </script>
 
-<main class="h-full flex">
-    <section
-        class="w-16 py-2 overflow-y-scroll overflow-x-hidden scrollbar-hide"
-        id="server-list"
-    >
-        <ServerList {servers} />
-    </section>
-    <section class="flex-1 bg-zinc-700" id="server-content">
-        <slot />
-    </section>
-</main>
+<section
+    class="w-16 py-2 overflow-y-scroll overflow-x-hidden scrollbar-hide"
+    id="server-list"
+>
+    <ServerList {servers} />
+</section>
+<section class="flex-1 bg-zinc-700" id="server-content">
+    <slot />
+</section>

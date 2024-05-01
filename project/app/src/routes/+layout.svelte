@@ -2,4 +2,6 @@
     import "./style.css";
 </script>
 
-<slot />
+<main class="h-full flex">
+    <slot />
+</main>
