@@ -5,7 +5,7 @@
     /* export let form: ActionData; */
 </script>
 
-<form method="POST" use:enhance>
+<form method="POST" use:enhance >
     <label>
         Email
         <input type="email" name="email" id="email" required />
