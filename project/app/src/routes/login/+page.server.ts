@@ -5,7 +5,10 @@ import { fail, redirect } from "@sveltejs/kit";
 
 export const actions: Actions = {
     default: async (event) => {
+        console.log("AKAK");
+        
         const formData = await event.request.formData();
+        console.log("AKAK2");
 
         const email = formData.get("email");
         const password = formData.get("password");
@@ -32,7 +35,10 @@ export const actions: Actions = {
             });
         }
 
+
         const _user = await validateCredentials(email, password);
+
+        
 
         if (_user) {
             // TODO: better way of setting the user :/
