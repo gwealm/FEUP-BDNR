@@ -1,14 +1,18 @@
 CONTAINER_NAME := aerospike
 AQL_TOOL_CONTAINER_NAME := aql
 ASADM_TOOL_CONTAINER_NAME := asadm
+POPULATE_SCRIPTS := ./scripts/populate_scripts
 
-all: create populate indices
+all: create generate-random-data populate indices
 
 create:
 	./scripts/create.sh ${CONTAINER_NAME}
 
 populate:
 	./scripts/populate.sh ${CONTAINER_NAME} aql_cmds
+
+generate-random-data:
+	source ${POPULATE_SCRIPTS}/generate_script/bin/activate && python ${POPULATE_SCRIPTS}/generate.py --output-file ${POPULATE_SCRIPTS}/aql_cmds
 
 indices:
 	./scripts/indices.sh ${ASADM_TOOL_CONTAINER_NAME} ${CONTAINER_NAME}
