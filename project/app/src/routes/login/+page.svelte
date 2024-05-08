@@ -1,6 +1,8 @@
 <!-- src/routes/login.svelte -->
 <script lang="ts">
     import { enhance } from "$app/forms";
+    import { get } from "svelte/store";
+    import userStore from "$lib/stores/user";
 
     async function handleSubmit(event: Event) {
         event.preventDefault();
@@ -13,10 +15,15 @@
         console.log('Login submitted');
         console.log('Email:', email);
         console.log('Password:', password);
+
     }
 </script>
 
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+<svelte:head>
+  <title>Login</title>
+</svelte:head>
+
+<div class="min-h-screen flexse items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
     
     <div class="max-w-md w-full space-y-8">
         <div>

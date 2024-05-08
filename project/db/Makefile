@@ -3,7 +3,7 @@ AQL_TOOL_CONTAINER_NAME := aql
 ASADM_TOOL_CONTAINER_NAME := asadm
 POPULATE_SCRIPTS := ./scripts/populate_scripts
 
-all: create generate-random-data populate indices
+all: create populate indices
 
 create:
 	./scripts/create.sh ${CONTAINER_NAME}

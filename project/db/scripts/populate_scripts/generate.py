@@ -52,7 +52,6 @@ def generate_aql_commands(output_file):
             file.write(f'INSERT INTO test.servers (PK, name, channels, members) VALUES ("{server_data["PK"]}", "{server_data["name"]}", {json.dumps(server_data["channels"])}, {json.dumps(server_data["members"])});\n')
 
 
-        # Insert the fixed user with email "testuser@mail.pt"
         fixed_user_data = {
             "PK": "fixed_user",
             "username": "testuser",

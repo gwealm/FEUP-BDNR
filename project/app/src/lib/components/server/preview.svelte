@@ -9,7 +9,7 @@
         <img
             src={server.image}
             alt="Image for {server.name}"
-            class="rounded-full transition-all duration-100 ease-in-out hover:rounded-xl"
+            class="rounded-xl transition-all duration-100 ease-in-out "
         />
     </a>
 </div>

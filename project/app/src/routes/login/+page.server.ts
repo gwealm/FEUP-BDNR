@@ -1,19 +1,16 @@
 import { validateCredentials } from "$lib/service/user";
 import user from "$lib/stores/user";
+import { setCookie, parseCookies } from "../../shared/cookieHelper";
 import type { Actions } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 
 export const actions: Actions = {
     default: async (event) => {
-        console.log("AKAK");
         
         const formData = await event.request.formData();
-        console.log("AKAK2");
 
         const email = formData.get("email");
         const password = formData.get("password");
-
-        // TODO: add better error feedback
 
         if (!email) {
             return fail(422, { email, reason: "Missing email" });
@@ -38,20 +35,18 @@ export const actions: Actions = {
 
         const _user = await validateCredentials(email, password);
 
-        
-
         if (_user) {
-            // TODO: better way of setting the user :/
-            // Also, perhaps we should put the user in the cookies. Food for thought.
+            // Set user info in cookies
+            setCookie("user", JSON.stringify(_user));
+
+            // Set user info in the store
             user.set(_user);
 
             throw redirect(303, "/@me");
         } else {
-            return fail(403, {
-                email,
-                invalid: true,
-                reason: "Invalid credentials",
-            });
+            return fail(403, { reason: "Invalid credentials" });
         }
+
     },
 };
+

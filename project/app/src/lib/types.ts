@@ -2,6 +2,7 @@ import * as z from "zod";
 
 const MessageSchema = z.object({
     id: z.string(),
+    sender: z.string(),
     content: z.string(),
 });
 type Message = z.infer<typeof MessageSchema>;
