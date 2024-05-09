@@ -11,7 +11,7 @@
             <ChannelPreview {channel} />
         </li>
         {#if index !== channels.length - 1}
-            <li class="w-full border-b border-gray-300"></li>
+            <div class="divider mx-1 mb-0 mt-0 h-1 rounded bg-white" />
         {/if}
     {/each}
 </ul>

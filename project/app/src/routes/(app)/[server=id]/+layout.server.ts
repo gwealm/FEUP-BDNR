@@ -16,7 +16,8 @@ export const load: LayoutServerLoad = async ({ params: { server: serverId } }) =
         const channels: ChannelPreview[] = Object.values(server.channels);
 
         return {
-            channels
+            channels,
+            server,
         };
     } else {
         console.log(data, parseResult.error.flatten())

@@ -1,16 +1,16 @@
-import userStore from "$lib/stores/user";
 import type { PageServerLoad } from "./$types";
 import { error, redirect } from "@sveltejs/kit";
-import { get } from "svelte/store";
 import { get as dbGet } from "$lib/service/db";
-import { ChannelSchema, MessageSchema } from "$lib/types";
+import { ChannelSchema, MessageSchema, UserSchema } from "$lib/types";
 
-export const load: PageServerLoad = async ({ parent, params: { channel: channelId } }) => {
-    const user = get(userStore);
+export const load: PageServerLoad = async ({ parent, params: { channel: channelId }, cookies }) => {
+    const userStr = cookies.get('user');
 
-    if (!user) {
+    if (!userStr) {
         redirect(303, "/login");
     }
+
+    const { user } = await parent();
 
     const dbResult = await dbGet('channels', channelId);
     const data = dbResult.bins;
@@ -35,7 +35,8 @@ export const load: PageServerLoad = async ({ parent, params: { channel: channelI
 
         return {
             channel,
-            messages
+            messages,
+            user
         };
     } else {
         console.log(data, parseResult.error.flatten())

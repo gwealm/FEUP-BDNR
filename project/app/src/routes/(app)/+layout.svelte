@@ -24,6 +24,6 @@
     <div class="divider mx-1 mb-0 mt-0 h-1 rounded bg-white" />
     <ServerList {servers} />
 </section>
-<section class="flex-1 bg-zinc-700" id="server-content">
+<section class="flex flex-1 bg-zinc-700" id="server-content">
     <slot />
 </section>

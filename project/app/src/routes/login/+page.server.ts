@@ -1,12 +1,18 @@
 import { validateCredentials } from "$lib/service/user";
-import user from "$lib/stores/user";
-import { setCookie, parseCookies } from "../../shared/cookieHelper";
-import type { Actions } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
+
+export const load: PageServerLoad = ({ cookies }) => {
+
+    const userStr = cookies.get("user");
+
+    if (userStr) {
+        redirect(303, "/@me");
+    }
+}
 
 export const actions: Actions = {
     default: async (event) => {
-        
         const formData = await event.request.formData();
 
         const email = formData.get("email");
@@ -32,21 +38,18 @@ export const actions: Actions = {
             });
         }
 
-
         const _user = await validateCredentials(email, password);
 
         if (_user) {
-            // Set user info in cookies
-            setCookie("user", JSON.stringify(_user));
 
-            // Set user info in the store
-            user.set(_user);
+            const cookies = event.cookies;
+
+            cookies.set("user", JSON.stringify(_user), { path: "/" })
 
             throw redirect(303, "/@me");
         } else {
             return fail(403, { reason: "Invalid credentials" });
         }
-
     },
 };
 
