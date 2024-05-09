@@ -2,8 +2,11 @@ import * as z from "zod";
 
 const MessageSchema = z.object({
     id: z.string(),
-    sender: z.string(),
+    senderId: z.string(),
+    senderName: z.string(),
+    senderImage: z.string(),
     content: z.string(),
+    timestamp: z.coerce.date()
 });
 type Message = z.infer<typeof MessageSchema>;
 
@@ -43,6 +46,7 @@ const UserSchema = z.object({
     id: z.string(),
     email: z.string().email(),
     username: z.string(),
+    image: z.string().url().optional(),
     servers: UserServerListSchema,
 });
 type User = z.infer<typeof UserSchema>;

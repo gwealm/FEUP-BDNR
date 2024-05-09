@@ -1,6 +1,7 @@
 <script lang="ts">
     import Icon from "$lib/components/Icon.svelte";
     import type { PageServerData } from "./$types";
+    import Message from "$lib/components/message/preview.svelte";
 
     export let data: PageServerData;
 
@@ -20,18 +21,11 @@
     <section class="flex flex-1 flex-col p-4">
         <div class="flex flex-1 flex-col justify-end p-4">
             {#each messages as message (message.id)}
-                <div
-                    class:chat-start={message.sender === user.username}
-                    class:chat-end={message.sender !== user.username}
-                    class="chat"
-                >
-                    <div class="chat-bubble rounded-lg bg-gray-200 p-3">
-                        <div class="text-sm font-bold">
-                            {message.sender}
-                        </div>
-                        {message.content}
-                    </div>
-                </div>
+                <Message
+                    {message}
+                    sentByCurrentUser={message.senderId === user.id}
+                    userImage={message.senderImage}
+                />
             {/each}
         </div>
         <form class="flex items-center" method="POST" action="/">
@@ -40,6 +34,7 @@
                 name="message"
                 id="message"
                 placeholder="Type your message..."
+                autocomplete="off"
                 class="input input-bordered flex-1 border-gray-300 bg-white focus:border-blue-500 focus:outline-none"
             />
             <button
