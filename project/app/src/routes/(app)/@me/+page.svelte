@@ -14,9 +14,9 @@
     <main class="p-6">
         <div class="mb-6 flex items-center space-x-4">
             <img
-                src="https://via.placeholder.com/50"
-                alt="Avatar"
-                class="h-12 w-12 rounded-full"
+                src={user.image ?? "https://via.placeholder.com/50"}
+                alt="Profile picture for {user.username}"
+                class="avatar h-12 w-12 rounded-full"
             />
             <div>
                 <h1 class="text-2xl font-bold">{user.username}</h1>

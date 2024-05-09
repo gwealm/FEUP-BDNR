@@ -4,7 +4,7 @@
 
     export let data: LayoutData;
 
-    const { servers } = data;
+    const { servers, user } = data;
 </script>
 
 <section
@@ -15,7 +15,7 @@
     <div class="h-12 w-12">
         <a href="/@me">
             <img
-                src={"https://picsum.photos/300/300"}
+                src={user.image ?? "https://picsum.photos/300/300"}
                 alt="Image for {'@me'}"
                 class="rounded-full transition-all duration-100 ease-in-out hover:rounded-xl"
             />
