@@ -4,9 +4,9 @@ const MessageSchema = z.object({
     id: z.string(),
     senderId: z.string(),
     senderName: z.string(),
-    senderImage: z.string(),
+    senderImage: z.string().optional(),
     content: z.string(),
-    timestamp: z.coerce.date()
+    timestamp: z.number()
 });
 type Message = z.infer<typeof MessageSchema>;
 

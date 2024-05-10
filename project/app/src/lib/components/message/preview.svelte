@@ -3,7 +3,16 @@
 
     export let message: Message;
     export let sentByCurrentUser: boolean = false;
-    export let userImage: string | undefined = undefined;
+
+    $: timeStampDate = new Date(message.timestamp);
+    $: messageHours =
+        timeStampDate.getHours() < 10
+            ? `0${timeStampDate.getHours()}`
+            : timeStampDate.getHours();
+    $: messageMinutes =
+        timeStampDate.getMinutes() < 10
+            ? `0${timeStampDate.getMinutes()}`
+            : timeStampDate.getMinutes();
 </script>
 
 <div
@@ -15,7 +24,7 @@
         <div class="w-10 rounded-full">
             <img
                 alt="Profile picture for {message.senderName}"
-                src={userImage ?? "https://picsum.photos/300/300"}
+                src={message.senderImage ?? "https://picsum.photos/300/300"}
             />
         </div>
     </div>
@@ -23,8 +32,11 @@
         <div class="text-sm font-bold">
             {message.senderName}
         </div>
-        <span class="text-pretty">
+        <span style="overflow-wrap: break-word;">
             {message.content}
         </span>
+    </div>
+    <div class="chat-footer opacity-50">
+        {messageHours}:{messageMinutes}
     </div>
 </div>

@@ -2,12 +2,16 @@
     import Icon from "$lib/components/Icon.svelte";
     import type { PageServerData } from "./$types";
     import Message from "$lib/components/message/preview.svelte";
+    import { enhance } from "$app/forms";
 
     export let data: PageServerData;
 
-    $: user = data.user;
-    $: channel = data.channel;
+    let textInput: string = "";
+
+    const user = data.user;
+    const channel = data.channel;
     $: messages = data.messages;
+    $: enableSend = textInput !== "";
 </script>
 
 <svelte:head>
@@ -18,27 +22,37 @@
     <h1 class="text-2xl font-bold">{channel.name}</h1>
 </header>
 {#if user}
-    <section class="flex flex-1 flex-col p-4">
-        <div class="flex flex-1 flex-col justify-end p-4">
+    <section class="flex flex-1 flex-col overflow-hidden p-4">
+        <div
+            class="flex flex-1 flex-col gap-4 overflow-scroll p-4"
+            style="justify-content: safe flex-end;"
+        >
             {#each messages as message (message.id)}
                 <Message
                     {message}
                     sentByCurrentUser={message.senderId === user.id}
-                    userImage={message.senderImage}
                 />
             {/each}
         </div>
-        <form class="flex items-center" method="POST" action="/">
+        <form
+            class="flex items-center pt-4"
+            method="POST"
+            action="?/postMessage"
+            use:enhance
+        >
             <input
                 type="text"
-                name="message"
+                name="content"
                 id="message"
                 placeholder="Type your message..."
                 autocomplete="off"
+                bind:value={textInput}
                 class="input input-bordered flex-1 border-gray-300 bg-white focus:border-blue-500 focus:outline-none"
             />
             <button
-                class="ml-2 rounded-lg bg-blue-500 px-4 py-3 text-white hover:bg-blue-600"
+                class="btn btn-secondary ml-2"
+                class:btn-disabled={!enableSend}
+                disabled={!enableSend}
             >
                 <Icon name="send" />
             </button>
