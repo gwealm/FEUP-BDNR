@@ -14,11 +14,11 @@ export const actions: Actions = {
     default: async (event) => {
         const formData = await event.request.formData();
 
-        const email = formData.get("email");
+        const identifier = formData.get("identifier");
         const password = formData.get("password");
 
-        if (!email) {
-            return fail(422, { email, reason: "Missing email" });
+        if (!identifier) {
+            return fail(422, { identifier: identifier, reason: "Missing email or username" });
         }
 
         if (!password) {
@@ -30,14 +30,18 @@ export const actions: Actions = {
             return typeof value === "string";
         };
 
-        if (!str(email) || !str(password)) {
+        if (!str(identifier) || !str(password)) {
             return fail(422, {
-                email,
+                identifier: identifier,
                 reason: "Invalid type of data for email and/or password",
             });
         }
 
-        const _user = await validateCredentials(email, password);
+        console.log("AAAAA2", formData);
+
+        const _user = await validateCredentials(identifier, password);
+
+        console.log("AAAAA3", _user);
 
         if (_user) {
             const cookies = event.cookies;

@@ -5,16 +5,27 @@ import type Key from "key";
 import type Record from "record";
 
 const validateCredentials = async (
-    email: string,
+    identifier: string,     // Username or email
     password: string,
 ): Promise<User | null> => {
-    // TODO: we should not use the raw client for this but I don't care anymore.
+    const isEmail = identifier.includes("@");   // dumb check, but can be improved later
+
+    console.log("Is" + identifier + "an email? ", isEmail ? "Yes" : "No");
+
+    // TODO: we should not use the raw client for this but waddayagonnado
     const query = client.query("test", "users");
-    query.where(Aerospike.filter.equal("email", email));
+    if (isEmail) {
+        query.where(Aerospike.filter.equal("email", identifier));
+    } else {
+        query.where(Aerospike.filter.equal("username", identifier));
+    }
+
     const queryResult: Record[] = await query.results();
 
+    console.log("AAAAA1", queryResult);
+
     if (queryResult.length !== 1) {
-        // More than one user with that email address
+        // More than one user with that identifier (email or username)
         return null;
     }
 

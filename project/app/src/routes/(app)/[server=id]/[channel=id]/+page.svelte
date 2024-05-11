@@ -24,7 +24,7 @@
 {#if user}
     <section class="flex flex-1 flex-col overflow-hidden p-4">
         <div
-            class="flex flex-1 flex-col gap-4 overflow-scroll p-4"
+            class="flex flex-1 flex-col gap-4 overflow-y-scroll p-4"
             style="justify-content: safe flex-end;"
         >
             {#each messages as message (message.id)}
