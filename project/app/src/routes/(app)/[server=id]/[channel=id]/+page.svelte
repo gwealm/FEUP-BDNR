@@ -27,12 +27,23 @@
             class="flex flex-1 flex-col gap-4 overflow-y-scroll p-4"
             style="justify-content: safe flex-end;"
         >
-            {#each messages as message (message.id)}
-                <Message
-                    {message}
-                    sentByCurrentUser={message.senderId === user.id}
-                />
-            {/each}
+            {#if messages.length > 0}
+                {#each messages as message (message.id)}
+                    <Message
+                        {message}
+                        sentByCurrentUser={message.senderId === user.id}
+                    />
+                {/each}
+            {:else}
+                <div
+                    class="flex w-full flex-1 items-center justify-center text-center"
+                >
+                    <span class="font-bold">
+                        There are no messages on this channel. Be the one to
+                        start its history :D
+                    </span>
+                </div>
+            {/if}
         </div>
         <form
             class="flex items-center pt-4"

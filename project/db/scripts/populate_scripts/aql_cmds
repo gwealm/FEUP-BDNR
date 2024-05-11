@@ -10,6 +10,7 @@ INSERT INTO test.servers (PK, name, image, channels, members) VALUES ('server2',
 INSERT INTO test.channels (PK, name, server, messages) VALUES ('channel1', "testchannel", "server1", LIST('["message1", "message2", "message4"]'));
 INSERT INTO test.channels (PK, name, server, messages) VALUES ('channel2', "testchannel2", "server1", LIST('["message3", "message5", "message6"]'));
 INSERT INTO test.channels (PK, name, server, messages) VALUES ('channel3', "testchannel3", "server2", LIST('["message7", "message8", "message9"]'));
+INSERT INTO test.channels (PK, name, server, messages) VALUES ('channel4', "testchannel4", "server2", LIST('[]'));
 
 -- Messages
 INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message1', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem", 1715278308000);
