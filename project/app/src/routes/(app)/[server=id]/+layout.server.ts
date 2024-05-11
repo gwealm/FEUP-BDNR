@@ -21,7 +21,7 @@ export const load: LayoutServerLoad = async ({
             server,
         };
     } else {
-        console.log(data, parseResult.error.flatten());
+        console.log(data, parseResult.error.errors);
         error(500);
     }
 };
