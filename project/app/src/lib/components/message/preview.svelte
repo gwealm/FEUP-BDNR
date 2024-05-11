@@ -28,17 +28,16 @@
             />
         </div>
     </div>
-    <div
-    >
-        <div class="text-sm font-bold chat-header">
+    <div>
+        <div class="chat-header text-sm font-bold">
             {message.senderName}
         </div>
-        <div 
-        
-        class:chat-bubble-primary={sentByCurrentUser}
-        class:chat-bubble-secondary={!sentByCurrentUser}
-        class="max-w-96 rounded-lg p-3 chat-bubble" 
-        style="overflow-wrap: break-word;">
+        <div
+            class:chat-bubble-primary={sentByCurrentUser}
+            class:chat-bubble-secondary={!sentByCurrentUser}
+            class="chat-bubble max-w-96 rounded-lg p-3"
+            style="overflow-wrap: break-word;"
+        >
             {message.content}
         </div>
     </div>

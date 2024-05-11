@@ -1,14 +1,13 @@
 import { UserSchema, type User } from "$lib/types";
 import { get, client } from "./db";
 import * as Aerospike from "aerospike";
-import type Record from "record";
 import type Key from "key";
+import type Record from "record";
 
 const validateCredentials = async (
     email: string,
     password: string,
 ): Promise<User | null> => {
-
     // TODO: we should not use the raw client for this but I don't care anymore.
     const query = client.query("test", "users");
     query.where(Aerospike.filter.equal("email", email));

@@ -3,13 +3,12 @@ import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 
 export const load: PageServerLoad = ({ cookies }) => {
-
     const userStr = cookies.get("user");
 
     if (userStr) {
         redirect(303, "/@me");
     }
-}
+};
 
 export const actions: Actions = {
     default: async (event) => {
@@ -41,10 +40,9 @@ export const actions: Actions = {
         const _user = await validateCredentials(email, password);
 
         if (_user) {
-
             const cookies = event.cookies;
 
-            cookies.set("user", JSON.stringify(_user), { path: "/" })
+            cookies.set("user", JSON.stringify(_user), { path: "/" });
 
             throw redirect(303, "/@me");
         } else {
@@ -52,4 +50,3 @@ export const actions: Actions = {
         }
     },
 };
-

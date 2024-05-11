@@ -6,7 +6,7 @@ const MessageSchema = z.object({
     senderName: z.string(),
     senderImage: z.string().optional(),
     content: z.string(),
-    timestamp: z.number()
+    timestamp: z.number(),
 });
 type Message = z.infer<typeof MessageSchema>;
 
@@ -24,7 +24,10 @@ const ChannelPreviewSchema = ChannelSchema.omit({ messages: true });
 type Channel = z.infer<typeof ChannelSchema>;
 type ChannelPreview = z.infer<typeof ChannelPreviewSchema>;
 
-const ServerChannelListSchema = z.record(ChannelSchema.shape.id, ChannelPreviewSchema);
+const ServerChannelListSchema = z.record(
+    ChannelSchema.shape.id,
+    ChannelPreviewSchema,
+);
 type ServerChannelList = z.infer<typeof ServerChannelListSchema>;
 
 const ServerSchema = z.object({
