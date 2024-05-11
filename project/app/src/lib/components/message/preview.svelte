@@ -28,15 +28,21 @@
             />
         </div>
     </div>
-    <div class="chat-bubble max-w-96 rounded-lg bg-gray-200 p-3">
-        <div class="text-sm font-bold">
+    <div
+    >
+        <div class="text-sm font-bold chat-header">
             {message.senderName}
         </div>
-        <span style="overflow-wrap: break-word;">
+        <div 
+        
+        class:chat-bubble-primary={sentByCurrentUser}
+        class:chat-bubble-secondary={!sentByCurrentUser}
+        class="max-w-96 rounded-lg p-3 chat-bubble" 
+        style="overflow-wrap: break-word;">
             {message.content}
-        </span>
+        </div>
     </div>
-    <div class="chat-footer opacity-50">
+    <div class="chat-footer opacity-80">
         {messageHours}:{messageMinutes}
     </div>
 </div>
