@@ -1,6 +1,6 @@
 import { validateCredentials } from "$lib/service/user";
 import type { Actions, PageServerLoad } from "./$types";
-import { fail, redirect } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 
 export const load: PageServerLoad = ({ cookies }) => {
     const userStr = cookies.get("user");
@@ -10,6 +10,12 @@ export const load: PageServerLoad = ({ cookies }) => {
     }
 };
 
+export interface LoginErrorObject {
+    general?: string;
+    identifier?: string;
+    password?: string;
+}
+
 export const actions: Actions = {
     default: async (event) => {
         const formData = await event.request.formData();
@@ -17,29 +23,24 @@ export const actions: Actions = {
         const identifier = formData.get("identifier");
         const password = formData.get("password");
 
-        if (!identifier) {
-            return fail(422, {
-                identifier: identifier,
-                reason: "Missing email or username",
-            });
-        }
+        const errors: LoginErrorObject = {};
 
-        if (!password) {
-            return fail(422, { password, reason: "Missing password" });
-        }
+        if (!password)
+            errors.password = "Missing password";
 
         // HACK: I love typescript
         const str = (value: unknown): value is string => {
             return typeof value === "string";
         };
 
-        if (!str(identifier) || !str(password)) {
-            return fail(422, {
-                identifier: identifier,
-                reason: "Invalid type of data for email and/or password",
-            });
-        }
+        if (!str(identifier) || !str(password))
+            errors.password = "Missing password";
 
+        if (Object.keys(errors).length > 0)
+            return fail(422, { errors });
+        
+
+        // @ts-ignore typescript is dumb
         const _user = await validateCredentials(identifier, password);
 
         if (_user) {
@@ -49,7 +50,11 @@ export const actions: Actions = {
 
             throw redirect(303, "/@me");
         } else {
-            return fail(403, { reason: "Invalid credentials" });
+            errors.general = "Invalid credentials";
         }
+
+        console.log(errors);
+
+        return fail(403, { errors });
     },
 };

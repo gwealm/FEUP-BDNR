@@ -1,6 +1,12 @@
 <!-- src/routes/login.svelte -->
 <script lang="ts">
     import { enhance } from "$app/forms";
+    import { page } from '$app/stores'; // This imports the page store
+    import type { LoginErrorObject } from "./+page.server";
+
+	/** @type {import('./$t
+     * \ypes').ActionData} */
+	export let form;
 </script>
 
 <svelte:head>
@@ -32,6 +38,11 @@
                         placeholder="Email address or Username"
                     />
                 </div>
+                {#if form?.errors?.identifier}
+                    <p class="text-xs italic text-red-500">
+                        {form?.errors?.identifier}
+                    </p>
+                {/if}
                 <div>
                     <label for="password" class="sr-only">Password</label>
                     <input
@@ -44,6 +55,9 @@
                         placeholder="Password"
                     />
                 </div>
+                {#if form?.errors?.password}
+                    <p class="text-xs italic text-red-500">{form?.errors?.password}</p>
+                {/if}
             </div>
 
             <div class="flex items-center justify-between">
@@ -71,6 +85,7 @@
                     </a>
                 </div>
             </div>
+
 
             <div>
                 <button
@@ -102,6 +117,9 @@
                     </span>
                     Sign in
                 </button>
+                {#if form?.errors?.general}
+                    <p class="text-center text-red-500 mt-2">{form?.errors?.general}</p>
+                {/if}
             </div>
         </form>
     </div>
