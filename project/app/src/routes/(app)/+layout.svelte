@@ -15,9 +15,9 @@
     <div class="h-12 w-12">
         <a href="/@me">
             <img
-                src={user.image ?? "https://picsum.photos/300/300"}
+                src="favicon.png"
                 alt="Image for {'@me'}"
-                class="rounded-full transition-all duration-100 ease-in-out hover:rounded-xl"
+                class="rounded-xl transition-all duration-100 ease-in-out hover:bg-blue-300"
             />
         </a>
     </div>
