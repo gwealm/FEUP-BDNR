@@ -10,8 +10,6 @@ const validateCredentials = async (
 ): Promise<User | null> => {
     const isEmail = identifier.includes("@"); // dumb check, but can be improved later
 
-    console.log("Is" + identifier + "an email? ", isEmail ? "Yes" : "No");
-
     // TODO: we should not use the raw client for this but waddayagonnado
     const query = client.query("test", "users");
     if (isEmail) {
@@ -21,8 +19,6 @@ const validateCredentials = async (
     }
 
     const queryResult: Record[] = await query.results();
-
-    console.log("AAAAA1", queryResult);
 
     if (queryResult.length !== 1) {
         // More than one user with that identifier (email or username)

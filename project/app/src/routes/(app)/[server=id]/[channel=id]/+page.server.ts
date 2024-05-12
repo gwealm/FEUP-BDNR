@@ -56,7 +56,6 @@ export const actions: Actions = {
         const formData = await request.formData();
         const messageContent = formData.get("content");
 
-        console.log("CONTENT:", messageContent);
 
         if (typeof messageContent !== "string") {
             return fail(403);

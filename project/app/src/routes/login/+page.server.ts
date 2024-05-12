@@ -40,11 +40,7 @@ export const actions: Actions = {
             });
         }
 
-        console.log("AAAAA2", formData);
-
         const _user = await validateCredentials(identifier, password);
-
-        console.log("AAAAA3", _user);
 
         if (_user) {
             const cookies = event.cookies;
