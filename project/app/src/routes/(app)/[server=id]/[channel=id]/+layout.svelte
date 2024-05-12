@@ -10,7 +10,7 @@
 <header class="bg-gray-800 py-4 text-center text-white">
     <h1 class="text-2xl font-bold">{channel.name}</h1>
 </header>
-<div class="flex flex-1">
+<div class="flex flex-1 overflow-hidden">
     <slot />
     <ServerMemberList {server} />
 </div>
