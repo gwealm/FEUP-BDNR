@@ -3,10 +3,18 @@
     import type { PageServerData } from "./$types";
     import Message from "$lib/components/message/preview.svelte";
     import { enhance } from "$app/forms";
+    import type { SubmitFunction } from "@sveltejs/kit";
 
     export let data: PageServerData;
 
     let textInput: string = "";
+
+    const handleSubmit: SubmitFunction = () => {
+        return async ({ update }) => {
+            textInput = "";
+            await update();
+        };
+    };
 
     const user = data.user;
     const channel = data.channel;
@@ -46,7 +54,7 @@
             class="flex items-center pt-4"
             method="POST"
             action="?/postMessage"
-            use:enhance
+            use:enhance={handleSubmit}
         >
             <input
                 type="text"
