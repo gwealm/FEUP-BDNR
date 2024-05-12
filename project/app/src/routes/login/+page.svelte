@@ -2,8 +2,19 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import type { ActionData } from "./$types";
+    import { onMount } from "svelte";
 
     export let form: ActionData;
+
+    let rememberMe = false;
+
+    onMount(() => {
+        rememberMe = localStorage.getItem('remember_me') === 'true';
+    });
+
+    function updateRememberMe(value) {
+        localStorage.setItem('remember_me', value);
+    }
 </script>
 
 <svelte:head>
@@ -64,6 +75,8 @@
                     <input
                         id="remember_me"
                         name="remember_me"
+                        bind:checked={rememberMe}
+                        on:change={() => updateRememberMe(rememberMe)}
                         type="checkbox"
                         class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />

@@ -22,6 +22,7 @@ export const actions: Actions = {
 
         const identifier = formData.get("identifier");
         const password = formData.get("password");
+        const remember_me = formData.get("remember_me");
 
         const errors: LoginErrorObject = {};
 
@@ -43,7 +44,10 @@ export const actions: Actions = {
         if (_user) {
             const cookies = event.cookies;
 
-            cookies.set("user", JSON.stringify(_user), { path: "/" });
+            cookies.set("user", JSON.stringify(_user), { 
+                path: "/",
+                maxAge: remember_me ? 60 * 60 * 24 * 14 : 60 * 60 * 24, // 14 days or 1 day
+            });
 
             throw redirect(303, "/@me");
         } else {
