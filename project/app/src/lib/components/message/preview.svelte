@@ -1,9 +1,11 @@
 <script lang="ts">
     import type { Message } from "$lib/types";
+    import type { Action } from "svelte/action";
 
     export let message: Message;
     export let sentByCurrentUser: boolean = false;
     export let isUserOnline: boolean = false;
+    export let scroll: Action;
 
     $: timeStampDate = new Date(message.timestamp);
     $: messageHours =
@@ -20,6 +22,8 @@
     class:chat-start={!sentByCurrentUser}
     class:chat-end={sentByCurrentUser}
     class="chat"
+    id={`message-${message.id}`}
+    use:scroll
 >
     <div class:online={isUserOnline} class=" avatar chat-image">
         <div class="w-10 rounded-full">

@@ -4,6 +4,7 @@
     import Message from "$lib/components/message/preview.svelte";
     import { enhance } from "$app/forms";
     import type { SubmitFunction } from "@sveltejs/kit";
+    import type { Action } from "svelte/action";
 
     export let data: PageServerData;
 
@@ -21,6 +22,12 @@
     $: server = data.server;
     $: messages = data.messages;
     $: enableSend = textInput !== "";
+
+    // FIXME: need to use "data." for this to work
+    const initialCount = data.messages.length;
+    const scroll: Action = (node: HTMLElement) => {
+        if (data.messages.length > initialCount) node.scrollIntoView();
+    };
 </script>
 
 <svelte:head>
@@ -39,6 +46,7 @@
                         {message}
                         sentByCurrentUser={message.senderId === user.id}
                         isUserOnline={server.members[message.senderId].online}
+                        {scroll}
                     />
                 {/each}
             {:else}
@@ -58,12 +66,15 @@
             action="?/postMessage"
             use:enhance={handleSubmit}
         >
+            <!-- TODO: find a better way to handle focus -->
+            <!-- svelte-ignore a11y-autofocus -->
             <input
                 type="text"
                 name="content"
                 id="message"
                 placeholder="Type your message..."
                 autocomplete="off"
+                autofocus
                 bind:value={textInput}
                 class="input input-bordered flex-1 border-gray-300 bg-white focus:border-blue-500 focus:outline-none"
             />
