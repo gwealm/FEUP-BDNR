@@ -21,13 +21,7 @@
     class:chat-end={sentByCurrentUser}
     class="chat"
 >
-    <div 
-        class:online={isUserOnline}
-        class="
-            avatar
-            chat-image
-        "
-    >
+    <div class:online={isUserOnline} class=" avatar chat-image">
         <div class="w-10 rounded-full">
             <img
                 alt="Profile picture for {message.senderName}"

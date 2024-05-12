@@ -25,8 +25,7 @@ export const actions: Actions = {
 
         const errors: LoginErrorObject = {};
 
-        if (!password)
-            errors.password = "Missing password";
+        if (!password) errors.password = "Missing password";
 
         // HACK: I love typescript
         const str = (value: unknown): value is string => {
@@ -36,9 +35,7 @@ export const actions: Actions = {
         if (!str(identifier) || !str(password))
             errors.password = "Missing password";
 
-        if (Object.keys(errors).length > 0)
-            return fail(422, { errors });
-        
+        if (Object.keys(errors).length > 0) return fail(422, { errors });
 
         // @ts-ignore typescript is dumb
         const _user = await validateCredentials(identifier, password);

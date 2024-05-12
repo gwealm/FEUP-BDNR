@@ -1,7 +1,5 @@
 import { get as dbGet } from "$lib/service/db";
-import {
-    ChannelSchema,
-} from "$lib/types";
+import { ChannelSchema } from "$lib/types";
 import type { LayoutServerLoad } from "./$types";
 import { error, redirect } from "@sveltejs/kit";
 
@@ -28,7 +26,7 @@ export const load: LayoutServerLoad = async ({
 
         return {
             channel,
-            server
+            server,
         };
     } else {
         console.log(data, parseResult.error.flatten());

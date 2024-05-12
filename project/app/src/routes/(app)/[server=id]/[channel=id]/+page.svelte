@@ -5,7 +5,6 @@
     import { enhance } from "$app/forms";
     import type { SubmitFunction } from "@sveltejs/kit";
 
-    
     export let data: PageServerData;
 
     let textInput: string = "";
@@ -31,9 +30,9 @@
 {#if user}
     <section class="flex flex-1 flex-col overflow-hidden p-4">
         <div
-            class="flex flex-1 flex-col gap-4 overflow-y-scroll p-4"
+            class="flex flex-1 flex-col gap-4 overflow-scroll p-4"
             style="justify-content: safe flex-end;"
-        > 
+        >
             {#if messages.length > 0}
                 {#each messages as message (message.id)}
                     <Message

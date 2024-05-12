@@ -15,7 +15,7 @@
     <div class="h-12 w-12">
         <a href="/@me">
             <img
-                src="favicon.png"
+                src="/favicon.png"
                 alt="Image for {'@me'}"
                 class="rounded-xl transition-all duration-100 ease-in-out hover:bg-blue-300"
             />

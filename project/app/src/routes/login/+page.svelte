@@ -1,12 +1,9 @@
 <!-- src/routes/login.svelte -->
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import { page } from '$app/stores'; // This imports the page store
-    import type { LoginErrorObject } from "./+page.server";
+    import type { ActionData } from "./$types";
 
-	/** @type {import('./$t
-     * \ypes').ActionData} */
-	export let form;
+    export let form: ActionData;
 </script>
 
 <svelte:head>
@@ -56,7 +53,9 @@
                     />
                 </div>
                 {#if form?.errors?.password}
-                    <p class="text-xs italic text-red-500">{form?.errors?.password}</p>
+                    <p class="text-xs italic text-red-500">
+                        {form?.errors?.password}
+                    </p>
                 {/if}
             </div>
 
@@ -75,17 +74,7 @@
                         Remember me
                     </label>
                 </div>
-
-                <div class="text-sm">
-                    <a
-                        href="#"
-                        class="font-medium text-blue-600 hover:text-blue-500"
-                    >
-                        Forgot your password?
-                    </a>
-                </div>
             </div>
-
 
             <div>
                 <button
@@ -118,7 +107,9 @@
                     Sign in
                 </button>
                 {#if form?.errors?.general}
-                    <p class="text-center text-red-500 mt-2">{form?.errors?.general}</p>
+                    <p class="mt-2 text-center text-red-500">
+                        {form?.errors?.general}
+                    </p>
                 {/if}
             </div>
         </form>

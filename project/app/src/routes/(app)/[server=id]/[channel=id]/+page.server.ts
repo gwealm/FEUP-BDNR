@@ -1,17 +1,10 @@
 import { get as dbGet, put, client } from "$lib/service/db";
-import {
-    MessageSchema,
-    UserSchema,
-    type Message,
-} from "$lib/types";
+import { MessageSchema, UserSchema, type Message } from "$lib/types";
 import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 import Aerospike from "aerospike";
 
-export const load: PageServerLoad = async ({
-    parent,
-    cookies,
-}) => {
+export const load: PageServerLoad = async ({ parent, cookies }) => {
     const userStr = cookies.get("user");
 
     if (!userStr) {
@@ -38,7 +31,7 @@ export const load: PageServerLoad = async ({
         messages,
         user,
         channel,
-        server
+        server,
     };
 };
 
@@ -56,7 +49,6 @@ export const actions: Actions = {
 
         const formData = await request.formData();
         const messageContent = formData.get("content");
-
 
         if (typeof messageContent !== "string") {
             return fail(403);
