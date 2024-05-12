@@ -8,17 +8,17 @@
     const { server, channel } = data;
 </script>
 
-<header class="bg-gray-800 py-4 text-white flex justify-between items-center">
-    <h1 class="text-2xl font-bold mx-4">{channel.name}</h1>
-    <form method="POST" action="?/searchMessage" class="flex mx-10" use:enhance >
-        <input 
+<header class="flex items-center justify-between bg-gray-800 py-4 text-white">
+    <h1 class="mx-4 text-2xl font-bold">{channel.name}</h1>
+    <form method="POST" action="?/searchMessage" class="mx-10 flex" use:enhance>
+        <input
             type="text"
             name="search"
             id="message"
-            placeholder="Search for messages" 
-            class="input input-bordered" 
+            placeholder="Search for messages"
+            class="input input-bordered"
             required
-        >
+        />
     </form>
 </header>
 

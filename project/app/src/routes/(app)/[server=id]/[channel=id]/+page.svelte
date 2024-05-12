@@ -34,7 +34,6 @@
     <title>{channel.name}@{channel.server}</title>
 </svelte:head>
 
-
 {#if user}
     <section class="flex flex-1 flex-col overflow-hidden p-4">
         <div

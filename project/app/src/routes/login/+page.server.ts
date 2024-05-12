@@ -3,13 +3,11 @@ import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 
 export const load: PageServerLoad = ({ cookies }) => {
-
     const userStr = cookies.get("user");
 
     if (userStr) {
         redirect(303, "/@me");
     }
-
 };
 
 export interface LoginErrorObject {

@@ -17,14 +17,19 @@ export const load: PageServerLoad = async ({ parent, cookies }) => {
 
     // TODO: check if this can be done on the DB rather than on the app.
     const messages = await Promise.all(
-        messageIds.map(async (messageId) => {
-            const dbResult = await dbGet("messages", messageId);
-            const data = dbResult.bins;
+        messageIds
+            .map(async (messageId) => {
+                const dbResult = await dbGet("messages", messageId);
 
-            const parseResult = MessageSchema.parse(data);
+                if (!dbResult) return null;
 
-            return parseResult;
-        }),
+                const data = dbResult.bins;
+
+                const parseResult = MessageSchema.parse(data);
+
+                return parseResult;
+            })
+            .filter(Boolean),
     );
 
     return {
@@ -76,9 +81,8 @@ export const actions: Actions = {
         return { success: true };
     },
     searchMessage: async (event) => {
-
         const { request, cookies, params } = event;
-        const userStr = cookies.get('user');
+        const userStr = cookies.get("user");
 
         if (!userStr) redirect(303, "/login");
 
@@ -91,36 +95,23 @@ export const actions: Actions = {
             return fail(403);
         }
 
-        const { channel } = params;
-        const keywords = searchMessage.split(' ');
+        const keywords = searchMessage.split(" ");
 
-        let matches: any[] = [];
-        for (const keyword of keywords) {   
-            
-            const keywordMessages = await dbGet('keywords', keyword);
-            matches = matches.concat(
-                keywordMessages !== null ? 
-                keywordMessages.bins.messageIds : 
-                []
-            );
-        
+        let matches: string[] = [];
+
+        for (const keyword of keywords) {
+            const keywordMessages = await dbGet("keywords", keyword);
+            matches = matches.concat(keywordMessages?.bins.messageIds ?? []);
         }
-        
+
         const results: string[] = [];
         for (const match of matches) {
-        
-            const result = await dbGet('messages', match);
-            results.push(
-                result !== null ?
-                result.bins.content :
-                []
-            );
-        
+            const result = await dbGet("messages", match);
+            results.push(result?.bins.content ?? []);
         }
 
         return {
-            results
+            results,
         };
-
     },
 };

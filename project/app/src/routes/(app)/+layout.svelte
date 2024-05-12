@@ -24,7 +24,7 @@
     <div class="divider mx-1 mb-0 mt-0 h-1 rounded bg-white" />
     <ServerList {servers} />
 
-    <div class="h-12 w-12 mt-auto">
+    <div class="mt-auto h-12 w-12">
         <a href="/logout">
             <img
                 src="https://static.thenounproject.com/png/678790-200.png"
@@ -33,7 +33,6 @@
             />
         </a>
     </div>
-   
 </section>
 <section class="flex flex-1 bg-zinc-700" id="server-content">
     <slot />
