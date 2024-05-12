@@ -25,4 +25,4 @@ INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, times
 
 -- Keywords
 
-INSERT INTO test.keywords (PK, messageIds) VALUES ('mensagem', LIST('["message1", "message2", "message4"]'));
+INSERT INTO test.keywords (PK, messageIds) VALUES ('mensagem', LIST('["message1", "message2", "message4", "message7"]'));

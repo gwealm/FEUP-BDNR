@@ -1,4 +1,5 @@
 import { client, get as dbGet, put } from "$lib/service/db";
+import user from "$lib/stores/user";
 import { MessageSchema, UserSchema, type Message } from "$lib/types";
 import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
@@ -95,23 +96,87 @@ export const actions: Actions = {
             return fail(403);
         }
 
-        const keywords = searchMessage.split(" ");
+        const regex = /^(?:from:([^\s]+)\s*)?(.+)?$/;
+        const matches = searchMessage.match(regex);
+        
+        if (!matches) return [];
+        
+        const userSearch = matches[1];
+        const keywordSearch = matches[2];
+        
+        const { channel } = params;
+        const channelData = await dbGet("channels", channel);
 
-        let matches: string[] = [];
+        // TODO: better handling of error, redirect?
+        if (!channelData) return [];
 
-        for (const keyword of keywords) {
-            const keywordMessages = await dbGet("keywords", keyword);
-            matches = matches.concat(keywordMessages?.bins.messageIds ?? []);
+        const serverData = await dbGet("servers", channelData.bins.server);
+
+        // TODO: better handling of error, redirect?
+        if (!serverData) return [];
+
+        const channelsInfo = serverData.bins.channels;
+        const channels = [channelData.bins];
+        
+        for (const channelID of Object.keys(channelsInfo)) {
+
+            // no need to fetch the data for the current channel
+            if (channelID == channel) continue;
+
+            const serverChannel = await dbGet('channels', channelID);
+            channels.push(serverChannel?.bins);
+            
         }
+        
+        const members = serverData.bins.members;
 
-        const results: string[] = [];
-        for (const match of matches) {
-            const result = await dbGet("messages", match);
-            results.push(result?.bins.content ?? []);
+        let results: unknown[] = [];
+        if (keywordSearch) {
+
+            const keywords = keywordSearch.split(" ");
+
+            let matches: string[] = [];
+            for (const keyword of keywords) {
+                const keywordMessages = await dbGet("keywords", keyword);
+                matches = matches.concat(keywordMessages?.bins.messageIds ?? []);
+            }
+
+            // filter out messages that don't belong to the server
+            matches = matches.filter(message =>
+                channels.some(channel => channel.messages.includes(message))
+            );
+    
+            for (const match of matches) {
+                const result = await dbGet("messages", match);
+                results.push(result);
+            }
+
+            if (userSearch) {
+                results = results.filter(
+                    result => result?.bins.senderName === userSearch
+                );
+            }
+        
         }
+        
+        if (userSearch) {
 
-        return {
-            results,
-        };
+            const userNotInServer = Object.values(members)
+                                          .filter(member => member?.username === userSearch)
+                                          .length === 0;
+
+            if (userNotInServer) return [];
+            
+            let serverMessages: unknown[];              
+            serverMessages = channels.map(channel => channel.messages).flat();
+            serverMessages = await Promise.all( serverMessages.map( messageID => dbGet('messages', messageID) ) );
+
+            results = serverMessages.filter( message => message.bins.senderName === userSearch);
+
+        }
+          
+        
+        return results.map(result => result?.bins.content ?? []);
+
     },
 };
