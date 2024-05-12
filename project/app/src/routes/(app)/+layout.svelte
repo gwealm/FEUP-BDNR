@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Icon from "$lib/components/Icon.svelte";
     import ServerList from "$lib/components/server/list.svelte";
     import type { LayoutData } from "./$types";
 
@@ -24,13 +25,9 @@
     <div class="divider mx-1 mb-0 mt-0 h-1 rounded bg-white" />
     <ServerList {servers} />
 
-    <div class="mt-auto h-12 w-12">
+    <div class="mt-auto mb-2">
         <a href="/logout">
-            <img
-                src="https://static.thenounproject.com/png/678790-200.png"
-                alt="Logout button"
-                class="rounded-full transition-all duration-300 ease-in-out hover:invert"
-            />
+            <Icon name="log-out" height="2em" width="2em" />
         </a>
     </div>
 </section>
