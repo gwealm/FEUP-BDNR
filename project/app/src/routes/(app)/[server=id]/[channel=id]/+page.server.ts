@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({
         redirect(303, "/login");
     }
 
-    const { user, channel } = await parent();
+    const { user, channel, server } = await parent();
 
     const messageIds = channel.messages;
 
@@ -38,6 +38,7 @@ export const load: PageServerLoad = async ({
         messages,
         user,
         channel,
+        server
     };
 };
 

@@ -3,6 +3,7 @@
 
     export let message: Message;
     export let sentByCurrentUser: boolean = false;
+    export let isUserOnline: boolean = false;
 
     $: timeStampDate = new Date(message.timestamp);
     $: messageHours =
@@ -21,7 +22,11 @@
     class="chat"
 >
     <div 
-        class="avatar chat-image"
+        class:online={isUserOnline}
+        class="
+            avatar
+            chat-image
+        "
     >
         <div class="w-10 rounded-full">
             <img

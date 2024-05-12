@@ -5,6 +5,7 @@
     import { enhance } from "$app/forms";
     import type { SubmitFunction } from "@sveltejs/kit";
 
+    
     export let data: PageServerData;
 
     let textInput: string = "";
@@ -18,6 +19,7 @@
 
     const user = data.user;
     const channel = data.channel;
+    $: server = data.server;
     $: messages = data.messages;
     $: enableSend = textInput !== "";
 </script>
@@ -31,13 +33,13 @@
         <div
             class="flex flex-1 flex-col gap-4 overflow-y-scroll p-4"
             style="justify-content: safe flex-end;"
-        >
+        > 
             {#if messages.length > 0}
                 {#each messages as message (message.id)}
                     <Message
                         {message}
                         sentByCurrentUser={message.senderId === user.id}
-                        
+                        isUserOnline={server.members[message.senderId].online}
                     />
                 {/each}
             {:else}
