@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { enhance } from "$app/forms";
     import ServerMemberList from "$lib/components/server/member/list.svelte";
     import type { LayoutServerData } from "./$types";
 

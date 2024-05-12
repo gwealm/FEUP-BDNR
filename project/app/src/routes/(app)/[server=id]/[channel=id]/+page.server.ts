@@ -96,14 +96,26 @@ export const actions: Actions = {
 
         let matches: any[] = [];
         for (const keyword of keywords) {   
+            
             const keywordMessages = await dbGet('keywords', keyword);
-            matches = matches.concat(keywordMessages.bins.messageIds);
+            matches = matches.concat(
+                keywordMessages !== null ? 
+                keywordMessages.bins.messageIds : 
+                []
+            );
+        
         }
         
         const results: string[] = [];
         for (const match of matches) {
+        
             const result = await dbGet('messages', match);
-            results.push(result.bins.content);
+            results.push(
+                result !== null ?
+                result.bins.content :
+                []
+            );
+        
         }
 
         return {

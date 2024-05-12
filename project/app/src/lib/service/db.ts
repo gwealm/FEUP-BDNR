@@ -14,8 +14,11 @@ const client = await Aerospike.connect(config);
 
 const NAMESPACE = "test";
 
-const get = async (set: string, recordKey: string): Promise<Record> => {
+const get = async (set: string, recordKey: string): Promise<Record|null> => {
     const key = new Aerospike.Key(NAMESPACE, set, recordKey);
+
+    const exists: boolean = await client.exists(key);
+    if (!exists) return null;
 
     const record: Record = await client.get(key);
 
