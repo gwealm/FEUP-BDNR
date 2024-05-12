@@ -20,7 +20,9 @@
     class:chat-end={sentByCurrentUser}
     class="chat"
 >
-    <div class="avatar chat-image">
+    <div 
+        class="avatar chat-image"
+    >
         <div class="w-10 rounded-full">
             <img
                 alt="Profile picture for {message.senderName}"

@@ -37,6 +37,7 @@
                     <Message
                         {message}
                         sentByCurrentUser={message.senderId === user.id}
+                        
                     />
                 {/each}
             {:else}

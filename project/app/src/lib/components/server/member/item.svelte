@@ -5,10 +5,18 @@
 </script>
 
 <div class="flex items-center gap-2">
-    <img
-        src={member.image}
-        alt="Image for {member.username}"
-        class="avatar h-10 w-10 rounded-full"
-    />
-    {member.username}
+    <div class="
+        avatar
+        {member.online ? 'online' : 'offline'}
+    ">
+        <div class="w-10 rounded-full">
+            <img
+                src={member.image}
+                alt="Image for {member.username}"
+            />
+        </div>
+    </div>
+    <div class="ml-2 text-base" >
+        {member.username}
+    </div>
 </div>
