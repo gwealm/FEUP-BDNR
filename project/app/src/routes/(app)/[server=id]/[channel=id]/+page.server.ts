@@ -1,4 +1,4 @@
-import { get as dbGet, put, client } from "$lib/service/db";
+import { client, get as dbGet, put } from "$lib/service/db";
 import { MessageSchema, UserSchema, type Message } from "$lib/types";
 import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";

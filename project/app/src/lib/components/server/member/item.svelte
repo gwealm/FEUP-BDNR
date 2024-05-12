@@ -2,7 +2,6 @@
     import type { Server } from "$lib/types";
 
     export let member: Server["members"][string];
-    delete member.image;
 </script>
 
 <div class="flex items-center gap-2">

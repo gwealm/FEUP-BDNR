@@ -1,10 +1,10 @@
 <script lang="ts">
-    import Icon from "$lib/components/Icon.svelte";
-    import type { PageServerData } from "./$types";
-    import Message from "$lib/components/message/preview.svelte";
     import { enhance } from "$app/forms";
+    import Icon from "$lib/components/Icon.svelte";
+    import Message from "$lib/components/message/preview.svelte";
     import type { SubmitFunction } from "@sveltejs/kit";
     import type { Action } from "svelte/action";
+    import type { PageServerData } from "./$types";
 
     export let data: PageServerData;
 

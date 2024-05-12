@@ -55,7 +55,7 @@ const shutdown = async () => {
 export {
     client, // FIXME: THIS IS WRONG ON SO MANY LEVELS GOD HELP ME
     get,
-    remove,
     put,
+    remove,
     shutdown,
 };

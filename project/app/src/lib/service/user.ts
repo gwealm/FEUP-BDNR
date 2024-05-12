@@ -1,5 +1,5 @@
 import { UserSchema, type User } from "$lib/types";
-import { get, client } from "./db";
+import { client } from "./db";
 import * as Aerospike from "aerospike";
 import type Key from "key";
 import type Record from "record";

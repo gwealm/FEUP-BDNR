@@ -1,5 +1,3 @@
-import type { ServerPreview } from "$lib/types";
-import { UserSchema } from "$lib/types";
 import type { PageServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 

@@ -1,6 +1,6 @@
 import { validateCredentials } from "$lib/service/user";
 import type { Actions, PageServerLoad } from "./$types";
-import { error, fail, redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 
 export const load: PageServerLoad = ({ cookies }) => {
     const userStr = cookies.get("user");
