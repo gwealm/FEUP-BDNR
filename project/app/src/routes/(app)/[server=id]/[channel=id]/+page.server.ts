@@ -157,9 +157,7 @@ export const actions: Actions = {
                 );
             }
         
-        }
-        
-        if (userSearch) {
+        } else if (userSearch) {
 
             const userNotInServer = Object.values(members)
                                           .filter(member => member?.username === userSearch)
@@ -176,7 +174,7 @@ export const actions: Actions = {
         }
           
         
-        return results.map(result => result?.bins.content ?? []);
+        console.log(results.map(result => result?.bins.content ?? []));
 
     },
 };
