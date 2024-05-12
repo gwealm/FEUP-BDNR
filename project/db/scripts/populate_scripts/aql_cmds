@@ -22,3 +22,7 @@ INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, times
 INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message7', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem6", 1715278308000);
 INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message8', "user2", "testuser2", "https://picsum.photos/300/300","Conteúdo da mensagem7", 1715278308000);
 INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message9', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem8", 1715278308000);
+
+-- Keywords
+
+INSERT INTO test.keywords (PK, messageIds) VALUES ('mensagem', LIST('["message1", "message2", "message4"]'));

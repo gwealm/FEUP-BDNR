@@ -75,4 +75,40 @@ export const actions: Actions = {
 
         return { success: true };
     },
+    searchMessage: async (event) => {
+
+        const { request, cookies, params } = event;
+        const userStr = cookies.get('user');
+
+        if (!userStr) redirect(303, "/login");
+
+        const formData = await request.formData();
+        const searchMessage = formData.get("search");
+
+        if (typeof searchMessage !== "string") {
+            return fail(403);
+        } else if (searchMessage === "" || searchMessage.length > 2000) {
+            return fail(403);
+        }
+
+        const { channel } = params;
+        const keywords = searchMessage.split(' ');
+
+        let matches: any[] = [];
+        for (const keyword of keywords) {   
+            const keywordMessages = await dbGet('keywords', keyword);
+            matches = matches.concat(keywordMessages.bins.messageIds);
+        }
+        
+        const results: string[] = [];
+        for (const match of matches) {
+            const result = await dbGet('messages', match);
+            results.push(result.bins.content);
+        }
+
+        return {
+            results
+        };
+
+    },
 };
