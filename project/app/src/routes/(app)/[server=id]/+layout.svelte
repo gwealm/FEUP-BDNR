@@ -9,7 +9,7 @@
 </script>
 
 <section
-    class="flex w-60 flex-col items-center overflow-x-hidden overflow-y-scroll scrollbar-hide"
+    class="flex w-72 flex-col items-center overflow-x-hidden overflow-y-scroll scrollbar-hide"
     id="channel-list"
 >
     <span class="py-4 font-bold">{server.name}</span>

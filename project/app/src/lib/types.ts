@@ -16,7 +16,7 @@ const ServerPreviewSchema = BaseObject.extend({
 
 const ChannelPreviewSchema = BaseObject.extend({
     name: z.string(),
-    server: ServerPreviewSchema.shape.id
+    server: ServerPreviewSchema.shape.id,
 });
 
 const UserPreviewSchema = BaseObject.extend({
@@ -30,14 +30,8 @@ const ChannelSchema = ChannelPreviewSchema.extend({
 });
 
 const ServerSchema = ServerPreviewSchema.extend({
-    channels: z.record(
-        ChannelSchema.shape.id,
-        ChannelPreviewSchema,
-    ),
-    members: z.record(
-        UserPreviewSchema.shape.id,
-        UserPreviewSchema,
-    ),
+    channels: z.record(ChannelSchema.shape.id, ChannelPreviewSchema),
+    members: z.record(UserPreviewSchema.shape.id, UserPreviewSchema),
 });
 
 const UserSchema = UserPreviewSchema.extend({
@@ -57,8 +51,6 @@ type Server = z.infer<typeof ServerSchema>;
 type ServerPreview = z.infer<typeof ServerPreviewSchema>;
 type Channel = z.infer<typeof ChannelSchema>;
 type ChannelPreview = z.infer<typeof ChannelPreviewSchema>;
-
-
 
 export {
     MessageSchema,

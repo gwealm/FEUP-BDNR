@@ -5,10 +5,10 @@ import type Key from "key";
 import type Record from "record";
 
 const validateCredentials = async (
-    identifier: string,     // Username or email
+    identifier: string, // Username or email
     password: string,
 ): Promise<User | null> => {
-    const isEmail = identifier.includes("@");   // dumb check, but can be improved later
+    const isEmail = identifier.includes("@"); // dumb check, but can be improved later
 
     console.log("Is" + identifier + "an email? ", isEmail ? "Yes" : "No");
 

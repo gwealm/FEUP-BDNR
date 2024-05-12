@@ -18,7 +18,10 @@ export const actions: Actions = {
         const password = formData.get("password");
 
         if (!identifier) {
-            return fail(422, { identifier: identifier, reason: "Missing email or username" });
+            return fail(422, {
+                identifier: identifier,
+                reason: "Missing email or username",
+            });
         }
 
         if (!password) {

@@ -18,9 +18,6 @@
     <title>{channel.name}@{channel.server}</title>
 </svelte:head>
 
-<header class="bg-gray-800 py-4 text-center text-white">
-    <h1 class="text-2xl font-bold">{channel.name}</h1>
-</header>
 {#if user}
     <section class="flex flex-1 flex-col overflow-hidden p-4">
         <div

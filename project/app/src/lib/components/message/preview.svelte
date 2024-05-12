@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { ChannelPreview, Server, Message } from "$lib/types";
+    import type { Message } from "$lib/types";
 
     export let message: Message;
     export let sentByCurrentUser: boolean = false;

@@ -1,17 +1,15 @@
 import { get as dbGet, put, client } from "$lib/service/db";
 import {
-    ChannelSchema,
     MessageSchema,
     UserSchema,
     type Message,
 } from "$lib/types";
 import type { Actions, PageServerLoad } from "./$types";
-import { error, fail, redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import Aerospike from "aerospike";
 
 export const load: PageServerLoad = async ({
     parent,
-    params: { channel: channelId },
     cookies,
 }) => {
     const userStr = cookies.get("user");
@@ -20,39 +18,27 @@ export const load: PageServerLoad = async ({
         redirect(303, "/login");
     }
 
-    const { user } = await parent();
+    const { user, channel } = await parent();
 
-    const dbResult = await dbGet("channels", channelId);
-    const data = dbResult.bins;
+    const messageIds = channel.messages;
 
-    const parseResult = ChannelSchema.safeParse(data);
+    // TODO: check if this can be done on the DB rather than on the app.
+    const messages = await Promise.all(
+        messageIds.map(async (messageId) => {
+            const dbResult = await dbGet("messages", messageId);
+            const data = dbResult.bins;
 
-    if (parseResult.success) {
-        const channel = parseResult.data;
+            const parseResult = MessageSchema.parse(data);
 
-        const messageIds = channel.messages;
+            return parseResult;
+        }),
+    );
 
-        // TODO: check if this can be done on the DB rather than on the app.
-        const messages = await Promise.all(
-            messageIds.map(async (messageId) => {
-                const dbResult = await dbGet("messages", messageId);
-                const data = dbResult.bins;
-
-                const parseResult = MessageSchema.parse(data);
-
-                return parseResult;
-            }),
-        );
-
-        return {
-            channel,
-            messages,
-            user,
-        };
-    } else {
-        console.log(data, parseResult.error.flatten());
-        error(500);
-    }
+    return {
+        messages,
+        user,
+        channel,
+    };
 };
 
 export const actions: Actions = {

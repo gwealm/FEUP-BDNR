@@ -20,7 +20,8 @@
             <input type="hidden" name="remember" value="true" />
             <div class="-space-y-px rounded-md shadow-sm">
                 <div>
-                    <label for="identifier" class="sr-only">Email address</label>
+                    <label for="identifier" class="sr-only">Email address</label
+                    >
                     <input
                         id="identifier"
                         name="identifier"
