@@ -21,7 +21,11 @@ const ChannelPreviewSchema = BaseObject.extend({
 
 const UserPreviewSchema = BaseObject.extend({
     username: z.string(),
-    online: z.coerce.boolean().default(true),
+    online: z.coerce
+        .string()
+        .transform((val) => (val.toLowerCase() === "true" ? true : false))
+        .pipe(z.boolean()),
+    // online: z.boolean(),
     image: z.string().url().optional(),
 });
 

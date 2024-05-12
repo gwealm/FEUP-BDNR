@@ -1,6 +1,8 @@
+import { client } from "$lib/service/db";
 import { validateCredentials } from "$lib/service/user";
 import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
+import * as Aerospike from "aerospike";
 
 export const load: PageServerLoad = ({ cookies }) => {
     const userStr = cookies.get("user");
@@ -48,6 +50,27 @@ export const actions: Actions = {
                 path: "/",
                 maxAge: remember_me ? 60 * 60 * 24 * 14 : 60 * 60 * 24, // 14 days or 1 day
             });
+
+            {
+                await client.operate(new Aerospike.Key("test", "users", _user.id), [
+                    Aerospike.operations.write("online", "true"),
+                ]); // TODO: do not use the raw client.
+
+                Object.values(_user.servers).forEach(async (serverPreview) => {
+                    const cdtContext = new Aerospike.cdt.Context().addMapKey(
+                        _user.id,
+                    );
+
+                    await client.operate(
+                        new Aerospike.Key("test", "servers", serverPreview.id),
+                        [
+                            Aerospike.maps
+                                .put("members", "online", "true")
+                                .withContext(cdtContext),
+                        ],
+                    ); // TODO: do not use the raw client.
+                });
+            }
 
             throw redirect(303, "/@me");
         } else {
