@@ -35,11 +35,13 @@
     "dependencies": {
         "@types/feather-icons": "^4.29.4",
         "@types/jsonwebtoken": "^9.0.6",
+        "@types/uuid": "^9.0.8",
         "aerospike": "^5.12.0",
         "cookie": "^0.6.0",
         "feather-icons": "^4.29.2",
         "jsonwebtoken": "^9.0.2",
         "prettier": "^3.2.5",
+        "uuid": "^9.0.1",
         "zod": "^3.23.5"
     }
 }

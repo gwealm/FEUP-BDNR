@@ -7,6 +7,7 @@ import path from 'path';
 import type { Actions, PageServerLoad } from "./$types";
 import { verify } from "$lib/service/jwt";
 import type { JwtPayload } from "jsonwebtoken";
+import { addNotification } from "$lib/stores/notifications";
 
 // If we get a request for this page it means the user has navigated to '/', load the last server the user has visited and proceed.
 export const load: PageServerLoad = async ({ cookies }) => {
@@ -101,6 +102,10 @@ export const actions: Actions = {
             Aerospike.maps.put("servers", serverId, serverPreview),
         ]); // TODO: do not use the raw client.
 
+        addNotification(`Created \"${server.name}\"`, {
+            dismissable: true,
+        });
+
         throw redirect(303, `/${serverId}`);
     },
     joinServer: async ({ request, cookies }) => {
@@ -141,6 +146,10 @@ export const actions: Actions = {
         await client.operate(new Aerospike.Key("test", "users", user.id), [
             Aerospike.maps.put("servers", serverId, serverPreview),
         ]); // TODO: do not use the raw client.
+
+        addNotification(`Joined \"${serverPreview.name}\"`, {
+            dismissable: true,
+        });
 
         throw redirect(303, `/${serverId}`);
     }
