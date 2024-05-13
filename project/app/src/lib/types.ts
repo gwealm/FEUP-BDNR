@@ -11,6 +11,7 @@ const MessageBaseImage = BaseObject.extend({
 
 const ServerPreviewSchema = BaseObject.extend({
     name: z.string(),
+    description: z.string().optional(),
     image: z.string().url().optional(),
 });
 

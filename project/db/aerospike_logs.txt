@@ -1,4 +1,4 @@
-Script started on 2024-05-12 17:55:32+01:00 [COMMAND="docker attach asadm" <not executed on terminal>]
+Script started on 2024-05-13 05:19:02+01:00 [COMMAND="docker attach asadm" <not executed on terminal>]
 enable
 manage sindex create string user-email ns test set users bin email
 
@@ -15,24 +15,20 @@ manage sindex create string user-username ns test set users bin username
 manage sindex create numeric message-timestamp ns test set messages bin timestamp
 show sindex
 exit
-Seed:        [('172.17.0.3', 3000, None)]
-Config_file: /root/.aerospike/astools.conf, /etc/aerospike/astools.conf
-[1mAerospike Interactive Shell, version 3.0.0[0m
-
 Found 1 nodes
-Online:  172.17.0.3:3000
+Online:  172.17.0.2:3000
 
-[1m[32;92;1mAdmin> [0;32;92m[0menable
-[0m[1m[31;91;1mAdmin+> [0;31;91m[0mmanage sindex create string user-email ns test set users bin email
+[1m[32;92;1mAdmin> [0;32;92m[0m                                                                               [1m[32;92;1mAdmin> [0;32;92m[0menable
+[0m[1m[1;31;91mAdmin+> [0;31;91m[0mmanage sindex create string user-email ns test set users bin email
 [0mUse 'show sindex' to confirm user-email was created successfully.
-[1m[31;91;1mAdmin+> [0;31;91m[0m
-[1m[31;91;1mAdmin+> [0;31;91m[0mmanage sindex create string user-username ns test set users bin usern<e string user-username ns test set users bin userna                                                     <e string user-username ns test set users bin username
+[1m[1;31;91mAdmin+> [0;31;91m[0m
+[1m[1;31;91mAdmin+> [0;31;91m[0mmanage sindex create string user-username ns test set users bin usern<e string user-username ns test set users bin userna                                                     <e string user-username ns test set users bin username
 [0mUse 'show sindex' to confirm user-username was created successfully.
-[1m[31;91;1mAdmin+> [0;31;91m[0m
-[1m[31;91;1mAdmin+> [0;31;91m[0mmanage sindex create numeric message-timestamp ns test set messages b<e numeric message-timestamp ns test set messages bi                                                     <e numeric message-timestamp ns test set messages bin timestamp
+[1m[1;31;91mAdmin+> [0;31;91m[0m
+[1m[1;31;91mAdmin+> [0;31;91m[0mmanage sindex create numeric message-timestamp ns test set messages b<e numeric message-timestamp ns test set messages bi                                                     <e numeric message-timestamp ns test set messages bin timestamp
 [0mUse 'show sindex' to confirm message-timestamp was created successfully.
-[1m[31;91;1mAdmin+> [0;31;91m[0mshow sindex
-[0m[1m~~~~~~~~~~~~Secondary Indexes (2024-05-12 16:55:32 UTC)~~~~~~~~~~~~~[0;m
+[1m[1;31;91mAdmin+> [0;31;91m[0mshow sindex
+[0m[1m~~~~~~~~~~~~Secondary Indexes (2024-05-13 04:19:02 UTC)~~~~~~~~~~~~~[0;m
 [1m       Index Name[0;m[2m|[0;m[1mNamespace[0;m[2m|[0;m[1m     Set[0;m[2m|[0;m[1m      Bin[0;m[2m|[0;m[1m    Bin[0;m[2m|[0;m[1m  Index[0;m[2m|[0;m[1mState[0;m
 [1m                 [0;m[2m|[0;m[1m         [0;m[2m|[0;m[1m        [0;m[2m|[0;m[1m         [0;m[2m|[0;m[1m   Type[0;m[2m|[0;m[1m   Type[0;m[2m|[0;m[1m     [0;m
 message-timestamp[2m|[0;mtest     [2m|[0;mmessages[2m|[0;mtimestamp[2m|[0;mnumeric[2m|[0;mdefault[2m|[0;mWO   
@@ -40,6 +36,6 @@ user-email       [2m|[0;mtest     [2m|[0;musers   [2m|[0;m    email[2m|[
 user-username    [2m|[0;mtest     [2m|[0;musers   [2m|[0;m username[2m|[0;mstring [2m|[0;mdefault[2m|[0;mRW   
 [2mNumber of rows: 3[0;m
 
-[1m[31;91;1mAdmin+> [0;31;91m[0mexit
+[1m[1;31;91mAdmin+> [0;31;91m[0mexit
 
-Script done on 2024-05-12 17:55:32+01:00 [COMMAND_EXIT_CODE="0"]
+Script done on 2024-05-13 05:19:03+01:00 [COMMAND_EXIT_CODE="0"]
