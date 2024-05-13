@@ -5,6 +5,8 @@ import * as Aerospike from 'aerospike';
 import { promises as fs } from 'fs';
 import path from 'path';
 import type { Actions, PageServerLoad } from "./$types";
+import { verify } from "$lib/service/jwt";
+import type { JwtPayload } from "jsonwebtoken";
 
 // If we get a request for this page it means the user has navigated to '/', load the last server the user has visited and proceed.
 export const load: PageServerLoad = async ({ cookies }) => {
@@ -101,7 +103,45 @@ export const actions: Actions = {
 
         throw redirect(303, `/${serverId}`);
     },
-    joinServer: async ({ request }) => {
+    joinServer: async ({ request, cookies }) => {
 
+        const userStr = cookies.get("user");
+
+        if (!userStr) {
+            return fail(401);
+        }
+
+        const user = UserSchema.parse(JSON.parse(userStr));
+
+        const formData = await request.formData();
+
+        const token = formData.get("token") as string;
+
+        const jwtServerPreview = verify(token) as JwtPayload;
+
+        await client.operate(new Aerospike.Key("test", "servers", jwtServerPreview.id), [
+            Aerospike.maps.put("members", user.id, { id: user.id, username: user.username, image: user.image, online: user.online }),
+        ]); // TODO: do not use the raw client.
+
+        const serverPreview: User['servers'][string] = {
+            id: jwtServerPreview.id,
+            name: jwtServerPreview.name,
+            image: jwtServerPreview.image,
+            joined_at: Date.now(),
+        };
+
+        const serverId = serverPreview.id;
+
+        user.servers[serverId] = serverPreview;
+        cookies.set("user", JSON.stringify(user), {
+            path: "/",
+            maxAge: 60 * 60 * 24 * 14, // 14 days
+        });
+
+        await client.operate(new Aerospike.Key("test", "users", user.id), [
+            Aerospike.maps.put("servers", serverId, serverPreview),
+        ]); // TODO: do not use the raw client.
+
+        throw redirect(303, `/${serverId}`);
     }
 }

@@ -63,7 +63,7 @@ export const actions: Actions = {
                 const uploadPath = path.join('static/uploads', `${username}-${Date.now()}.png`);
                 await fs.mkdir(path.dirname(uploadPath), { recursive: true });
                 await fs.writeFile(uploadPath, buffer);
-                imageUrl = `/uploads/${path.basename(uploadPath)}`;  // Update image URL to point to the accessible path
+                imageUrl = `uploads/${path.basename(uploadPath)}`;  // Update image URL to point to the accessible path
             } catch (error) {
                 console.error('Failed to save the image:', error);
                 return fail(500, { error: 'Failed to save image' });

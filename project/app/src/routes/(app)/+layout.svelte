@@ -68,12 +68,16 @@
                             class="flex h-full w-full flex-col items-center justify-center"
                         >
                             Join Server
-                            <form action="" method="post" class="w-full">
+                            <form
+                                action="/?/joinServer"
+                                method="POST"
+                                class="w-full"
+                            >
                                 <input
                                     type="text"
                                     class="input input-bordered w-full"
                                     placeholder="Please input the server's token to join a server"
-                                    name="serverToken"
+                                    name="token"
                                     id="serverToken"
                                     required
                                 />

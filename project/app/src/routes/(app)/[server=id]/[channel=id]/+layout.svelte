@@ -6,13 +6,16 @@
 
     export let data: LayoutServerData;
 
-    const { server, channel } = data;
+    const { channel } = data;
+    $: server = data.server;
 
     let showMembers = true;
     let showInfo = false;
 </script>
 
-<header class="flex w-full items-center justify-between bg-gray-800 px-4 py-4 text-white">
+<header
+    class="flex w-full items-center justify-between bg-gray-800 px-4 py-4 text-white"
+>
     <div class="flex-grow"><!-- Spacer to balance the header --></div>
     <h1 class="flex-grow text-center text-2xl font-bold">{channel.name}</h1>
     <div class="flex flex-grow items-center justify-end">
@@ -26,7 +29,7 @@
             />
         </form>
         <button
-            class="btn btn-square btn-ghost ml-2 relative"
+            class="btn btn-square btn-ghost relative ml-2"
             on:click={() => (showMembers = !showMembers)}
             on:mouseenter={() => (showInfo = true)}
             on:mouseleave={() => (showInfo = false)}
@@ -37,7 +40,9 @@
                 name={showMembers ? "eye" : "eye-off"}
             />
             {#if showInfo}
-                <div class="mt-2 tooltip tooltip-primary tooltip-bottom z-50 bg-gray-700 px-2 py-1 rounded">
+                <div
+                    class="tooltip tooltip-primary tooltip-bottom z-50 mt-2 rounded bg-gray-700 px-2 py-1"
+                >
                     {showMembers ? "Hide" : "Show"} members
                 </div>
             {/if}
