@@ -50,7 +50,7 @@
                     </label>
                 </div>
             </div>
-            <div class="-space-y-px rounded-md shadow-sm">
+            <div class="rounded-md shadow-sm">
                 <div>
                     <label for="username" class="sr-only">Username</label>
                     <input
@@ -62,7 +62,7 @@
                         placeholder="Username"
                     />
                     {#if form?.errors?.username}
-                        <p class="text-xs italic text-red-500">
+                        <p class="text-red-500">
                             {form.errors.username}
                         </p>
                     {/if}
@@ -79,7 +79,7 @@
                         placeholder="Email address"
                     />
                     {#if form?.errors?.email}
-                        <p class="text-xs italic text-red-500">
+                        <p class="text-red-500">
                             {form.errors?.email}
                         </p>
                     {/if}
@@ -96,7 +96,7 @@
                         placeholder="Password"
                     />
                     {#if form?.errors?.password}
-                        <p class="text-xs italic text-red-500">
+                        <p class="text-red-500">
                             {form.errors?.password}
                         </p>
                     {/if}
@@ -113,7 +113,7 @@
                         placeholder="Confirm Password"
                     />
                     {#if form?.errors?.password_confirm}
-                        <p class="text-xs italic text-red-500">
+                        <p class="text-red-500">
                             {form.errors?.password_confirm}
                         </p>
                     {/if}
