@@ -11,7 +11,6 @@ const MessageBaseImage = BaseObject.extend({
 
 const ServerPreviewSchema = BaseObject.extend({
     name: z.string(),
-    description: z.string().optional(),
     image: z.string().url().optional(),
 });
 
@@ -37,6 +36,7 @@ const ChannelSchema = ChannelPreviewSchema.extend({
 const ServerSchema = ServerPreviewSchema.extend({
     channels: z.record(ChannelSchema.shape.id, ChannelPreviewSchema),
     members: z.record(UserPreviewSchema.shape.id, UserPreviewSchema),
+    description: z.string().optional(),
     register_date: z.number(),
 });
 
