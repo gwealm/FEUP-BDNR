@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from "$lib/components/Icon.svelte";
-    import type { PageData } from "../$types";
+    import type { PageData } from "./$types.js";
     import { enhance } from '$app/forms';
 
     export let data: PageData;
@@ -36,7 +36,6 @@
                     Status:
                     <span
                         class={user.online ? "text-green-500" : "text-red-500"}
-                        on:click={isMe ? toggleStatus : undefined}
                     >
                         {user.online ? "Online" : "Offline"}
                     </span>
@@ -154,7 +153,7 @@
                         class="rounded-lg border border-gray-200 bg-white p-4 shadow-xl hover:bg-gray-50"
                     >
                         <a
-                            href={`/${server.name}`}
+                            href={`/${server.id}`}
                             class="block font-medium text-blue-700 hover:text-blue-900"
                         >
                             {server.name}

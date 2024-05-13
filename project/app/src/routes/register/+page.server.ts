@@ -75,7 +75,7 @@ export const actions: Actions = {
                 username,
                 email,
                 password,  // Note: Hashing the password should be done here in production
-                online: false,
+                online: true,
                 image: `http://${url.host}/${imageUrl}`,  // Storing the accessible path
                 servers: {},
                 register_date: Date.now(),
@@ -92,6 +92,7 @@ export const actions: Actions = {
                 path: "/",
                 maxAge: 60 * 60 * 24 * 14, // 14 days
             });
+
         } catch (error) {
             console.error('Failed to register user:', error);
             errors.general = "Failed to create user";
