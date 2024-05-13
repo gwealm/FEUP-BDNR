@@ -65,7 +65,6 @@ export const actions: Actions = {
         const { channel } = params;
 
         const messageId = `message-${Math.random()}`;
-
         const message: Omit<Message, "id"> = {
             content: messageContent,
             senderId: user.id,
@@ -75,9 +74,20 @@ export const actions: Actions = {
         };
 
         await put("messages", messageId, message);
-        await client.operate(new Aerospike.Key("test", "channels", channel), [
+        await client.operate(
+            new Aerospike.Key("test", "channels", channel), [
             Aerospike.lists.append("messages", messageId),
         ]); // TODO: do not use the raw client.
+
+        const keywords = messageContent.split(' ');
+        for (const keyword of keywords) {
+
+            await client.operate(
+                new Aerospike.Key("test", "keywords", keyword), [
+                Aerospike.lists.append("messageIds", messageId),
+            ]);
+
+        }
 
         return { success: true };
     },
