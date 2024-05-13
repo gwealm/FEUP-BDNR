@@ -2,15 +2,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.member-list {
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    transform: translateX(0%);
-    opacity: 1;
-}
-
-.member-list.hidden {
-    transform: translateX(100%); /* Adjust direction as needed */
-    opacity: 0;
-    pointer-events: none; /* Disables interaction with the hidden element */
-}

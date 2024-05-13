@@ -15,6 +15,13 @@ const ServerPreviewSchema = BaseObject.extend({
     image: z.string().url().optional(),
 });
 
+const UserServerPreviewSchema = BaseObject.extend({
+    name: z.string(),
+    description: z.string().optional(),
+    image: z.string().url().optional(),
+    joined_at: z.number(),
+});
+
 const ChannelPreviewSchema = BaseObject.extend({
     name: z.string(),
     server: ServerPreviewSchema.shape.id,
@@ -26,7 +33,6 @@ const UserPreviewSchema = BaseObject.extend({
         .string()
         .transform((val) => (val.toLowerCase() === "true" ? true : false))
         .pipe(z.boolean()),
-    // online: z.boolean(),
     image: z.string().url().optional(),
 });
 
@@ -41,7 +47,8 @@ const ServerSchema = ServerPreviewSchema.extend({
 
 const UserSchema = UserPreviewSchema.extend({
     email: z.string().email(),
-    servers: z.record(ServerPreviewSchema.shape.id, ServerPreviewSchema),
+    register_date: z.number(),
+    servers: z.record(UserServerPreviewSchema.shape.id, UserServerPreviewSchema),
 });
 
 const MessageSchema = MessageBaseImage.extend({
