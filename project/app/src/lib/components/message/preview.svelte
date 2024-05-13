@@ -34,11 +34,9 @@
         let time = 0;
 
         if (elapsed < msPerMinute * 60) {
-            // Displays "x min ago" if less than 1 hour ago
             time = Math.round(elapsed / msPerMinute);
             displayTime = `${time == 0 ? "< 1" : time} min ago`;
         } else if (elapsed < msPerHour * 3) {
-            // Displays "x hrs ago" if less than 3 hours ago
             time = Math.round(elapsed / msPerHour);
             displayTime = `${time == 0 ? "< 1" : time} hrs ago`;
         } else {
@@ -88,7 +86,11 @@
             class="chat-bubble max-w-96 rounded-lg p-3"
             style="overflow-wrap: break-word;"
         >
-            {message.content}
+            {#if message.deleted}
+                <span class="text-gray-400 italic">This message has been deleted</span>
+            {:else}
+                {message.content}
+            {/if}
         </div>
     </div>
     <div class="chat-footer opacity-80">

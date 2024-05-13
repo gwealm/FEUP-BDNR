@@ -1,11 +1,11 @@
-import { get as dbGet } from "$lib/service/db";
-import type { PageServerLoad } from "./$types";
-import { client } from "$lib/service/db";
-import * as Aerospike from "aerospike";
-import { error, redirect } from "@sveltejs/kit";
-import type Record from "record";
-import type Key from "key";
+import { servers } from "$lib/components/server/list.svelte";
+import { client, get as dbGet, put } from "$lib/service/db";
 import { MessageSchema, ServerSchema, UserSchema } from "$lib/types";
+import type { PageServerLoad } from "./$types";
+import { error, fail, redirect, type Actions } from "@sveltejs/kit";
+import * as Aerospike from "aerospike";
+import type Key from "key";
+import type Record from "record";
 
 export const load: PageServerLoad = async ({ params, cookies }) => {
     const userStr = cookies.get("user");
@@ -13,6 +13,8 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
     if (!userStr) {
         throw redirect(303, "/login");
     }
+
+    const me = UserSchema.parse(JSON.parse(userStr));
 
     const { username } = params;
 
@@ -40,20 +42,22 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 
     const user = result.data;
 
-    const servers = await Promise.all(Object.keys(user.servers).map(async (serverId) => {
-        const dbResult = await dbGet("servers", serverId);
-        const data = dbResult.bins;
+    const servers = await Promise.all(
+        Object.keys(user.servers).map(async (serverId) => {
+            const dbResult = await dbGet("servers", serverId);
+            const data = dbResult.bins;
 
-        const parseResult = ServerSchema.safeParse(data);
+            const parseResult = ServerSchema.safeParse(data);
 
-        if (!parseResult.success) {
-            console.log(data, parseResult.error.flatten());
-            return error(500, "Failed to parse server data");
-        }
+            if (!parseResult.success) {
+                console.log(data, parseResult.error.flatten());
+                return error(500, "Failed to parse server data");
+            }
 
-        return parseResult.data;
-    }));
-    
+            return parseResult.data;
+        }),
+    );
+
     const msgQuery = client.query("test", "messages");
     msgQuery.where(Aerospike.filter.equal("senderId", user.id));
 
@@ -67,14 +71,63 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
         const msgData = msg.bins;
         const msgId = (msg.key as Key).key;
         const dbResult = MessageSchema.parse({ ...msgData, id: msgId });
-        
+
         messages.push(dbResult);
     }
 
-
     return {
+        me: me,
         user: user,
         servers: servers,
         messages: messages,
-    }
+    };
+};
+
+export const actions: Actions = {
+    deleteuser: async ({ request, cookies }) => {
+        const userStr = cookies.get("user");
+
+        if (!userStr) {
+            return fail(401, { error: "Unauthorized" });
+        }
+
+        const user = UserSchema.parse(JSON.parse(userStr));
+
+        const dbResult = await dbGet("users", user.id);
+        const userData = dbResult.bins;
+
+        const { password } = userData;
+
+        const data = await request.formData();
+        const passwordCandidate = data.get("password");
+
+        // Replace this with actual password validation logic
+        if (passwordCandidate !== password) {
+            return fail(403, { error: "Invalid password" });
+        }
+
+        await put("users", user.id, {
+            ...user,
+            username: "DELETED_USER",
+            email: "unknown@unknown.com",
+            image: "deleted_user.png",
+            servers: {},
+            online: false,
+            deleted: true,
+        });
+
+        const msgQuery = client.query("test", "messages");
+        msgQuery.where(Aerospike.filter.equal("senderId", user.id));
+
+        const msgQueryResult: Record[] = await msgQuery.results();
+
+        for (const msg of msgQueryResult) {
+            const msgId = (msg.key as Key).key as string;
+            await put("messages", msgId, { content: "", deleted: true });
+        }
+
+        cookies.delete("user", "", { path: "/" });
+
+        throw redirect(303, "/login");
+    },
 };

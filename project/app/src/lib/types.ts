@@ -43,6 +43,10 @@ const ServerSchema = ServerPreviewSchema.extend({
 const UserSchema = UserPreviewSchema.extend({
     email: z.string().email(),
     register_date: z.number().optional(),
+    deleted: z.coerce
+        .string()
+        .transform((val) => (val.toLowerCase() === "true" ? true : false))
+        .pipe(z.boolean()),
     servers: z.record(ServerPreviewSchema.shape.id, ServerPreviewSchema.extend({
         joined_at: z.number().optional(),
     })),
@@ -52,6 +56,10 @@ const MessageSchema = MessageBaseImage.extend({
     senderId: UserPreviewSchema.shape.id,
     senderName: UserPreviewSchema.shape.username,
     senderImage: UserPreviewSchema.shape.image,
+    deleted: z.coerce
+        .string()
+        .transform((val) => (val.toLowerCase() === "true" ? true : false))
+        .pipe(z.boolean()),
 });
 
 type Message = z.infer<typeof MessageSchema>;

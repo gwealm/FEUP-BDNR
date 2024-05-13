@@ -1,6 +1,6 @@
 -- Users
-INSERT INTO test.users (PK, username, email, password, online, register_date, image, servers) VALUES ('user1', "testuser", 'testuser@mail.com', "password", "false", 1683992828000, "https://picsum.photos/300/300", JSON('{"server1": { "id": "server1", "name": "testserver", "image": "https://picsum.photos/300/300", "joined_at": 1705160828}, "server2": { "id": "server2", "name": "testserver2", "image": "https://picsum.photos/300/300", "joined_at": 1705160828}}'));
-INSERT INTO test.users (PK, username, email, password, online, register_date, image, servers) VALUES ('user2', "testuser2", 'testuser2@mail.com', "password", "false", 1652456828000, "https://picsum.photos/300/300", JSON('{"server1": { "id": "server1", "name": "testserver", "image": "https://picsum.photos/300/300", "joined_at": 1705160828}, "server2": { "id": "server2", "name": "testserver2", "image": "https://picsum.photos/300/300", "joined_at": 1705160828}}'));
+INSERT INTO test.users (PK, username, email, password, online, register_date, image, deleted, servers) VALUES ('user1', "testuser", 'testuser@mail.com', "password", "false", 1683992828000, "https://picsum.photos/300/300", "false", JSON('{"server1": { "id": "server1", "name": "testserver", "image": "https://picsum.photos/300/300", "joined_at": 1705160828}, "server2": { "id": "server2", "name": "testserver2", "image": "https://picsum.photos/300/300", "joined_at": 1705160828}}'));
+INSERT INTO test.users (PK, username, email, password, online, register_date, image, deleted, servers) VALUES ('user2', "testuser2", 'testuser2@mail.com', "password", "false", 1652456828000, "https://picsum.photos/300/300", "true", JSON('{"server1": { "id": "server1", "name": "testserver", "image": "https://picsum.photos/300/300", "joined_at": 1705160828}, "server2": { "id": "server2", "name": "testserver2", "image": "https://picsum.photos/300/300", "joined_at": 1705160828}}'));
 
 -- Servers 
 INSERT INTO test.servers (PK, name, description, image, channels, members) VALUES ('server1', "testserver", "A place to have fun", "https://picsum.photos/300/300", JSON('{"channel1": { "id": "channel1", "name": "testchannel", "server": "server1"}, "channel2": { "id": "channel2", "name": "testchannel2", "server": "server1"}}'), JSON('{"user1": { "id": "user1", "username": "testuser", "online": "false", "image": "https://picsum.photos/300/300"}, "user2": { "id": "user2", "username": "testuser2", "online": "false", "image": "https://picsum.photos/300/300"}}'));
@@ -13,15 +13,15 @@ INSERT INTO test.channels (PK, name, server, messages) VALUES ('channel3', "test
 INSERT INTO test.channels (PK, name, server, messages) VALUES ('channel4', "testchannel4", "server2", LIST('[]'));
 
 -- Messages
-INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message1', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem", 1715278308000);
-INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message2', "user2", "testuser2", "https://picsum.photos/300/300","Conteúdo da mensagem1", 1715278308000);
-INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message3', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem2", 1715278308000);
-INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message4', "user2", "testuser2", "https://picsum.photos/300/300","Conteúdo da mensagem3", 1715278308000);
-INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message5', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem4", 1715278308000);
-INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message6', "user2", "testuser2", "https://picsum.photos/300/300","Conteúdo da mensagem5", 1715278308000);
-INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message7', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem6", 1715278308000);
-INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message8', "user2", "testuser2", "https://picsum.photos/300/300","Conteúdo da mensagem7", 1715278308000);
-INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp) VALUES ('message9', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem8", 1715278308000);
+INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp, deleted) VALUES ('message1', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem", 1715278308000, "false");
+INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp, deleted) VALUES ('message2', "user2", "testuser2", "https://picsum.photos/300/300","Conteúdo da mensagem1", 1715278308000, "false");
+INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp, deleted) VALUES ('message3', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem2", 1715278308000, "false");
+INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp, deleted) VALUES ('message4', "user2", "testuser2", "https://picsum.photos/300/300","Conteúdo da mensagem3", 1715278308000, "false");
+INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp, deleted) VALUES ('message5', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem4", 1715278308000, "false");
+INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp, deleted) VALUES ('message6', "user2", "testuser2", "https://picsum.photos/300/300","Conteúdo da mensagem5", 1715278308000, "false");
+INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp, deleted) VALUES ('message7', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem6", 1715278308000, "false");
+INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp, deleted) VALUES ('message8', "user2", "testuser2", "https://picsum.photos/300/300","Conteúdo da mensagem7", 1715278308000, "false");
+INSERT INTO test.messages (PK, senderId, senderName, senderImage, content, timestamp, deleted) VALUES ('message9', "user1", "testuser", "https://picsum.photos/300/300","Conteúdo da mensagem8", 1715278308000, "false");
 
 -- Keywords
 

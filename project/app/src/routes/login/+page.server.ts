@@ -40,12 +40,15 @@ export const actions: Actions = {
         if (!str(identifier) || !str(password))
             errors.password = "Missing password";
 
+        if (identifier?.toString().startsWith("DELETED_USER"))
+            errors.general = "Invalid credentials";
+
         if (Object.keys(errors).length > 0) return fail(422, { errors });
 
         // @ts-ignore typescript is dumb
         const _user = await validateCredentials(identifier, password);
 
-        if (_user) {
+        if (_user && !_user.deleted) {
             const cookies = event.cookies;
 
             cookies.set("user", JSON.stringify(_user), { 
