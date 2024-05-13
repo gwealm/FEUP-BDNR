@@ -41,9 +41,9 @@ const ServerSchema = ServerPreviewSchema.extend({
 
 const UserSchema = UserPreviewSchema.extend({
     email: z.string().email(),
-    register_date: z.number(),
+    register_date: z.number().optional(),
     servers: z.record(ServerPreviewSchema.shape.id, ServerPreviewSchema.extend({
-        joined_at: z.number(),
+        joined_at: z.number().optional(),
     })),
 });
 

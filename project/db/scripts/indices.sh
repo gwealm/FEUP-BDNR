@@ -30,7 +30,7 @@ echo "Aerospike tools container started successfully, ID: $container_id"
 # END
 # )
 
-printf "enable\nmanage sindex create string user-email ns test set users bin email\n\nmanage sindex create string user-username ns test set users bin username\n\nmanage sindex create numeric message-timestamp ns test set messages bin timestamp\nshow sindex\nexit\n" | script -q -c "docker attach $1" aerospike_logs.txt
+printf "enable\nmanage sindex create string user-email ns test set users bin email\n\nmanage sindex create string user-username ns test set users bin username\n\nmanage sindex create numeric message-timestamp ns test set messages bin timestamp\n\nmanage sindex create string message-senderId ns test set messages bin senderId\nshow sindex\nexit\n" | script -q -c "docker attach $1" aerospike_logs.txt
 
 # script -q -c "printf '%s\n' '$commands' | docker attach $1" aerospike_logs.txt
 
