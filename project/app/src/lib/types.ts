@@ -15,12 +15,6 @@ const ServerPreviewSchema = BaseObject.extend({
     image: z.string().url().optional(),
 });
 
-const UserServerPreviewSchema = BaseObject.extend({
-    name: z.string(),
-    description: z.string().optional(),
-    image: z.string().url().optional(),
-    joined_at: z.number(),
-});
 
 const ChannelPreviewSchema = BaseObject.extend({
     name: z.string(),
@@ -43,12 +37,15 @@ const ChannelSchema = ChannelPreviewSchema.extend({
 const ServerSchema = ServerPreviewSchema.extend({
     channels: z.record(ChannelSchema.shape.id, ChannelPreviewSchema),
     members: z.record(UserPreviewSchema.shape.id, UserPreviewSchema),
+    register_date: z.number(),
 });
 
 const UserSchema = UserPreviewSchema.extend({
     email: z.string().email(),
     register_date: z.number(),
-    servers: z.record(UserServerPreviewSchema.shape.id, UserServerPreviewSchema),
+    servers: z.record(ServerPreviewSchema.shape.id, ServerPreviewSchema.extend({
+        joined_at: z.number(),
+    })),
 });
 
 const MessageSchema = MessageBaseImage.extend({
