@@ -70,6 +70,7 @@ export const actions: Actions = {
         }
 
         try {
+            
             await client.put(new Aerospike.Key("test", "users", username), {
                 username,
                 email,
@@ -78,11 +79,16 @@ export const actions: Actions = {
                 image: imageUrl,  // Storing the accessible path
                 servers: JSON.stringify({})
             });
-            throw redirect(303, "/login");
+            
         } catch (error) {
+
             console.error('Failed to register user:', error);
             errors.general = "Failed to create user";
             return fail(500, { errors });
+
         }
+        
+        redirect(303, "/login");
+
     }
 };
