@@ -8,11 +8,11 @@
     let rememberMe = false;
 
     onMount(() => {
-        rememberMe = localStorage.getItem('remember_me') === 'true';
+        rememberMe = localStorage.getItem("remember_me") === "true";
     });
 
     function updateRememberMe(value) {
-        localStorage.setItem('remember_me', value);
+        localStorage.setItem("remember_me", value);
     }
 </script>
 
@@ -120,9 +120,9 @@
                     Sign in
                 </button>
                 {#if form?.errors?.general}
-                <p class="mt-2 text-center text-red-500">
-                    {form?.errors?.general}
-                </p>
+                    <p class="mt-2 text-center text-red-500">
+                        {form?.errors?.general}
+                    </p>
                 {/if}
             </div>
         </form>

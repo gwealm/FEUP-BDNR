@@ -17,15 +17,15 @@ export const notifications = writable<Notification[]>([]);
 
 export const addNotification = (
     message: string,
-    options: Partial<Omit<Notification, "id" | "message">>,
+    options?: Partial<Omit<Notification, "id" | "message">>,
 ) => {
     // Setup some sensible defaults for a toast.
     const notification: Notification = {
         id: generateNotificationId(),
         message,
-        type: options.type ?? "info",
-        dismissible: options.dismissible ?? true,
-        timeout: options.timeout,
+        type: options?.type ?? "info",
+        dismissible: options?.dismissible ?? true,
+        timeout: options?.timeout,
     };
 
     // Push the toast to the top of the list of toasts

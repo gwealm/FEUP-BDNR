@@ -3,6 +3,7 @@
     import ChannelList from "$lib/components/channel/list.svelte";
     import type { LayoutData } from "./$types";
     import { enhance } from "$app/forms";
+    import { addNotification } from "$lib/stores/notifications";
 
     export let data: LayoutData;
 
@@ -20,17 +21,17 @@
 </script>
 
 <section
-    class="scrollbar-hide flex w-72 flex-col items-center overflow-x-hidden overflow-y-scroll"
+    class="flex w-72 flex-col items-center overflow-x-hidden overflow-y-scroll scrollbar-hide"
     id="channel-list"
 >
     <div class="flex w-full items-center justify-between">
         <div class="mx-4 py-4 font-bold">{server.name}</div>
         <details class="dropdown dropdown-end">
-            <summary class="btn btn-outline btn-sm rounded-box mx-2">
+            <summary class="btn btn-outline btn-sm mx-2 rounded-box">
                 <Icon name="menu" height="2em" width="2em" />
             </summary>
             <ul
-                class="dropdown-content menu bg-base-100 rounded-box z-[1] p-2 shadow"
+                class="menu dropdown-content z-[1] rounded-box bg-base-100 p-2 shadow"
             >
                 <li>
                     <form action={`/${server.id}/?/deleteServer`} method="POST">
@@ -51,7 +52,12 @@
                                 if (result.type === "success") {
                                     const { data } = result;
 
-                                    data && copyToClipboard(`${data.token}`);
+                                    if (data) {
+                                        copyToClipboard(`${data.token}`);
+                                        addNotification(
+                                            "Invitation token copied to clipboard",
+                                        );
+                                    }
                                 }
 
                                 await update();
@@ -63,7 +69,7 @@
                             name="payload"
                             bind:value={serverPreview}
                         />
-                        <button>Get Token</button>
+                        <button class="btn-sm">Invite</button>
                     </form>
                 </li>
             </ul>

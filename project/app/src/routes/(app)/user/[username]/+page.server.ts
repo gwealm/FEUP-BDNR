@@ -1,4 +1,3 @@
-import { servers } from "$lib/components/server/list.svelte";
 import { client, get as dbGet, put } from "$lib/service/db";
 import { MessageSchema, ServerSchema, UserSchema } from "$lib/types";
 import type { PageServerLoad } from "./$types";
@@ -84,7 +83,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 };
 
 export const actions: Actions = {
-    deleteuser: async ({ request, cookies }) => {
+    deleteUser: async ({ request, cookies }) => {
         const userStr = cookies.get("user");
 
         if (!userStr) {
@@ -126,7 +125,7 @@ export const actions: Actions = {
             await put("messages", msgId, { content: "", deleted: true });
         }
 
-        cookies.delete("user", "", { path: "/" });
+        cookies.delete("user", { path: "/" });
 
         throw redirect(303, "/login");
     },

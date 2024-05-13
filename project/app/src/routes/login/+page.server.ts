@@ -51,15 +51,16 @@ export const actions: Actions = {
         if (_user && !_user.deleted) {
             const cookies = event.cookies;
 
-            cookies.set("user", JSON.stringify(_user), { 
+            cookies.set("user", JSON.stringify(_user), {
                 path: "/",
                 maxAge: remember_me ? 60 * 60 * 24 * 14 : 60 * 60 * 24, // 14 days or 1 day
             });
 
             {
-                await client.operate(new Aerospike.Key("test", "users", _user.id), [
-                    Aerospike.operations.write("online", "true"),
-                ]); // TODO: do not use the raw client.
+                await client.operate(
+                    new Aerospike.Key("test", "users", _user.id),
+                    [Aerospike.operations.write("online", "true")],
+                ); // TODO: do not use the raw client.
 
                 Object.values(_user.servers).forEach(async (serverPreview) => {
                     const cdtContext = new Aerospike.cdt.Context().addMapKey(

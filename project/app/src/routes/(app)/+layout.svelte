@@ -17,12 +17,12 @@
 </script>
 
 <section
-    class="scrollbar-hide flex w-16 flex-col items-center gap-2 overflow-visible py-2"
+    class="flex w-16 flex-col items-center gap-2 overflow-visible py-2 scrollbar-hide"
     id="server-list"
 >
     <!-- TODO: This should be factored out into a component that also has a list of DMs (if those are added) -->
     <div class="dropdown dropdown-right">
-        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+        <div tabindex="0" role="button" class="avatar btn btn-circle btn-ghost">
             <div class="h-12 w-12 rounded-xl">
                 <img
                     src="/favicon.png"
@@ -32,7 +32,7 @@
             </div>
         </div>
         <ul
-            class="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 ml-3 w-52 p-2 shadow"
+            class="menu dropdown-content menu-sm z-10 ml-3 w-52 rounded-box bg-base-100 p-2 shadow"
         >
             <li>
                 <a class="justify-between" href="/user/{user.username}">
@@ -44,7 +44,6 @@
     </div>
     <div class="divider mx-1 mb-0 mt-0 h-1 rounded bg-white" />
     <ServerList {servers} />
-    <div class="divider mx-1 mb-0 mt-0 h-1 rounded bg-white" />
     <div>
         <button class="btn h-12 w-12 rounded-full" on:click={showModal}>
             <Icon name="plus" height="2em" width="2em" />
@@ -62,7 +61,7 @@
                     />
                     <div
                         role="tabpanel"
-                        class="tab-content bg-base-100 rounded-box px-2 py-6"
+                        class="tab-content rounded-box bg-base-100 px-2 py-6"
                     >
                         <div
                             class="flex h-full w-full flex-col items-center justify-center"
@@ -94,7 +93,7 @@
                     />
                     <div
                         role="tabpanel"
-                        class="tab-content bg-base-100 rounded-box px-2 py-6"
+                        class="tab-content rounded-box bg-base-100 px-2 py-6"
                     >
                         <div
                             class="flex h-full w-full flex-col items-center justify-center gap-2"

@@ -1,7 +1,7 @@
 <script lang="ts">
     import Icon from "$lib/components/Icon.svelte";
-    import type { PageData } from "./$types.js";
-    import { enhance } from '$app/forms';
+    import type { PageData } from "./$types";
+    import { enhance } from "$app/forms";
 
     export let data: PageData;
 
@@ -49,7 +49,12 @@
         </div>
 
         {#if showDeleteForm}
-            <form method="POST" action="?/deleteuser" use:enhance class="mb-6 space-y-4">
+            <form
+                method="POST"
+                action="?/deleteUser"
+                use:enhance
+                class="mb-6 space-y-4"
+            >
                 <div class="form-control">
                     <label class="label" for="password">
                         <span class="label-text">Confirm Password</span>
@@ -135,8 +140,8 @@
                 </div>
                 <div class="stat-title">Member Since</div>
                 <div class="stat-value">
-                    <time datetime={new Date(user.register_date).toISOString()}>
-                        {new Date(user.register_date).toLocaleDateString()}
+                    <time datetime={new Date(user.registerDate).toISOString()}>
+                        {new Date(user.registerDate).toLocaleDateString()}
                     </time>
                 </div>
             </div>

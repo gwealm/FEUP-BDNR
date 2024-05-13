@@ -41,7 +41,7 @@
             />
             {#if showInfo}
                 <div
-                    class="tooltip tooltip-primary tooltip-bottom z-50 mt-2 rounded bg-gray-700 px-2 py-1"
+                    class="tooltip tooltip-bottom tooltip-primary z-50 mt-2 rounded bg-gray-700 px-2 py-1"
                 >
                     {showMembers ? "Hide" : "Show"} members
                 </div>

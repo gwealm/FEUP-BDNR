@@ -87,7 +87,9 @@
             style="overflow-wrap: break-word;"
         >
             {#if message.deleted}
-                <span class="text-gray-400 italic">This message has been deleted</span>
+                <span class="italic text-gray-400"
+                    >This message has been deleted</span
+                >
             {:else}
                 {message.content}
             {/if}

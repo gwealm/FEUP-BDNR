@@ -6,7 +6,6 @@ import { error } from "@sveltejs/kit";
 export const load: LayoutServerLoad = async ({
     params: { server: serverId },
 }) => {
-
     const dbResult = await get("servers", serverId);
     const data = dbResult.bins;
 

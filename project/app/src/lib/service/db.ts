@@ -12,10 +12,9 @@ const config = new Aerospike.Config({
 
     policies: {
         read: new Aerospike.ReadPolicy({ key: 1 }),
-        write: new Aerospike.WritePolicy({ key: 1 })
-    }
+        write: new Aerospike.WritePolicy({ key: 1 }),
+    },
 });
-
 
 const client = await Aerospike.connect(config);
 

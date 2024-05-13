@@ -1,9 +1,9 @@
+import { client, get as dbGet, put, remove } from "$lib/service/db";
 import { sign } from "$lib/service/jwt";
 import { ServerSchema, UserSchema } from "$lib/types";
 import type { PageServerLoad, Actions } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
-import { client, get as dbGet, put, remove } from "$lib/service/db";
-import * as Aerospike from 'aerospike';
+import * as Aerospike from "aerospike";
 import type Record from "record";
 
 // If we reach this loader it means that there has been a request for '/[server]', redirect to the correct channel page
@@ -42,50 +42,50 @@ export const actions: Actions = {
         return { token };
     },
     deleteServer: async ({ request, cookies, params }) => {
-    
         const userStr = cookies.get("user");
-    
+
         if (!userStr) return fail(401);
-    
+
         const user = UserSchema.parse(JSON.parse(userStr));
-        
+
         const serverID = params.server;
-        const server = await dbGet('servers', serverID);
+        const server = await dbGet("servers", serverID);
         const serverOwner = server?.bins.owner;
 
         if (user.id !== serverOwner.id) {
-            redirect(303, `/${serverID}`);  
-        } 
+            redirect(303, `/${serverID}`);
+        }
 
-        await remove('servers', serverID);
-        await client.operate(
-            new Aerospike.Key("test", "users", user.id), [
-            Aerospike.maps.removeByKey('servers', serverID)
+        await remove("servers", serverID);
+        await client.operate(new Aerospike.Key("test", "users", user.id), [
+            Aerospike.maps.removeByKey("servers", serverID),
         ]);
 
         const query = client.query("test", "channels");
         query.where(Aerospike.filter.equal("server", serverID));
 
         const results: Record[] = await query.results();
-        
+
         const job = await query.operate([Aerospike.operations.delete()]);
         await job.waitUntilDone();
 
-        const messages = results.map(record => record.bins.messages).flat();
+        const messages = results.map((record) => record.bins.messages).flat();
         for (const message of messages) {
-            await remove('messages', message);
+            await remove("messages", message);
         }
 
         delete user.servers[serverID];
-        cookies.set("user", JSON.stringify({
-            ...user,
-        }), {
-            path: "/",
-            maxAge: 60 * 60 * 24 * 14, // 14 days
-        });
+        cookies.set(
+            "user",
+            JSON.stringify({
+                ...user,
+            }),
+            {
+                path: "/",
+                maxAge: 60 * 60 * 24 * 14, // 14 days
+            },
+        );
 
         redirect(303, `/user/${user.id}`);
-
-    }
-}
-
+    },
+};
