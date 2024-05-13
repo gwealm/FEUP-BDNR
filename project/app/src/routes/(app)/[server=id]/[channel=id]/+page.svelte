@@ -37,7 +37,7 @@
 {#if user}
     <section class="flex flex-1 flex-col overflow-hidden p-4">
         <div
-            class="flex flex-1 flex-col gap-4 overflow-scroll p-4 pt-0"
+            class="flex flex-1 flex-col gap-4 overflow-y-scroll p-4 pt-0"
             style="justify-content: safe flex-end;"
         >
             {#if messages.length > 0}

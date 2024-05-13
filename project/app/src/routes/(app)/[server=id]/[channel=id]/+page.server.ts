@@ -108,12 +108,12 @@ export const actions: Actions = {
 
         const regex = /^(?:from:([^\s]+)\s*)?(.+)?$/;
         const matches = searchMessage.match(regex);
-        
+
         if (!matches) return [];
-        
+
         const userSearch = matches[1];
         const keywordSearch = matches[2];
-        
+
         const { channel } = params;
         const channelData = await dbGet("channels", channel);
 
@@ -127,7 +127,7 @@ export const actions: Actions = {
 
         const channelsInfo = serverData.bins.channels;
         const channels = [channelData.bins];
-        
+
         for (const channelID of Object.keys(channelsInfo)) {
 
             // no need to fetch the data for the current channel
@@ -135,9 +135,9 @@ export const actions: Actions = {
 
             const serverChannel = await dbGet('channels', channelID);
             channels.push(serverChannel?.bins);
-            
+
         }
-        
+
         const members = serverData.bins.members;
 
         let results: unknown[] = [];
@@ -155,7 +155,7 @@ export const actions: Actions = {
             matches = matches.filter(message =>
                 channels.some(channel => channel.messages.includes(message))
             );
-    
+
             for (const match of matches) {
                 const result = await dbGet("messages", match);
                 results.push(result);
@@ -166,24 +166,24 @@ export const actions: Actions = {
                     result => result?.bins.senderName === userSearch
                 );
             }
-        
+
         } else if (userSearch) {
 
             const userNotInServer = Object.values(members)
-                                          .filter(member => member?.username === userSearch)
-                                          .length === 0;
+                .filter(member => member?.username === userSearch)
+                .length === 0;
 
             if (userNotInServer) return [];
-            
-            let serverMessages: unknown[];              
-            serverMessages = channels.map(channel => channel.messages).flat();
-            serverMessages = await Promise.all( serverMessages.map( messageID => dbGet('messages', messageID) ) );
 
-            results = serverMessages.filter( message => message.bins.senderName === userSearch);
+            let serverMessages: unknown[];
+            serverMessages = channels.map(channel => channel.messages).flat();
+            serverMessages = await Promise.all(serverMessages.map(messageID => dbGet('messages', messageID)));
+
+            results = serverMessages.filter(message => message.bins.senderName === userSearch);
 
         }
-          
-        
+
+
         console.log(results.map(result => result?.bins.content ?? []));
 
     },

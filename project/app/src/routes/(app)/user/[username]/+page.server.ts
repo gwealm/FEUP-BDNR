@@ -6,7 +6,7 @@ import type Record from "record";
 import type Key from "key";
 import { UserSchema } from "$lib/types";
 
-export const load: PageServerLoad = async ({ params, fetch, cookies }) => {
+export const load: PageServerLoad = async ({ params, cookies }) => {
     const userStr = cookies.get("user");
 
     if (!userStr) {
@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ params, fetch, cookies }) => {
     const [userResult] = queryResult;
 
     const data = userResult.bins;
-    const userId = (userResult.key as Key).key;
+    const userId = (userResult.key as Key).key ?? username;
 
     const result = UserSchema.safeParse({ ...data, id: userId });
 
@@ -37,7 +37,7 @@ export const load: PageServerLoad = async ({ params, fetch, cookies }) => {
             user: result.data,
         }
     } else {
-        console.log(data, result.error.flatten());
+        console.log("Error", data, result.error.flatten());
         return error(500, "Failed to parse user data");
     }
 };

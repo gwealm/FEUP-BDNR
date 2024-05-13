@@ -1,7 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import type { ActionData } from "./$types";
-    import { browser } from '$app/environment';
+    import { browser } from "$app/environment";
 
     export let form;
 
@@ -23,21 +23,37 @@
     <title>Register</title>
 </svelte:head>
 
-<div class="flexse min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+<div
+    class="flexse min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8"
+>
     <div class="w-full max-w-md space-y-8">
         <div>
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
                 Register your account
             </h2>
         </div>
-        <form method="POST" class="mt-8 space-y-6" use:enhance enctype="multipart/form-data">
+        <form
+            method="POST"
+            class="mt-8 space-y-6"
+            use:enhance
+            enctype="multipart/form-data"
+        >
             <input type="hidden" name="register" value="true" />
             <div class="flex flex-col items-center">
-                <div class="rounded-full border-4 border-gray-300 shadow-lg overflow-hidden w-24 h-24 mb-4">
-                    <img src="{imagePreviewUrl || 'https://placehold.it/100x100'}" alt="Profile picture preview" class="object-cover w-full h-full">
+                <div
+                    class="mb-4 h-24 w-24 overflow-hidden rounded-full border-4 border-gray-300 shadow-lg"
+                >
+                    <img
+                        src={imagePreviewUrl || "https://placehold.it/100x100"}
+                        alt="Profile picture preview"
+                        class="h-full w-full object-cover"
+                    />
                 </div>
                 <div>
-                    <label for="image" class="btn btn-primary cursor-pointer text-white">
+                    <label
+                        for="image"
+                        class="btn btn-primary cursor-pointer text-white"
+                    >
                         Upload Profile Picture
                         <input
                             type="file"
@@ -46,7 +62,7 @@
                             class="sr-only"
                             accept="image/*"
                             on:change={updateImagePreview}
-                        >
+                        />
                     </label>
                 </div>
             </div>
@@ -58,7 +74,7 @@
                         name="username"
                         type="text"
                         required
-                        class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                        class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
                         placeholder="Username"
                     />
                     {#if form?.errors?.username}
@@ -75,7 +91,7 @@
                         type="email"
                         autocomplete="email"
                         required
-                        class="relative block w-full appearance-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                        class="relative block w-full appearance-none border border-gray-300 px-3 py-2 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
                         placeholder="Email address"
                     />
                     {#if form?.errors?.email}
@@ -92,7 +108,7 @@
                         type="password"
                         autocomplete="new-password"
                         required
-                        class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                        class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
                         placeholder="Password"
                     />
                     {#if form?.errors?.password}
@@ -102,14 +118,15 @@
                     {/if}
                 </div>
                 <div>
-                    <label for="password_confirm" class="sr-only">Confirm Password</label
+                    <label for="password_confirm" class="sr-only"
+                        >Confirm Password</label
                     >
                     <input
                         id="password_confirm"
                         name="password_confirm"
                         type="password"
                         required
-                        class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                        class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
                         placeholder="Confirm Password"
                     />
                     {#if form?.errors?.password_confirm}

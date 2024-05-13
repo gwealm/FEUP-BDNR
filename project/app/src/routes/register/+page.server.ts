@@ -1,14 +1,15 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { client } from "$lib/service/db";
+import { client, put } from "$lib/service/db";
 import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 import * as Aerospike from "aerospike";
-import { UserSchema } from '$lib/types';
+import type Key from "key";
+import { UserSchema, type User } from '$lib/types';
 
 export const load: PageServerLoad = ({ cookies }) => {
     const userStr = cookies.get("user");
-    
+
     if (userStr) {
         const user = UserSchema.parse(JSON.parse(userStr));
         redirect(303, `/user/${user.username}`);
@@ -25,8 +26,8 @@ export interface RegisterErrorObject {
 }
 
 export const actions: Actions = {
-    default: async (event) => {
-        const formData = await event.request.formData();
+    default: async ({ request, cookies, url }) => {
+        const formData = await request.formData();
 
         const username = formData.get("username") as string;
         const email = formData.get("email") as string;
@@ -50,7 +51,7 @@ export const actions: Actions = {
             return fail(422, { errors });
         }
 
-        let imageUrl = "/unkown_user.png";  // Default image path
+        let imageUrl = "unknown_user.png";  // Default image path
 
         // This is a dumb way to save the image in the db without using blobs
         // We store the image in the filesystem and save the path in the db
@@ -70,25 +71,34 @@ export const actions: Actions = {
         }
 
         try {
-            
-            await client.put(new Aerospike.Key("test", "users", username), {
+            const user: Omit<User, 'id'> = {
                 username,
                 email,
                 password,  // Note: Hashing the password should be done here in production
-                online: "false",
-                image: imageUrl,  // Storing the accessible path
-                servers: JSON.stringify({})
-            });
-            
-        } catch (error) {
+                online: false,
+                image: `http://${url.host}/${imageUrl}`,  // Storing the accessible path
+                servers: {},
+                register_date: Date.now(),
+            };
 
+            const userId = username;
+
+            const key = await put("users", `${userId}`, user);
+
+            cookies.set("user", JSON.stringify({
+                ...user,
+                id: key.key as string,
+            }), {
+                path: "/",
+                maxAge: 60 * 60 * 24 * 14, // 14 days
+            });
+        } catch (error) {
             console.error('Failed to register user:', error);
             errors.general = "Failed to create user";
+
             return fail(500, { errors });
-
         }
-        
-        redirect(303, "/login");
 
+        redirect(303, "/login");
     }
 };

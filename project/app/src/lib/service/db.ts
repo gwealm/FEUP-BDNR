@@ -1,4 +1,5 @@
 import * as Aerospike from "aerospike";
+import type Key from "key";
 import type Record from "record";
 
 const config = new Aerospike.Config({
@@ -10,6 +11,10 @@ const config = new Aerospike.Config({
     ],
 });
 
+const POLICY = {
+    key: Aerospike.policy.key.SEND
+}
+
 const client = await Aerospike.connect(config);
 
 const NAMESPACE = "test";
@@ -20,7 +25,7 @@ const get = async (set: string, recordKey: string): Promise<Record | null> => {
     const exists: boolean = await client.exists(key);
     if (!exists) return null;
 
-    const record: Record = await client.get(key);
+    const record: Record = await client.get(key, POLICY);
 
     return {
         ...record,
@@ -43,10 +48,10 @@ const put = async (
     set: string,
     recordKey: string,
     bins: object,
-): Promise<Record> => {
+): Promise<Key> => {
     const key = new Aerospike.Key(NAMESPACE, set, recordKey);
 
-    const record = await client.put(key, bins);
+    const record = await client.put(key, bins, POLICY);
 
     return record;
 };

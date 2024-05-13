@@ -37,7 +37,6 @@ const ServerSchema = ServerPreviewSchema.extend({
     channels: z.record(ChannelSchema.shape.id, ChannelPreviewSchema),
     members: z.record(UserPreviewSchema.shape.id, UserPreviewSchema),
     description: z.string().optional(),
-    register_date: z.number(),
 });
 
 const UserSchema = UserPreviewSchema.extend({

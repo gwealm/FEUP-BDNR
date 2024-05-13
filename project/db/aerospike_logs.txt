@@ -1,4 +1,4 @@
-Script started on 2024-05-13 16:58:26+01:00 [COMMAND="docker attach asadm" <not executed on terminal>]
+Script started on 2024-05-13 17:45:27+00:00 [<not executed on terminal>]
 enable
 manage sindex create string user-email ns test set users bin email
 
@@ -22,7 +22,7 @@ Config_file: /root/.aerospike/astools.conf, /etc/aerospike/astools.conf
 Found 1 nodes
 Online:  172.17.0.2:3000
 
-[1m[32;92;1mAdmin> [0;32;92m[0m                                                                               [1m[32;92;1mAdmin> [0;32;92m[0menable
+[1m[32;92;1mAdmin> [0;32;92m[0menable
 [0m[1m[31;91;1mAdmin+> [0;31;91m[0mmanage sindex create string user-email ns test set users bin email
 [0mUse 'show sindex' to confirm user-email was created successfully.
 [1m[31;91;1mAdmin+> [0;31;91m[0m
@@ -32,7 +32,7 @@ Online:  172.17.0.2:3000
 [1m[31;91;1mAdmin+> [0;31;91m[0mmanage sindex create numeric message-timestamp ns test set messages b<e numeric message-timestamp ns test set messages bi                                                     <e numeric message-timestamp ns test set messages bin timestamp
 [0mUse 'show sindex' to confirm message-timestamp was created successfully.
 [1m[31;91;1mAdmin+> [0;31;91m[0mshow sindex
-[0m[1m~~~~~~~~~~~~Secondary Indexes (2024-05-13 15:58:27 UTC)~~~~~~~~~~~~~[0;m
+[0m[1m~~~~~~~~~~~~Secondary Indexes (2024-05-13 17:45:29 UTC)~~~~~~~~~~~~~[0;m
 [1m       Index Name[0;m[2m|[0;m[1mNamespace[0;m[2m|[0;m[1m     Set[0;m[2m|[0;m[1m      Bin[0;m[2m|[0;m[1m    Bin[0;m[2m|[0;m[1m  Index[0;m[2m|[0;m[1mState[0;m
 [1m                 [0;m[2m|[0;m[1m         [0;m[2m|[0;m[1m        [0;m[2m|[0;m[1m         [0;m[2m|[0;m[1m   Type[0;m[2m|[0;m[1m   Type[0;m[2m|[0;m[1m     [0;m
 message-timestamp[2m|[0;mtest     [2m|[0;mmessages[2m|[0;mtimestamp[2m|[0;mnumeric[2m|[0;mdefault[2m|[0;mWO   
@@ -42,4 +42,4 @@ user-username    [2m|[0;mtest     [2m|[0;musers   [2m|[0;m username[2m|[
 
 [1m[31;91;1mAdmin+> [0;31;91m[0mexit
 
-Script done on 2024-05-13 16:58:27+01:00 [COMMAND_EXIT_CODE="0"]
+Script done on 2024-05-13 17:45:29+00:00 [COMMAND_EXIT_CODE="0"]

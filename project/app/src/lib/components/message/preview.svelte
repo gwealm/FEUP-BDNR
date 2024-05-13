@@ -10,16 +10,21 @@
 
     let now = new Date();
     let timeStampDate = new Date(message.timestamp);
-    let displayTime = '';
+    let displayTime = "";
 
-    const isSameDay = (d1, d2) => {
-        return d1.getFullYear() === d2.getFullYear() &&
-               d1.getMonth() === d2.getMonth() &&
-               d1.getDate() === d2.getDate();
+    const isSameDay = (d1: Date, d2: Date) => {
+        return (
+            d1.getFullYear() === d2.getFullYear() &&
+            d1.getMonth() === d2.getMonth() &&
+            d1.getDate() === d2.getDate()
+        );
     };
 
-    const formatDate = (date) => {
-        return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    const formatDate = (date: Date) => {
+        return date.toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+        });
     };
 
     const updateTime = () => {
@@ -28,15 +33,19 @@
         const elapsed = new Date() - timeStampDate;
         let time = 0;
 
-        if (elapsed < msPerMinute * 60) {       // Displays "x min ago" if less than 1 hour ago
+        if (elapsed < msPerMinute * 60) {
+            // Displays "x min ago" if less than 1 hour ago
             time = Math.round(elapsed / msPerMinute);
             displayTime = `${time == 0 ? "< 1" : time} min ago`;
-        } else if (elapsed < msPerHour * 3) {   // Displays "x hrs ago" if less than 3 hours ago
+        } else if (elapsed < msPerHour * 3) {
+            // Displays "x hrs ago" if less than 3 hours ago
             time = Math.round(elapsed / msPerHour);
             displayTime = `${time == 0 ? "< 1" : time} hrs ago`;
         } else {
-            const time = timeStampDate.getHours().toString().padStart(2, '0') + ':' +
-                         timeStampDate.getMinutes().toString().padStart(2, '0');
+            const time =
+                timeStampDate.getHours().toString().padStart(2, "0") +
+                ":" +
+                timeStampDate.getMinutes().toString().padStart(2, "0");
             if (isSameDay(timeStampDate, new Date())) {
                 displayTime = time;
             } else {
@@ -65,7 +74,7 @@
         <div class="w-10 rounded-full">
             <img
                 alt={`Profile picture for ${message.senderName}`}
-                src={message.senderImage ?? "/unkown_user.png"}
+                src={message.senderImage ?? "/unknown_user.png"}
             />
         </div>
     </div>
