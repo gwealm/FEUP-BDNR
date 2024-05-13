@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from "$lib/components/Icon.svelte";
-    import type { PageData } from "./$types";
+    import type { PageData } from "../$types";
 
     export let data: PageData;
 

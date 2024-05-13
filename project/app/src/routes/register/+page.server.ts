@@ -4,11 +4,14 @@ import { client } from "$lib/service/db";
 import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 import * as Aerospike from "aerospike";
+import { UserSchema } from '$lib/types';
 
 export const load: PageServerLoad = ({ cookies }) => {
     const userStr = cookies.get("user");
+    
     if (userStr) {
-        redirect(303, "/@me");
+        const user = UserSchema.parse(JSON.parse(userStr));
+        redirect(303, `/user/${user.username}`);
     }
 };
 

@@ -15,7 +15,7 @@
             <div class="h-12 w-12 rounded-xl">
                 <img
                     src="/favicon.png"
-                    alt="Image for {'@me'}"
+                    alt="Image for {user.username}"
                     class="rounded-xl transition-all duration-100 ease-in-out hover:bg-blue-300"
                 />
             </div>
@@ -24,7 +24,7 @@
             class="menu menu-sm z-10 dropdown-content bg-base-100 rounded-box ml-3 w-52 p-2 shadow"
         >
             <li>
-                <a class="justify-between" href="/@me">
+                <a class="justify-between" href="/user/{user.username}">
                     Profile
                 </a>
             </li>

@@ -1,3 +1,4 @@
+import { UserSchema } from "$lib/types";
 import type { PageServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 
@@ -7,16 +8,17 @@ export const load: PageServerLoad = async ({
     params: { server },
     cookies,
 }) => {
-    const user = cookies.get("user");
+    const userStr = cookies.get("user");
 
-    if (!user) {
+    if (!userStr) {
         redirect(303, "/login");
     } else {
         const { channels } = await parent();
+        const user = UserSchema.parse(JSON.parse(userStr));
 
         if (channels.length === 0) {
             // TODO: better logic
-            redirect(303, "/@me");
+            redirect(303, `/user/${user.username}`);
         }
 
         const channelId = channels[0].id; // TODO: should we do this differently?

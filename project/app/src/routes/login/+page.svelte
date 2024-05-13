@@ -1,4 +1,3 @@
-<!-- src/routes/login.svelte -->
 <script lang="ts">
     import { enhance } from "$app/forms";
     import type { ActionData } from "./$types";
@@ -87,6 +86,7 @@
                         Remember me
                     </label>
                 </div>
+                <a href="/register">Create an account</a>
             </div>
 
             <div>
