@@ -34,6 +34,7 @@ const ChannelSchema = ChannelPreviewSchema.extend({
 });
 
 const ServerSchema = ServerPreviewSchema.extend({
+    owner: UserPreviewSchema.pick({id: true, username: true}),
     channels: z.record(ChannelSchema.shape.id, ChannelPreviewSchema),
     members: z.record(UserPreviewSchema.shape.id, UserPreviewSchema),
     description: z.string().optional(),

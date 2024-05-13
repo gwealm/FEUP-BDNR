@@ -31,7 +31,7 @@
 </script>
 
 <svelte:head>
-    <title>{channel.name}@{channel.server}</title>
+    <title>{channel.name}@{server.name}</title>
 </svelte:head>
 
 {#if user}

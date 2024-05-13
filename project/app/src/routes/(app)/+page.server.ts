@@ -75,6 +75,10 @@ export const actions: Actions = {
                     server: serverId
                 }
             },
+            owner: {
+                id: user.id,
+                username: user.username
+            },
             members: {
                 [user.id]: {
                     id: user.id,
