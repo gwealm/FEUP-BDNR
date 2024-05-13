@@ -21,7 +21,7 @@
             </div>
         </div>
         <ul
-            class="menu menu-sm dropdown-content bg-base-100 rounded-box ml-3 w-52 p-2 shadow"
+            class="menu menu-sm z-10 dropdown-content bg-base-100 rounded-box ml-3 w-52 p-2 shadow"
         >
             <li>
                 <a class="justify-between" href="/@me">
