@@ -8,6 +8,7 @@ const validateCredentials = async (
     identifier: string, // Username or email
     password: string,
 ): Promise<User | null> => {
+
     const isEmail = identifier.includes("@"); // dumb check, but can be improved later
 
     // TODO: we should not use the raw client for this but waddayagonnado
@@ -54,5 +55,6 @@ const verifyPassword = async (
     // TODO: implement better checks
     return passwordCandidate === realPassword;
 };
+
 
 export { validateCredentials };
