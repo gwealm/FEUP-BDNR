@@ -43,7 +43,7 @@
             </div>
             {#if isMe}
                 <button class="btn btn-error" on:click={toggleDeleteForm}>
-                    Delete Profile {showDeleteForm}
+                    Delete Profile
                 </button>
             {/if}
         </div>

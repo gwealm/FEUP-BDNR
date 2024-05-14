@@ -1,5 +1,5 @@
 import { client, get as dbGet, put } from "$lib/service/db";
-import { MessageSchema, ServerSchema, UserSchema } from "$lib/types";
+import { MessageSchema, ServerSchema, UserSchema, type Server } from "$lib/types";
 import type { PageServerLoad } from "./$types";
 import { error, fail, redirect, type Actions } from "@sveltejs/kit";
 import * as Aerospike from "aerospike";
@@ -82,9 +82,22 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
     };
 };
 
+// Generate a random 6-digit number
+function generateRandomNumber() {
+    return Math.floor(100000 + Math.random() * 900000);
+}
+
+function pickRandomServerMember(server: Server) {
+    const members = Object.values(server.members);
+    const randomIndex = Math.floor(Math.random() * members.length);
+    return members[randomIndex];
+}
+
 export const actions: Actions = {
     deleteUser: async ({ request, cookies }) => {
         const userStr = cookies.get("user");
+
+        const randomNumber = generateRandomNumber();
 
         if (!userStr) {
             return fail(401, { error: "Unauthorized" });
@@ -105,15 +118,59 @@ export const actions: Actions = {
             return fail(403, { error: "Invalid password" });
         }
 
+        const userServers = Object.keys(userData.servers);
+
+
         await put("users", user.id, {
             ...user,
-            username: "DELETED_USER",
+            username: `DELETED_USER_${randomNumber}`,
             email: "unknown@unknown.com",
             image: "deleted_user.png",
             servers: {},
             online: false,
             deleted: true,
         });
+
+        const serverQuery = client.query("test", "servers");
+
+        for (const serverId of userServers) {
+            serverQuery.where(Aerospike.filter.equal("id", serverId));
+            const serverQueryResult: Record[] = await serverQuery.results();
+
+            if (serverQueryResult.length !== 1) {
+                return error(404, `Server ${serverId} not found`);
+            }
+
+            const [serverResult] = userQueryResult;
+
+            const serverData = serverResult.bins;
+            const serverId = (serverResult.key as Key).key;
+
+            const parseResult = ServerSchema.safeParse({ ...serverData, id: serverId });
+
+            const server = parseResult.data;
+
+            let changedMembers = {};
+
+            for (const member of server.members) {
+                if (member.id === user.id) {
+                    changedMembers += {
+                        ...member,
+                        username: `DELETED_USER_${randomNumber}`,
+                        id: `DELETED_USER_${randomNumber}`,
+                    };
+                } else {
+                    changedMembers += member;
+                }
+            }
+
+            await put("servers", serverId, {
+                ...server,
+                ownerId: server.owner.id === user.id ? { ...pickRandomServerMember(server) } : server?.owner,
+                members: changedMembers,
+            });
+        }
+
 
         const msgQuery = client.query("test", "messages");
         msgQuery.where(Aerospike.filter.equal("senderId", user.id));

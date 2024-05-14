@@ -2,6 +2,7 @@
     import type { Server } from "$lib/types";
 
     export let member: Server["members"][string];
+    export let serverOwner: string;
 </script>
 
 <div class="flex items-center gap-2">
@@ -28,4 +29,7 @@
     <div class="ml-2 text-base">
         {member.username}
     </div>
+    {#if member.username === serverOwner}
+        <div class="badge badge-primary badge-outline">Owner</div>
+    {/if}
 </div>

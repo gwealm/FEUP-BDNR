@@ -5,6 +5,8 @@
     export let server: Server;
     let searchQuery = "";
 
+    $: serverOwner = server.owner.username;
+
     $: members = Object.values(server.members);
 
     // @ts-ignore im blue dabadi dabada dabadi dabada dabadi dabada dabadi dabada
@@ -29,7 +31,7 @@
         <ul class="flex flex-col gap-5">
             {#each filteredMembers as member (`member-${member.id}`)}
                 <li>
-                    <Member {member} />
+                    <Member {member} {serverOwner} />
                 </li>
             {/each}
         </ul>
