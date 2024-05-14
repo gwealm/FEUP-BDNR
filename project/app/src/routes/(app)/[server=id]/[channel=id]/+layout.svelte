@@ -59,7 +59,7 @@
             </form>
             {#if filteredMessages.length > 0}
                 <div
-                    class="dropdown dropdown-open absolute top-20"
+                    class="dropdown dropdown-open absolute top-20 z-20"
                     on:mouseenter={() => (dropdownEntered = true)}
                     on:mouseleave={() => {
                         if (dropdownEntered) {
@@ -69,7 +69,7 @@
                     }}
                 >
                     <ul
-                        class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow flex flex-col gap-2"
+                        class="dropdown-content menu bg-base-100 rounded-box z-[1] flex w-52 flex-col gap-2 p-2 shadow"
                     >
                         {#each filteredMessages as message (`search-message-${message.id}`)}
                             <li>
@@ -87,8 +87,14 @@
                                             />
                                         </div>
                                         <div class="flex flex-col items-end">
-                                            <span class="text-ellipsis overflow-hidden">{message.senderName}</span>
-                                            <span class="text-ellipsis overflow-hidden">{message.content}</span>
+                                            <span
+                                                class="overflow-hidden text-ellipsis"
+                                                >{message.senderName}</span
+                                            >
+                                            <span
+                                                class="overflow-hidden text-ellipsis"
+                                                >{message.content}</span
+                                            >
                                         </div>
                                     </div>
                                 </a>

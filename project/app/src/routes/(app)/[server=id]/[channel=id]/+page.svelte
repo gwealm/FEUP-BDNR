@@ -42,13 +42,16 @@
         >
             {#if messages.length > 0}
                 {#each messages as message (message?.id)}
-                    <Message
-                        {message}
-                        sentByCurrentUser={message?.senderId === user.id}
-                        isUserOnline={server.members[message.senderId].online}
-                        userIsAdmin={server.owner.id === user.id}
-                        {scroll}
-                    />
+                    {#if message}
+                        <Message
+                            {message}
+                            sentByCurrentUser={message?.senderId === user.id}
+                            isUserOnline={server.members[message.senderId]
+                                ?.online ?? false}
+                            userIsAdmin={server.owner.id === user.id}
+                            {scroll}
+                        />
+                    {/if}
                 {/each}
             {:else}
                 <div

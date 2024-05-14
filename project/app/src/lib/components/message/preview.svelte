@@ -3,8 +3,12 @@
     import { onMount } from "svelte";
     import type { Action } from "svelte/action";
     import { fly } from "svelte/transition";
-    import { visibleProfile, showProfile, hideProfile } from "$lib/stores/profileCard.ts";
-    import { get } from 'svelte/store';
+    import {
+        visibleProfile,
+        showProfile,
+        hideProfile,
+    } from "$lib/stores/profileCard";
+    import { get } from "svelte/store";
     import Icon from "../Icon.svelte";
 
     export let message: Message;
@@ -69,7 +73,11 @@
     let clickedElementBounds;
 
     function toggleProfile(event: MouseEvent) {
-        clickedElementBounds = (event.target as HTMLElement).getBoundingClientRect();
+        if (message.senderName.startsWith("DELETED_USER")) return;
+
+        clickedElementBounds = (
+            event.target as HTMLElement
+        ).getBoundingClientRect();
         const currentVisibleProfile = get(visibleProfile);
 
         if (currentVisibleProfile === message.id) {
@@ -106,6 +114,99 @@
     }
 </script>
 
+<div
+    class:chat-start={!sentByCurrentUser}
+    class:chat-end={sentByCurrentUser}
+    class="chat relative"
+    id={`message-${message.id}`}
+    use:scroll
+>
+    <div
+        class:online={isUserOnline}
+        class:offline={!isUserOnline}
+        class="avatar chat-image"
+        on:click={toggleProfile}
+    >
+        <div class="w-10 rounded-full">
+            <img
+                alt={`Profile picture for ${message.senderName}`}
+                src={message.senderImage ?? "/unknown_user.png"}
+            />
+        </div>
+    </div>
+    <div>
+        <div
+            class="chat-header text-sm font-bold"
+            class:text-end={sentByCurrentUser}
+        >
+            {message.senderName}
+        </div>
+        <div
+            class:chat-bubble-primary={sentByCurrentUser}
+            class:chat-bubble-secondary={!sentByCurrentUser}
+            class="chat-bubble group relative max-w-96 rounded-lg p-3"
+            style="overflow-wrap: break-word;"
+        >
+            {#if !message.deleted && (sentByCurrentUser || userIsAdmin)}
+                <form
+                    action="?/deleteMessage"
+                    method="POST"
+                    class="hidden group-hover:block"
+                >
+                    <input type="hidden" name="message" value={message.id} />
+                    <button
+                        class="
+                        absolute
+                        -top-3
+                        {sentByCurrentUser ? '-left-2' : '-right-2'} 
+                        btn
+                        btn-xs
+                        btn-error"
+                    >
+                        <Icon name="trash-2" />
+                    </button>
+                </form>
+            {/if}
+            {#if message.deleted}
+                <span class="italic text-gray-800"
+                    >This message has been deleted</span
+                >
+            {:else}
+                {message.content}
+            {/if}
+        </div>
+    </div>
+    <div class="chat-footer opacity-80">
+        {displayTime}
+    </div>
+    {#if $visibleProfile === message.id}
+        <div
+            bind:this={profileCard}
+            class="profile-card card glass w-96"
+            transition:fly
+        >
+            <button class="close-btn btn-primary" on:click={closeProfile}>
+                <Icon name="x" />
+            </button>
+            <figure>
+                <img
+                    src={message.senderImage ?? "/unknown_user.png"}
+                    alt={`Profile picture for ${message.senderName}`}
+                />
+            </figure>
+            <div class="card-body">
+                <h2 class="card-title">{message.senderName}</h2>
+                <div class="card-actions justify-end">
+                    <a
+                        href={`/user/${message.senderName}`}
+                        class="btn btn-primary">View Profile</a
+                    >
+                </div>
+            </div>
+        </div>
+    {/if}
+</div>
+
 <style>
     .profile-card {
         position: fixed;
@@ -129,71 +230,3 @@
         font-size: 1.5rem;
     }
 </style>
-
-<div
-    class:chat-start={!sentByCurrentUser}
-    class:chat-end={sentByCurrentUser}
-    class="chat relative"
-    id={`message-${message.id}`}
-    use:scroll
->
-    <div class:online={isUserOnline} class:offline={!isUserOnline} class="avatar chat-image" on:click={toggleProfile}>
-        <div class="w-10 rounded-full">
-            <img
-                alt={`Profile picture for ${message.senderName}`}
-                src={message.senderImage ?? "/unknown_user.png"}
-            />
-        </div>
-    </div>
-    <div>
-        <div class="chat-header text-sm font-bold"
-        class:text-end={sentByCurrentUser}>
-            {message.senderName}
-        </div>
-        <div
-            class:chat-bubble-primary={sentByCurrentUser}
-            class:chat-bubble-secondary={!sentByCurrentUser}
-            class="chat-bubble max-w-96 rounded-lg p-3 relative group"
-            style="overflow-wrap: break-word;"
-        >
-            {#if !message.deleted && (sentByCurrentUser || userIsAdmin)}
-                <form action="?/deleteMessage" method="POST" class="hidden group-hover:block">
-                    <input type="hidden" name="message" value={message.id}>
-                    <button class="
-                        absolute 
-                        -top-3 
-                        {sentByCurrentUser ? "-left-2" : "-right-2"} 
-                        btn 
-                        btn-xs 
-                        btn-error">
-                        <Icon name="trash-2" />
-                    </button>
-                </form>
-            {/if}
-            {#if message.deleted}
-                <span class="italic text-gray-400">This message has been deleted</span>
-            {:else}
-                {message.content}
-            {/if}
-        </div>
-    </div>
-    <div class="chat-footer opacity-80">
-        {displayTime}
-    </div>
-    {#if $visibleProfile === message.id}
-        <div bind:this={profileCard} class="profile-card card w-96 glass" transition:fly>
-            <button class="close-btn btn-primary" on:click={closeProfile}>
-                <Icon name="x" />
-            </button>
-            <figure>
-                <img src={message.senderImage ?? "/unknown_user.png"} alt={`Profile picture for ${message.senderName}`} />
-            </figure>
-            <div class="card-body">
-                <h2 class="card-title">{message.senderName}</h2>
-                <div class="card-actions justify-end">
-                    <a href={`/user/${message.senderName}`} class="btn btn-primary">View Profile</a>
-                </div>
-            </div>
-        </div>
-    {/if}
-</div>

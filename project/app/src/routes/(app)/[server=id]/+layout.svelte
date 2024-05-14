@@ -7,6 +7,7 @@
 
     export let data: LayoutData;
 
+    $: user = data.user;
     $: channels = data.channels;
     $: server = data.server;
     $: serverPreview = JSON.stringify({
@@ -14,6 +15,7 @@
         name: server.name,
         image: server.image,
     });
+    $: isServerOwner = user.id === server.owner.id;
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
@@ -43,14 +45,21 @@
             <ul
                 class="menu dropdown-content rounded-box bg-base-100 z-10 items-center p-2 shadow"
             >
-                <li>
-                    <form action={`/${server.id}/?/deleteServer`} method="POST">
-                        <button class="btn btn-sm btn-error">Delete</button>
-                    </form>
-                </li>
+                {#if isServerOwner}
+                    <li>
+                        <form
+                            action={`/${server.id}/?/deleteServer`}
+                            method="POST"
+                        >
+                            <button class="btn btn-sm btn-error">Delete</button>
+                        </form>
+                    </li>
+                {/if}
                 <li>
                     <form action={`/${server.id}/?/leaveServer`} method="POST">
-                        <button class="btn btn-sm btn-warning">Leave Server</button>
+                        <button class="btn btn-sm btn-warning"
+                            >Leave Server</button
+                        >
                     </form>
                 </li>
                 <li>
@@ -82,50 +91,52 @@
                         <button class="btn btn-sm btn-info">Invite</button>
                     </form>
                 </li>
-                <li>
-                    <div>
-                        <button
-                            class="btn btn-sm btn-success"
-                            on:click={showModal}>New Channel</button
-                        >
-                        <dialog id={modalElementId} class="modal">
-                            <div class="modal-box rounded-lg p-4 shadow-lg">
-                                <h3 class="mb-4 text-lg font-semibold">
-                                    Create Channel
-                                </h3>
-                                <form
-                                    action={`/${server.id}/?/createChannel`}
-                                    method="post"
-                                    class="flex w-full flex-col gap-4"
-                                >
-                                    <input
-                                        type="text"
-                                        class="input input-bordered w-full"
-                                        placeholder="Channel name..."
-                                        name="channel"
-                                        id="serverChannelName"
-                                        required
-                                    />
-                                </form>
-                                <div
-                                    class="modal-action flex justify-end gap-2"
-                                >
-                                    <form method="dialog">
-                                        <button class="btn" type="button"
-                                            >Close</button
-                                        >
+                {#if isServerOwner}
+                    <li>
+                        <div>
+                            <button
+                                class="btn btn-sm btn-success"
+                                on:click={showModal}>New Channel</button
+                            >
+                            <dialog id={modalElementId} class="modal">
+                                <div class="modal-box rounded-lg p-4 shadow-lg">
+                                    <h3 class="mb-4 text-lg font-semibold">
+                                        Create Channel
+                                    </h3>
+                                    <form
+                                        action={`/${server.id}/?/createChannel`}
+                                        method="post"
+                                        class="flex w-full flex-col gap-4"
+                                    >
+                                        <input
+                                            type="text"
+                                            class="input input-bordered w-full"
+                                            placeholder="Channel name..."
+                                            name="channel"
+                                            id="serverChannelName"
+                                            required
+                                        />
                                     </form>
+                                    <div
+                                        class="modal-action flex justify-end gap-2"
+                                    >
+                                        <form method="dialog">
+                                            <button class="btn" type="button"
+                                                >Close</button
+                                            >
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
-                        </dialog>
-                    </div>
-                </li>
+                            </dialog>
+                        </div>
+                    </li>
+                {/if}
             </ul>
         </details>
     </div>
 
     <div class="divider mx-4 my-2 h-[1px] bg-gray-600" />
-    <ChannelList {channels} />
+    <ChannelList {channels} {isServerOwner} />
 </section>
 <section class="flex flex-1 flex-col bg-slate-500" id="channel-content">
     <slot />

@@ -10,7 +10,7 @@ create:
 	./scripts/create.sh ${CONTAINER_NAME}
 
 populate:
-	./scripts/populate.sh ${CONTAINER_NAME} aql_cmds
+	./scripts/populate.sh ${CONTAINER_NAME} generated_data
 
 indices:
 	./scripts/indices.sh ${ASADM_TOOL_CONTAINER_NAME} ${CONTAINER_NAME}

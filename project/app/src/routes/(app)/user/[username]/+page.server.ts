@@ -152,26 +152,27 @@ export const actions: Actions = {
 
             const server = parseResult.data;
 
-            let changedMembers = {};
+            const serverOps = [];
+            
+            if (user.id === server.owner.id) {
+                // Owner leaving a server he owns, bruh
+                
+                delete server.members[user.id];
+                const newOwner = pickRandomServerMember(server);
 
-            for (const member of Object.values(server.members)) {
-                if (member.id === user.id) {
-                    changedMembers[member.id] = {
-                        ...member,
-                        username: `DELETED_USER_${randomNumber}`,
-                        id: `DELETED_USER_${randomNumber}`,
-                    };
-                } else {
-                    changedMembers[member.id] = member;
-                }
+                serverOps.push(
+                    Aerospike.maps.put('owner', 'id', newOwner.id),
+                    Aerospike.maps.put('owner', 'username', newOwner.username)
+                )
             }
 
-            await put("servers", serverId, {
-                ...server,
-                ownerId: server.owner.id === user.id ? { ...pickRandomServerMember(server) } : server?.owner,
-                members: changedMembers,
-            });
+            serverOps.push(Aerospike.maps.removeByKey('members', user.id));
 
+            await client.operate(
+                new Aerospike.Key('test', 'servers', serverId),
+                serverOps
+            );
+            
             console.log("Erased server membership data for server:", serverId);
         }
 
@@ -182,7 +183,7 @@ export const actions: Actions = {
 
         for (const msg of msgQueryResult) {
             const msgId = (msg.key as Key).key as string;
-            await put("messages", msgId, {...msg, senderId: "", senderName: "", content: "", deleted: true });
+            await put("messages", msgId, { ...msg.bins, senderId: "", senderName: "", content: "", deleted: true });
         }
 
         console.log("Erased messages");
