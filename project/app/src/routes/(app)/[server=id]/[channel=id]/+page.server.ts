@@ -155,8 +155,6 @@ export const actions: Actions = {
             }
         }
 
-        console.log("searchParams", searchParams);
-
         const serverData = await dbGet("servers", serverId);
 
         // TODO: better handling of error, redirect?
@@ -250,4 +248,17 @@ export const actions: Actions = {
 
         return { messages: filteredMessages };
     },
+    deleteMessage: async ({ request, cookies }) => {
+        const userStr = cookies.get("user");
+
+        if (!userStr) redirect(303, "/login");
+
+        const formData = await request.formData();
+
+        const messageId = formData.get("message") as string;
+
+        await put("messages", messageId, {
+            deleted: true
+        });
+    }
 };

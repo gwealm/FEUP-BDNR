@@ -2,6 +2,7 @@
     import type { Message } from "$lib/types";
     import { onMount } from "svelte";
     import type { Action } from "svelte/action";
+    import Icon from "$lib/components/Icon.svelte";
 
     export let message: Message;
     export let sentByCurrentUser: boolean = false;
@@ -64,7 +65,7 @@
 <div
     class:chat-start={!sentByCurrentUser}
     class:chat-end={sentByCurrentUser}
-    class="chat"
+    class="chat relative"
     id={`message-${message.id}`}
     use:scroll
 >
@@ -77,21 +78,38 @@
         </div>
     </div>
     <div>
-        <div class="chat-header text-sm font-bold">
+        <div class="chat-header text-sm font-bold"
+        class:text-end={sentByCurrentUser}>
             {message.senderName}
         </div>
         <div
             class:chat-bubble-primary={sentByCurrentUser}
             class:chat-bubble-secondary={!sentByCurrentUser}
-            class="chat-bubble max-w-96 rounded-lg p-3"
+            class="chat-bubble max-w-96 rounded-lg p-3 relative group"
             style="overflow-wrap: break-word;"
         >
+            {#if !message.deleted && sentByCurrentUser}
+                <form action="?/deleteMessage" method="POST" class="hidden group-hover:block">
+                    <input type="hidden" name="message" value={message.id}>
+                    <button class="absolute -top-3 -left-2 btn btn-xs btn-error">
+                        <Icon name="trash-2" />
+                    </button>
+                </form>
+            {/if}
             {#if message.deleted}
-                <span class="italic text-gray-400"
+                <span class="italic text-gray-700"
                     >This message has been deleted</span
                 >
             {:else}
                 {message.content}
+            {/if}
+            {#if !message.deleted && !sentByCurrentUser}
+                <form action="?/deleteMessage" method="POST" class="hidden group-hover:block">
+                    <input type="hidden" name="message" value={message.id}>
+                    <button class="absolute -top-3 -right-2 btn btn-xs btn-error">
+                        <Icon name="trash-2" />
+                    </button>
+                </form>
             {/if}
         </div>
     </div>
