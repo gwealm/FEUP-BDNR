@@ -86,6 +86,7 @@ export const actions: Actions = {
             Aerospike.lists.append("messages", messageId),
         ]); // TODO: do not use the raw client.
 
+        messageContent.toLowerCase();
         const keywords = messageContent.split(" ");
         for (const keyword of keywords) {
             await client.operate(
