@@ -32,7 +32,9 @@
     class="scrollbar-hide flex w-72 flex-col items-center overflow-x-hidden overflow-y-scroll bg-gray-800 text-white shadow-lg"
     id="channel-list"
 >
-    <div class="flex w-full items-center justify-between px-4 py-5 rounded-t-lg">
+    <div
+        class="flex w-full items-center justify-between rounded-t-lg px-4 py-5"
+    >
         <div class="font-bold">{server.name}</div>
         <details class="dropdown dropdown-end">
             <summary class="btn btn-outline btn-sm rounded-box">
@@ -77,10 +79,15 @@
                 </li>
                 <li>
                     <div>
-                        <button class="btn btn-sm btn-success" on:click={showModal}>New Channel</button>
+                        <button
+                            class="btn btn-sm btn-success"
+                            on:click={showModal}>New Channel</button
+                        >
                         <dialog id={modalElementId} class="modal">
-                            <div class="modal-box rounded-lg p-4 bg-white shadow-lg">
-                                <h3 class="text-lg font-semibold mb-4">Create Channel</h3>
+                            <div class="modal-box rounded-lg p-4 shadow-lg">
+                                <h3 class="mb-4 text-lg font-semibold">
+                                    Create Channel
+                                </h3>
                                 <form
                                     action={`/${server.id}/?/createChannel`}
                                     method="post"
@@ -94,11 +101,16 @@
                                         id="serverChannelName"
                                         required
                                     />
-                                    <div class="modal-action flex justify-end gap-2">
-                                        <button class="btn btn-secondary">Create</button>
-                                        <button class="btn" type="button" onclick={() => document.querySelector(`#${modalElementId}`).close()}>Close</button>
-                                    </div>
                                 </form>
+                                <div
+                                    class="modal-action flex justify-end gap-2"
+                                >
+                                    <form method="dialog">
+                                        <button class="btn" type="button"
+                                            >Close</button
+                                        >
+                                    </form>
+                                </div>
                             </div>
                         </dialog>
                     </div>
