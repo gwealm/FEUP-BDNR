@@ -64,6 +64,9 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 
     const msgQuery = client.query("test", "messages");
     msgQuery.where(Aerospike.filter.equal("senderId", user.id));
+    /*msgQuery.apply("scripts", "record_count", null, null, (error, result) => {
+        console.log(error, result);
+    });*/
 
     const msgQueryResult: Record[] = await msgQuery.results();
 

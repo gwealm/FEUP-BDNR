@@ -1,6 +1,12 @@
 import * as Aerospike from "aerospike";
 import type Key from "key";
 import type Record from "record";
+import path from "path";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const config = new Aerospike.Config({
     hosts: [
@@ -9,7 +15,6 @@ const config = new Aerospike.Config({
             port: 3000,
         },
     ],
-
     policies: {
         read: new Aerospike.ReadPolicy({ key: 1 }),
         write: new Aerospike.WritePolicy({ key: 1 }),
@@ -17,6 +22,9 @@ const config = new Aerospike.Config({
 });
 
 const client = await Aerospike.connect(config);
+
+const udfPath = path.join(__dirname, './scripts/scripts.lua')
+const job = await client.udfRegister(udfPath);
 
 const NAMESPACE = "test";
 
