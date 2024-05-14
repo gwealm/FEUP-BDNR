@@ -8,9 +8,11 @@ const validateCredentials = async (
     identifier: string, // Username or email
     password: string,
 ): Promise<User | null> => {
-    const isEmail = identifier.includes("@"); // dumb check, but can be improved later
+    // this is not a good pratice, but for this PoC it's fine
+    // by doing this, it means that if a user has "@" in the username, 
+    // it will be considered an email
+    const isEmail = identifier.includes("@"); 
 
-    // TODO: we should not use the raw client for this but waddayagonnado
     const query = client.query("test", "users");
     if (isEmail) {
         query.where(Aerospike.filter.equal("email", identifier));
@@ -51,7 +53,6 @@ const verifyPassword = async (
     passwordCandidate: string,
     realPassword: string,
 ): Promise<boolean> => {
-    // TODO: implement better checks
     return passwordCandidate === realPassword;
 };
 

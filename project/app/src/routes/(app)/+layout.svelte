@@ -66,7 +66,7 @@
                         <div
                             class="flex h-full w-full flex-col items-center justify-center gap-3"
                         >
-                            Join Server
+                            <b>Join Server</b>
                             <form
                                 action="/?/joinServer"
                                 method="POST"

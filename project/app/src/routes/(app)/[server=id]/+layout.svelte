@@ -29,21 +29,21 @@
 </script>
 
 <section
-    class="scrollbar-hide flex w-72 flex-col items-center overflow-x-hidden overflow-y-scroll"
+    class="scrollbar-hide flex w-72 flex-col items-center overflow-x-hidden overflow-y-scroll bg-gray-800 text-white shadow-lg"
     id="channel-list"
 >
-    <div class="flex w-full items-center justify-between">
-        <div class="mx-4 py-4 font-bold">{server.name}</div>
+    <div class="flex w-full items-center justify-between px-4 py-5 rounded-t-lg">
+        <div class="font-bold">{server.name}</div>
         <details class="dropdown dropdown-end">
-            <summary class="btn btn-outline btn-sm rounded-box mx-2 mt-1">
+            <summary class="btn btn-outline btn-sm rounded-box">
                 <Icon name="menu" height="2em" width="2em" />
             </summary>
             <ul
-                class="menu dropdown-content rounded-box bg-base-100 z-[1] items-center p-2 shadow"
+                class="menu dropdown-content rounded-box bg-base-100 z-10 items-center p-2 shadow"
             >
                 <li>
                     <form action={`/${server.id}/?/deleteServer`} method="POST">
-                        <button class="btn-sm">Delete</button>
+                        <button class="btn btn-sm btn-error">Delete</button>
                     </form>
                 </li>
                 <li>
@@ -72,44 +72,33 @@
                             name="payload"
                             bind:value={serverPreview}
                         />
-                        <button class="btn-sm">Invite</button>
+                        <button class="btn btn-sm btn-info">Invite</button>
                     </form>
                 </li>
                 <li>
                     <div>
-                        <button on:click={showModal}>New Channel</button>
+                        <button class="btn btn-sm btn-success" on:click={showModal}>New Channel</button>
                         <dialog id={modalElementId} class="modal">
-                            <div class="modal-box">
-                                        <div
-                                            class="flex h-full w-full flex-col items-center justify-center gap-2"
-                                        >
-                                            Create Channel
-                                                
-                                            <form
-                                                action={`/${server.id}/?/createChannel`}
-                                                method="post"
-                                                class="flex w-full flex-col items-center justify-center gap-2"
-                                            >
-
-                                                <input
-                                                    type="text"
-                                                    class="input input-bordered w-full"
-                                                    placeholder="Channel name..."
-                                                    name="channel"
-                                                    id="serverChannelName"
-                                                    required
-                                                />
-
-                                            <div class="modal-action flex w-full justify-between items-center">
-                                                <button class="btn btn-secondary ml-2 self-start">
-                                                    Create
-                                                </button>
-                                                <form method="dialog">
-                                                    <button class="btn">Close</button>
-                                                </form>
-                                            </div>
-                                            </form>
-                                        </div>
+                            <div class="modal-box rounded-lg p-4 bg-white shadow-lg">
+                                <h3 class="text-lg font-semibold mb-4">Create Channel</h3>
+                                <form
+                                    action={`/${server.id}/?/createChannel`}
+                                    method="post"
+                                    class="flex w-full flex-col gap-4"
+                                >
+                                    <input
+                                        type="text"
+                                        class="input input-bordered w-full"
+                                        placeholder="Channel name..."
+                                        name="channel"
+                                        id="serverChannelName"
+                                        required
+                                    />
+                                    <div class="modal-action flex justify-end gap-2">
+                                        <button class="btn btn-secondary">Create</button>
+                                        <button class="btn" type="button" onclick={() => document.querySelector(`#${modalElementId}`).close()}>Close</button>
+                                    </div>
+                                </form>
                             </div>
                         </dialog>
                     </div>
@@ -118,7 +107,7 @@
         </details>
     </div>
 
-    <div class="divider mx-1 mb-0 mt-0 h-[1px] rounded bg-white" />
+    <div class="divider mx-4 my-2 h-[1px] bg-gray-600" />
     <ChannelList {channels} />
 </section>
 <section class="flex flex-1 flex-col bg-slate-500" id="channel-content">

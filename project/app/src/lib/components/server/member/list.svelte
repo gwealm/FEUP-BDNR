@@ -9,7 +9,7 @@
 
     $: members = Object.values(server.members);
 
-    // @ts-ignore im blue dabadi dabada dabadi dabada dabadi dabada dabadi dabada
+    // @ts-ignore 
     $: filteredMembers = members.filter((member: User) =>
         member.username.toLowerCase().includes(searchQuery.toLowerCase()),
     );
@@ -30,9 +30,11 @@
     <section class="mt-2 flex-grow overflow-auto">
         <ul class="flex flex-col gap-5">
             {#each filteredMembers as member (`member-${member.id}`)}
-                <li>
-                    <Member {member} {serverOwner} />
-                </li>
+                {#if !member.username.startsWith("DELETED_USER")}
+                    <li>
+                        <Member {member} {serverOwner} />
+                    </li>
+                {/if}
             {/each}
         </ul>
     </section>

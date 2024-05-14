@@ -70,7 +70,7 @@ const shutdown = async () => {
 };
 
 export {
-    client, // FIXME: THIS IS WRONG ON SO MANY LEVELS GOD HELP ME
+    client,
     get,
     put,
     remove,
