@@ -1,6 +1,6 @@
 import { client, get as dbGet, put, remove } from "$lib/service/db";
 import { sign } from "$lib/service/jwt";
-import { ServerSchema, UserSchema } from "$lib/types";
+import { ServerSchema, UserSchema, type Channel } from "$lib/types";
 import type { PageServerLoad, Actions } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 import * as Aerospike from "aerospike";
@@ -88,4 +88,62 @@ export const actions: Actions = {
 
         redirect(303, `/user/${user.id}`);
     },
+    createChannel: async ({ request, params, cookies }) => {
+
+        const userStr = cookies.get("user");
+
+        if (!userStr) return fail(401);
+
+        const formData = await request.formData();
+        const channelName = formData.get('channel') as string;
+        
+        const serverID = params.server;
+        
+        const channelID = `channel-${Math.random()}`;
+        const channel: Omit<Channel, "id"> = {
+            name: channelName,
+            server: serverID,
+            messages: [],
+        };
+
+        const serverChannel: Omit<Channel, "messages"> = {
+            id: channelID,
+            name: channelName,
+            server: serverID
+        };
+
+        await put('channels', channelID, channel);
+        await client.operate(
+            new Aerospike.Key('test', 'servers', serverID), [
+            Aerospike.maps.put('channels', channelID, serverChannel)
+        ]);
+
+        redirect(303, `/${serverID}/${channelID}`);
+
+    },
+    deleteChannel: async ({ request, cookies, params }) => {
+        const userStr = cookies.get("user");
+
+        if (!userStr) return fail(401);
+
+        const formData = await request.formData();
+
+        const channelID = formData.get('channel') as string;
+        const serverID = params.server;
+
+        const channel = await dbGet('channels', channelID);        
+        const channelMessages = channel?.bins.messages ?? [];
+
+        await client.operate(
+            new Aerospike.Key('test', 'servers', serverID), [
+            Aerospike.maps.removeByKey('channels', channelID)
+        ]);
+
+        for (const message of channelMessages) {
+            await remove('messages', message);
+        }
+        
+        redirect(303, `/${serverID}`);
+
+    }
 };

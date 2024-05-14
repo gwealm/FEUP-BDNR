@@ -18,28 +18,31 @@
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
     };
+
+    const modalElementId = "my_modal_2";
+
+    const showModal = () => {
+        document
+            .querySelector<HTMLDialogElement>(`#${modalElementId}`)
+            ?.showModal();
+    };
 </script>
 
 <section
-    class="flex w-72 flex-col items-center overflow-x-hidden overflow-y-scroll scrollbar-hide"
+    class="scrollbar-hide flex w-72 flex-col items-center overflow-x-hidden overflow-y-scroll"
     id="channel-list"
 >
     <div class="flex w-full items-center justify-between">
         <div class="mx-4 py-4 font-bold">{server.name}</div>
         <details class="dropdown dropdown-end">
-            <summary class="btn btn-outline btn-sm mx-2 rounded-box">
+            <summary class="btn btn-outline btn-sm rounded-box mx-2 mt-1">
                 <Icon name="menu" height="2em" width="2em" />
             </summary>
             <ul
-                class="menu dropdown-content z-[1] rounded-box bg-base-100 p-2 shadow"
+                class="menu dropdown-content rounded-box bg-base-100 z-[1] items-center p-2 shadow"
             >
                 <li>
                     <form action={`/${server.id}/?/deleteServer`} method="POST">
-                        <input
-                            type="hidden"
-                            name="serverID"
-                            value={server.id}
-                        />
                         <button class="btn-sm">Delete</button>
                     </form>
                 </li>
@@ -71,6 +74,45 @@
                         />
                         <button class="btn-sm">Invite</button>
                     </form>
+                </li>
+                <li>
+                    <div>
+                        <button on:click={showModal}>New Channel</button>
+                        <dialog id={modalElementId} class="modal">
+                            <div class="modal-box">
+                                        <div
+                                            class="flex h-full w-full flex-col items-center justify-center gap-2"
+                                        >
+                                            Create Channel
+                                                
+                                            <form
+                                                action={`/${server.id}/?/createChannel`}
+                                                method="post"
+                                                class="flex w-full flex-col items-center justify-center gap-2"
+                                            >
+
+                                                <input
+                                                    type="text"
+                                                    class="input input-bordered w-full"
+                                                    placeholder="Channel name..."
+                                                    name="channel"
+                                                    id="serverChannelName"
+                                                    required
+                                                />
+
+                                            <div class="modal-action flex w-full justify-between items-center">
+                                                <button class="btn btn-secondary ml-2 self-start">
+                                                    Create
+                                                </button>
+                                                <form method="dialog">
+                                                    <button class="btn">Close</button>
+                                                </form>
+                                            </div>
+                                            </form>
+                                        </div>
+                            </div>
+                        </dialog>
+                    </div>
                 </li>
             </ul>
         </details>

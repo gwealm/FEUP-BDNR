@@ -1,8 +1,8 @@
 <script lang="ts">
     import type { ChannelPreview } from "$lib/types";
+    import Icon from "../Icon.svelte";
 
     export let channel: ChannelPreview;
-    export let selected: boolean = false;
 </script>
 
 <div class="w-full">
@@ -14,3 +14,4 @@
         <span>{channel.name}</span>
     </a>
 </div>
+    
