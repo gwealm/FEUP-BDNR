@@ -107,7 +107,7 @@ export const actions: Actions = {
 
         await client.operate(new Aerospike.Key("test", "users", user.id), [
             Aerospike.maps.put("servers", serverId, serverPreview),
-        ]); // TODO: do not use the raw client.
+        ]); 
 
         addNotification(`Created \"${server.name}\"`, {
             dismissable: true,
@@ -140,7 +140,7 @@ export const actions: Actions = {
                     online: user.online,
                 }),
             ],
-        ); // TODO: do not use the raw client.
+        ); 
 
         const serverPreview: User["servers"][string] = {
             id: jwtServerPreview.id,

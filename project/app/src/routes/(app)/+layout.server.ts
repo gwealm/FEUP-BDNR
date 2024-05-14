@@ -12,7 +12,6 @@ export const load: LayoutServerLoad = async ({ cookies }) => {
 
     const user = UserSchema.parse(JSON.parse(userStr));
 
-    // TODO: this might blow up KKKK
     const servers: ServerPreview[] = Object.values(user.servers);
 
     return {

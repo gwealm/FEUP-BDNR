@@ -20,7 +20,6 @@
     class="scrollbar-hide flex w-16 flex-col items-center gap-2 overflow-visible py-2"
     id="server-list"
 >
-    <!-- TODO: This should be factored out into a component that also has a list of DMs (if those are added) -->
     <div class="dropdown dropdown-right">
         <div tabindex="0" role="button" class="avatar btn btn-circle btn-ghost">
             <div class="h-12 w-12 rounded-xl">
