@@ -41,6 +41,49 @@ export const actions: Actions = {
 
         return { token };
     },
+    leaveServer: async ({ request, cookies, params }) => {
+        const userStr = cookies.get("user");
+
+        if (!userStr) return fail(401);
+
+        const user = UserSchema.parse(JSON.parse(userStr));
+
+        const serverID = params.server;
+        const server = await dbGet("servers", serverID);
+        const serverOwner = server?.bins.owner;
+
+        await remove("servers", serverID);
+        await client.operate(new Aerospike.Key("test", "users", user.id), [
+            Aerospike.maps.removeByKey("servers", serverID),
+        ]);
+
+        const query = client.query("test", "channels");
+        query.where(Aerospike.filter.equal("server", serverID));
+
+        const results: Record[] = await query.results();
+
+        const job = await query.operate([Aerospike.operations.delete()]);
+        await job.waitUntilDone();
+
+        const messages = results.map((record) => record.bins.messages).flat();
+        for (const message of messages) {
+            await remove("messages", message);
+        }
+
+        delete user.servers[serverID];
+        cookies.set(
+            "user",
+            JSON.stringify({
+                ...user,
+            }),
+            {
+                path: "/",
+                maxAge: 60 * 60 * 24 * 14, // 14 days
+            },
+        );
+
+        redirect(303, `/user/${user.id}`);
+    },
     deleteServer: async ({ request, cookies, params }) => {
         const userStr = cookies.get("user");
 
