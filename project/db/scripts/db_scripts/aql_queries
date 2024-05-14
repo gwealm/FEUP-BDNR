@@ -7,8 +7,8 @@ SELECT * FROM test.users WHERE email="testuser@mail.com"
 INSERT INTO test.users (PK, online) VALUES ("user1", TRUE);
 
 -- Make user X a member of server Y
-INSERT INTO test.users (PK, servers) VALUES ("user1", JSON('{"server1": { "id": "server1", "name": "testserver", "image": "https://picsum.photos/300/300", "joined_at": 1705160828}'))
-INSERT INTO test.servers (PK, members) VALUES ("server1", JSON('{"user1": { "id": "user1", "username": "testuser", "online": "false", "image": "https://picsum.photos/300/300"}'))
+INSERT INTO test.users (PK, servers) VALUES ("user1", JSON('{"server1": { "id": "server1", "name": "testserver", "image": "https://picsum.photos/300/300", "joined_at": 1705160828}'));
+INSERT INTO test.servers (PK, members) VALUES ("server1", JSON('{"user1": { "id": "user1", "username": "testuser", "online": "false", "image": "https://picsum.photos/300/300"}'));
 
 -- Fetch messages from a given user between a given timeframe
-SELECT * FROM test.messages WHERE senderId="user1" AND timestamp BETWEEN 1705160820 AND 1705160830
+SELECT * FROM test.messages WHERE senderId="user1" AND timestamp BETWEEN 1705160820 AND 1705160830;
