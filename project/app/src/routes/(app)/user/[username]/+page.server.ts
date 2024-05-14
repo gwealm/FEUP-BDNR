@@ -182,7 +182,7 @@ export const actions: Actions = {
 
         for (const msg of msgQueryResult) {
             const msgId = (msg.key as Key).key as string;
-            await put("messages", msgId, { content: "", deleted: true });
+            await put("messages", msgId, {...msg, senderId: "", senderName: "", content: "", deleted: true });
         }
 
         console.log("Erased messages");
