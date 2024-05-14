@@ -89,13 +89,7 @@
                             on:click={showModal}>New Channel</button
                         >
                         <dialog id={modalElementId} class="modal">
-<<<<<<< Updated upstream
                             <div class="modal-box rounded-lg p-4 shadow-lg">
-=======
-                            <div
-                                class="modal-box rounded-lg bg-white p-4 shadow-lg"
-                            >
->>>>>>> Stashed changes
                                 <h3 class="mb-4 text-lg font-semibold">
                                     Create Channel
                                 </h3>
@@ -112,26 +106,6 @@
                                         id="serverChannelName"
                                         required
                                     />
-<<<<<<< Updated upstream
-=======
-                                    <div
-                                        class="modal-action flex justify-end gap-2"
-                                    >
-                                        <button class="btn btn-secondary"
-                                            >Create</button
-                                        >
-                                        <button
-                                            class="btn"
-                                            type="button"
-                                            onclick={() =>
-                                                document
-                                                    .querySelector(
-                                                        `#${modalElementId}`,
-                                                    )
-                                                    .close()}>Close</button
-                                        >
-                                    </div>
->>>>>>> Stashed changes
                                 </form>
                                 <div
                                     class="modal-action flex justify-end gap-2"
