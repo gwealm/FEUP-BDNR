@@ -50,25 +50,41 @@ export const actions: Actions = {
 
         const serverID = params.server;
         const server = await dbGet("servers", serverID);
+        const serverMembers = server?.bins.members;
         const serverOwner = server?.bins.owner;
 
-        await remove("servers", serverID);
-        await client.operate(new Aerospike.Key("test", "users", user.id), [
+        const userNotInServer = Object.keys(serverMembers)
+                                      .filter((member) => { return member === user.id; })
+                                      .length === 0;
+
+        if (userNotInServer) return fail(401);
+
+        const serverOperations = []; 
+        if (serverOwner.id === user.id) {
+
+            const otherMembers = Object.values(serverMembers)
+                                       .filter((member) => { return member.id !== user.id; });
+
+            const newOwner = otherMembers[Math.floor(Math.random() * otherMembers.length)];
+
+            serverOperations.push(
+                Aerospike.maps.put('owner', 'id', newOwner.id),
+                Aerospike.maps.put('owner', 'username', newOwner.username)
+            )
+
+        }
+
+        serverOperations.push(Aerospike.maps.removeByKey('members', user.id));
+
+        await client.operate(
+            new Aerospike.Key('test', 'servers', serverID), 
+            serverOperations
+        );
+
+        await client.operate(
+            new Aerospike.Key("test", "users", user.id), [
             Aerospike.maps.removeByKey("servers", serverID),
         ]);
-
-        const query = client.query("test", "channels");
-        query.where(Aerospike.filter.equal("server", serverID));
-
-        const results: Record[] = await query.results();
-
-        const job = await query.operate([Aerospike.operations.delete()]);
-        await job.waitUntilDone();
-
-        const messages = results.map((record) => record.bins.messages).flat();
-        for (const message of messages) {
-            await remove("messages", message);
-        }
 
         delete user.servers[serverID];
         cookies.set(
@@ -82,7 +98,7 @@ export const actions: Actions = {
             },
         );
 
-        redirect(303, `/user/${user.id}`);
+        redirect(303, `/user/${user.id}`); 
     },
     deleteServer: async ({ request, cookies, params }) => {
         const userStr = cookies.get("user");

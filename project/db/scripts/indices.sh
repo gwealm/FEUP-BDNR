@@ -37,6 +37,7 @@ printf "enable \
         \nmanage sindex create numeric message-timestamp ns test set messages bin timestamp \
         \nmanage sindex create string channel-server ns test set channels bin server \
         \nmanage sindex create string message-senderId ns test set messages bin senderId \
+        \nmanage sindex create string server-name ns test set servers bin name \
         \nshow sindex \
         \nexit \
         \n" | script -q -c "docker attach $1" aerospike_logs.txt
