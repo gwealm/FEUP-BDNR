@@ -1,4 +1,4 @@
-import { client, get as dbGet, put } from "$lib/service/db";
+import { client, get as dbGet, get, put } from "$lib/service/db";
 import { MessageSchema, ServerSchema, UserSchema, type Server } from "$lib/types";
 import type { PageServerLoad } from "./$types";
 import { error, fail, redirect, type Actions } from "@sveltejs/kit";
@@ -126,9 +126,6 @@ export const actions: Actions = {
             return fail(403, { error: "Invalid password" });
         }
 
-        const userServers = Object.keys(userData.servers);
-
-
         await put("users", user.id, {
             ...user,
             username: `DELETED_USER_${randomNumber}`,
@@ -139,36 +136,33 @@ export const actions: Actions = {
             deleted: true,
         });
 
-        const serverQuery = client.query("test", "servers");
+        console.log("Erased user data");
 
-        for (const serverId of userServers) {
-            serverQuery.where(Aerospike.filter.equal("id", serverId));
-            const serverQueryResult: Record[] = await serverQuery.results();
+        for (const serverId in userData.servers) {
+            console.log("Erasing server:", serverId)
+            const serverResult = await get("servers", serverId);
 
-            if (serverQueryResult.length !== 1) {
-                return error(404, `Server ${serverId} not found`);
-            }
-
-            const [serverResult] = userQueryResult;
+            if (serverResult === null) continue;
 
             const serverData = serverResult.bins;
-            const serverId = (serverResult.key as Key).key;
 
             const parseResult = ServerSchema.safeParse({ ...serverData, id: serverId });
+
+            if (!parseResult.success) continue; // TODO: see when this can fail.
 
             const server = parseResult.data;
 
             let changedMembers = {};
 
-            for (const member of server.members) {
+            for (const member of Object.values(server.members)) {
                 if (member.id === user.id) {
-                    changedMembers += {
+                    changedMembers[member.id] = {
                         ...member,
                         username: `DELETED_USER_${randomNumber}`,
                         id: `DELETED_USER_${randomNumber}`,
                     };
                 } else {
-                    changedMembers += member;
+                    changedMembers[member.id] = member;
                 }
             }
 
@@ -177,8 +171,9 @@ export const actions: Actions = {
                 ownerId: server.owner.id === user.id ? { ...pickRandomServerMember(server) } : server?.owner,
                 members: changedMembers,
             });
-        }
 
+            console.log("Erased server membership data for server:", serverId);
+        }
 
         const msgQuery = client.query("test", "messages");
         msgQuery.where(Aerospike.filter.equal("senderId", user.id));
@@ -189,6 +184,8 @@ export const actions: Actions = {
             const msgId = (msg.key as Key).key as string;
             await put("messages", msgId, { content: "", deleted: true });
         }
+
+        console.log("Erased messages");
 
         cookies.delete("user", { path: "/" });
 
