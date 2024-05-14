@@ -17,7 +17,7 @@
 </script>
 
 <section
-    class="flex w-16 flex-col items-center gap-2 overflow-visible py-2 scrollbar-hide"
+    class="scrollbar-hide flex w-16 flex-col items-center gap-2 overflow-visible py-2"
     id="server-list"
 >
     <!-- TODO: This should be factored out into a component that also has a list of DMs (if those are added) -->
@@ -32,7 +32,7 @@
             </div>
         </div>
         <ul
-            class="menu dropdown-content menu-sm z-10 ml-3 w-52 rounded-box bg-base-100 p-2 shadow"
+            class="menu dropdown-content menu-sm rounded-box bg-base-100 z-10 ml-3 w-52 p-2 shadow"
         >
             <li>
                 <a class="justify-between" href="/user/{user.username}">
@@ -50,7 +50,7 @@
         </button>
         <dialog id={modalElementId} class="modal">
             <div class="modal-box">
-                <div role="tablist" class="tabs tabs-lifted">
+                <div role="tablist" class="tabs tabs-bordered">
                     <input
                         type="radio"
                         name="my_tabs_2"
@@ -64,7 +64,7 @@
                         class="tab-content rounded-box bg-base-100 px-2 py-6"
                     >
                         <div
-                            class="flex h-full w-full flex-col items-center justify-center"
+                            class="flex h-full w-full flex-col items-center justify-center gap-3"
                         >
                             Join Server
                             <form
@@ -96,7 +96,7 @@
                         class="tab-content rounded-box bg-base-100 px-2 py-6"
                     >
                         <div
-                            class="flex h-full w-full flex-col items-center justify-center gap-2"
+                            class="flex h-full w-full flex-col items-center justify-center gap-3"
                         >
                             Create Server
                             <form

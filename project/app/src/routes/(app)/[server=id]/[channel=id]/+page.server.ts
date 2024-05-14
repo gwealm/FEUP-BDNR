@@ -246,6 +246,8 @@ export const actions: Actions = {
             }
         }
 
+        console.log(filteredMessages);
+
         return { messages: filteredMessages };
     },
 };
