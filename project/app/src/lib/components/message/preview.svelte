@@ -9,6 +9,7 @@
 
     export let message: Message;
     export let sentByCurrentUser: boolean = false;
+    export let userIsAdmin: boolean = false;
     export let isUserOnline: boolean = false;
     export let scroll: Action;
 
@@ -136,7 +137,7 @@
     id={`message-${message.id}`}
     use:scroll
 >
-    <div class:online={isUserOnline} class="avatar chat-image" on:click={toggleProfile}>
+    <div class:online={isUserOnline} class:offline={!isUserOnline} class="avatar chat-image" on:click={toggleProfile}>
         <div class="w-10 rounded-full">
             <img
                 alt={`Profile picture for ${message.senderName}`}
@@ -155,10 +156,16 @@
             class="chat-bubble max-w-96 rounded-lg p-3 relative group"
             style="overflow-wrap: break-word;"
         >
-            {#if !message.deleted && sentByCurrentUser}
+            {#if !message.deleted && (sentByCurrentUser || userIsAdmin)}
                 <form action="?/deleteMessage" method="POST" class="hidden group-hover:block">
                     <input type="hidden" name="message" value={message.id}>
-                    <button class="absolute -top-3 -left-2 btn btn-xs btn-error">
+                    <button class="
+                        absolute 
+                        -top-3 
+                        {sentByCurrentUser ? "-left-2" : "-right-2"} 
+                        btn 
+                        btn-xs 
+                        btn-error">
                         <Icon name="trash-2" />
                     </button>
                 </form>
@@ -167,14 +174,6 @@
                 <span class="italic text-gray-400">This message has been deleted</span>
             {:else}
                 {message.content}
-            {/if}
-            {#if !message.deleted && !sentByCurrentUser}
-                <form action="?/deleteMessage" method="POST" class="hidden group-hover:block">
-                    <input type="hidden" name="message" value={message.id}>
-                    <button class="absolute -top-3 -right-2 btn btn-xs btn-error">
-                        <Icon name="trash-2" />
-                    </button>
-                </form>
             {/if}
         </div>
     </div>

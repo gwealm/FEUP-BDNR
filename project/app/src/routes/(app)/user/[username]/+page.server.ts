@@ -15,6 +15,11 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 
     const me = UserSchema.parse(JSON.parse(userStr));
 
+    if (me.username.startsWith("DELETED_USER")) {
+        cookies.delete("user", { path: "/" });
+        throw redirect(303, "/login");
+    }
+
     const { username } = params;
 
     const userQuery = client.query("test", "users");

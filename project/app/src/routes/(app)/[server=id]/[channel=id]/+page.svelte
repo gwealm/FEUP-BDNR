@@ -41,11 +41,12 @@
             style="justify-content: safe flex-end;"
         >
             {#if messages.length > 0}
-                {#each messages as message (message.id)}
+                {#each messages as message (message?.id)}
                     <Message
                         {message}
-                        sentByCurrentUser={message.senderId === user.id}
+                        sentByCurrentUser={message?.senderId === user.id}
                         isUserOnline={server.members[message.senderId].online}
+                        userIsAdmin={server.owner.id === user.id}
                         {scroll}
                     />
                 {/each}
